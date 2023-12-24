@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Content;
 use App\Http\Requests\StoreContentRequest;
 use App\Http\Requests\UpdateContentRequest;
+use App\Http\Resources\ContentResource;
 
 class ContentController extends Controller
 {
@@ -13,7 +14,9 @@ class ContentController extends Controller
      */
     public function index()
     {
-        //
+        $content = Content::all();
+        // return response()->json($content);
+        return ContentResource::collection($content);
     }
 
     /**
@@ -35,9 +38,10 @@ class ContentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Content $content)
+    public function show($id)
     {
-        //
+        $content = Content::findOrFail($id);
+        return response()->json($content);
     }
 
     /**

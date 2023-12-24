@@ -21,7 +21,24 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nim',
+        'photo',
+        'bio',
+        'prodi_id',
+        'friend_id'
     ];
+
+    public function prodi(){
+        return $this->belongsTo(Prodi::class);
+    }
+
+    public function content(){
+        return $this->hasMany(Content::class);
+    }
+
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

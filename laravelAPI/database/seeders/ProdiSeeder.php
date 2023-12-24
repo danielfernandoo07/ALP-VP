@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Prodi;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProdiSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class ProdiSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Prodi::create([
+            'name' => 'Teknik Informatika'
+        ]);
     }
 }

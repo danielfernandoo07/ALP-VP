@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Http\Resources\ContentResource;
 use App\Http\Requests\StoreContentRequest;
 use App\Http\Requests\UpdateContentRequest;
-use App\Http\Resources\ContentResource;
+use App\Http\Resources\ContentDetailResource;
 
 class ContentController extends Controller
 {
@@ -14,9 +15,9 @@ class ContentController extends Controller
      */
     public function index()
     {
-        $content = Content::all();
+        $contents = Content::all();
         // return response()->json($content);
-        return ContentResource::collection($content);
+        return ContentResource::collection($contents);
     }
 
     /**
@@ -40,8 +41,14 @@ class ContentController extends Controller
      */
     public function show($id)
     {
+        $content = Content::with('user:id,name')->findOrFail($id);
+        return new ContentDetailResource($content);
+    }
+
+    public function show1($id)
+    {
         $content = Content::findOrFail($id);
-        return response()->json($content);
+        return new ContentDetailResource($content);
     }
 
     /**

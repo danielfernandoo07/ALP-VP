@@ -16,15 +16,9 @@ class DatabaseSeeder extends Seeder
         
         $this->call([
             CategorySeeder::class,
-            ContentSeeder::class,
             ProdiSeeder::class,
-        ]);
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('123'),
-            'nim' => '0706012210004',
-            'prodi_id' => 1,
+            UserSeeder::class,
+            ContentSeeder::class        
         ]);
     }
 }

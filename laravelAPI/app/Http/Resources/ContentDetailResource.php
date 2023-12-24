@@ -5,12 +5,12 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ContentResource extends JsonResource
+class ContentDetailResource extends JsonResource
 {
     /**
-     * Transform the resource collection into an array.
+     * Transform the resource into an array.
      *
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
@@ -19,7 +19,9 @@ class ContentResource extends JsonResource
             'headline'=>$this->headline,
             'image'=>$this->image,
             'content_text'=>$this->content_text,
-            'created_at'=>date_format($this->created_at, 'Y-m-d H:i:s')
+            'created_at'=>date_format($this->created_at, 'Y-m-d H:i:s'),
+            'category_id'=>$this->category_id,
+            'user_id'=>$this->whenLoaded('user')
         ];
     }
 }

@@ -26,7 +26,7 @@ Route::middleware(['auth:sanctum'])->group(
     function () {
         Route::get('/content', [ContentController::class, 'index']);
         Route::get('/content/{id}', [ContentController::class, 'show']);
-        Route::get('/content1/{id}', [ContentController::class, 'show1']);
+        Route::get('/content1/{id}', [ContentController::class, 'show1']); //test
         Route::post('/content', [ContentController::class, 'create']);
         Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author');
         Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author');

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Middleware\ContentAuthor;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::middleware(['auth:sanctum'])->group(
         Route::get('/content', [ContentController::class, 'index']);
         Route::get('/content/{id}', [ContentController::class, 'show']);
         Route::get('/content1/{id}', [ContentController::class, 'show1']);
+        Route::post('/content', [ContentController::class, 'create']);
+        Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author');
+        Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author');
         Route::get('/logout', [AuthenticationController::class, 'logout']);
     }
 );

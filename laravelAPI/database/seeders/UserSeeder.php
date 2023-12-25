@@ -20,5 +20,19 @@ class UserSeeder extends Seeder
             'nim' => '0706012210004',
             'prodi_id' => 1,
         ]);
+        User::create([
+            'name' => 'user1',
+            'email' => 'user1@example.com',
+            'password' => bcrypt('123'),
+            'nim' => '0706012210005',
+            'prodi_id' => 1,
+        ]);
+        User::create([
+            'name' => 'user2',
+            'email' => 'user2@example.com',
+            'password' => bcrypt('123'),
+            'nim' => '0706012210006',
+            'prodi_id' => 1,
+        ]);
     }
 }

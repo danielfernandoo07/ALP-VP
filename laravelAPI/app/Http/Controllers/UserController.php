@@ -1,50 +1,129 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function getAllUser()
     {
-        $user = User::all();
-        return response()->json($user);
+        $users = User::all();
+        return UserResource::collection($users);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function checkPassword()
     {
-        //
+        $users = User::all();
+        $check = [];
+
+        foreach ($users as $user) {
+            array_push($check,
+                Hash::check("Evan1", $user->password));
+        }
+        return $check;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function createUser(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'nim' => 'required',
+            'password' => 'required',
+            'prodi_id' => 'required'
+        ]);
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->nim = $request->nim;
+            $user->photo = $request->photo;
+            $user->bio = $request->bio;
+            $user->prodi_id = $request->prodi_id;
+            $user->save();
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => $user
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function updateUser(Request $request)
     {
-        //
+        if (!empty($request->email)) {
+            $user = User::where('email', $request->email)->first();
+        } else {
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if (!empty($user)) {
+            try {
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->nim = $request->nim;
+                $user->photo = $request->photo;
+                $user->bio = $request->bio;
+                $user->prodi_id = $request->prodi_id;
+                $user->save();
+                return [
+                    'status' => Response::HTTP_OK,
+                    'message' => "Success",
+                    'data' => $user
+                ];
+            } catch (Exception $e) {
+                return [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ];
+            }
+        }
+
+        return [
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => "User not found",
+            'data' => []
+        ];
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function deleteUser(Request $request)
     {
-        //
+        if (!empty($request->email)) {
+            $user = User::where('email', $request->email)->first();
+        } else {
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if (!empty($user)) {
+            $user->delete();
+
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => []
+            ];
+        }
+
+        return [
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => "User not found",
+            'data' => []
+        ];
     }
 }

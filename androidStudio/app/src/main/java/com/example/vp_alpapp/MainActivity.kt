@@ -8,8 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.vp_alpapp.service.RetrofitFunc
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,10 +33,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+
+    LaunchedEffect(key1 = true) {
+
+
+    }
 }
 
 @Preview(showBackground = true)

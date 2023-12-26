@@ -5,11 +5,14 @@ import com.google.gson.annotations.SerializedName
 data class Content(
 
     @SerializedName("body")
-    val category_id: Int,
-    val content_text: String,
-    val created_at: String,
+    val content_id: Int,
     val headline: String,
-    val id: Int,
     val image: String,
-    val user_id: UserId
+    val content_text: String,
+    val category_id: Int,
+    val user_id: Int,
+    val created_at: String,
+    val user: User
+
+
 )

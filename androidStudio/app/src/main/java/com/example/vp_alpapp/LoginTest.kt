@@ -2,6 +2,7 @@ package com.example.vp_alpapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -83,6 +84,8 @@ class LoginTest: ComponentActivity() {
 //                override fun onResponse(call: Call<LoginToken?>, response: Response<LoginToken?>) {
 //
 //                    token = response.body()?.token.toString()
+//
+//                    Log.d("TOKEN", token)
 //                }
 //
 //                override fun onFailure(call: Call<LoginToken?>, t: Throwable) {
@@ -91,9 +94,9 @@ class LoginTest: ComponentActivity() {
 //                }
 //            })
 
+            val tokenku = "1|aICsxo8WDdiSZvH9V3SSvjg23sb5sRRtSuPtGzFN4859bf86"
 
-
-            val callContent = userClient.getAllContent("2|6ktsxF71Ko0jOFHSADLcJ7EerB9xVJvFVVcDGPYi407b9875")
+            val callContent = userClient.getAllContent("Bearer $tokenku")
 
             val str = StringBuilder()
 
@@ -108,12 +111,16 @@ class LoginTest: ComponentActivity() {
 
 
                         for (konten in response.body()!!) {
-                            str.append(konten.headline)
-                            str.append("\n")
+
+                            Log.d("HASIL : ",konten.headline)
+
+                            Log.d("Content ID", konten.content_id.toString())
                         }
 
                         hasilkonten = str.toString()
                     }
+
+                    newsList = response.body()
 
                 }
 
@@ -127,24 +134,13 @@ class LoginTest: ComponentActivity() {
         }
 
         //buat desain e di sini?
-        Text(text =  token)
-
-        Text(text = hasilkonten)
 
 
 
 
-//
-//        newsList?.let { contentList ->
-//            LazyColumn {
-//                items(contentList) { content ->
-//
-//                    Text(text = content.id.toString())
-//                    Text(text = content.headline)
-//
-//                }
-//            }
-//        }
+
+
+
 
 
     }

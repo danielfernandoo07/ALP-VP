@@ -1,6 +1,10 @@
 package com.example.vp_alpapp.service;
 
 
+import com.example.vp_alpapp.model.Login;
+import com.example.vp_alpapp.model.LoginToken;
+
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,6 +27,9 @@ public class RetrofitClient {
 
         return retrofit;
     }
+
+
+
 
 
 }

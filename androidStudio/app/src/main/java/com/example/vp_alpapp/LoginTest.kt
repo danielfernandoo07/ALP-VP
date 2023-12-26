@@ -27,6 +27,7 @@ import com.example.vp_alpapp.model.ContentList
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.LoginToken
 import com.example.vp_alpapp.service.RetrofitClient
+import com.example.vp_alpapp.service.RetrofitFunc
 import com.example.vp_alpapp.service.UserClient
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 import okhttp3.ResponseBody
@@ -39,6 +40,8 @@ import java.lang.StringBuilder
 
 
 class LoginTest: ComponentActivity() {
+
+
 
 
      private val retrofit: Retrofit = RetrofitClient.getRetrofit()

@@ -32,5 +32,10 @@ Route::middleware(['auth:sanctum'])->group(
         Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author');
         Route::get('/logout', [AuthenticationController::class, 'logout']);
     }
+    
 );
+
+
+
+
 

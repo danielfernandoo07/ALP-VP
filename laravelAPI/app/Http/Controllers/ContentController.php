@@ -21,7 +21,7 @@ class ContentController extends Controller
     {
         $contents = Content::all();
         // return response()->json($content);
-        return ContentDetailResource::collection($contents->loadMissing('user:id,name'));
+        return $contents->loadMissing('user:id,name');
     }
 
     /**

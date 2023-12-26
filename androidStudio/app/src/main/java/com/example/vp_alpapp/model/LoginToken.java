@@ -2,14 +2,14 @@ package com.example.vp_alpapp.model;
 
 public class LoginToken {
 
-    private String access_token;
+    private String data;
 
     public void setToken(String data) {
-        this.access_token = data;
+        this.data = data;
     }
 
     public String getToken() {
-        return this.access_token;
+        return this.data;
     }
 
 }

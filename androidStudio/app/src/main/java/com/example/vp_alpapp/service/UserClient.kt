@@ -17,6 +17,6 @@ public interface UserClient {
     suspend fun login(@Body login: Login): LoginToken
 
     @GET("content")
-    suspend fun getAllContent(@Header("Authorization") token: String) :Call<List<Content>>
+    suspend fun getAllContent(@Header("Authorization") token: String) : List<Content>
 
 }

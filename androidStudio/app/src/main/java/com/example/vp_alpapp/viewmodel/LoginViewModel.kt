@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel: ViewModel() {
 
-    fun testLoad(
+    fun login(
         dataStore: DataStore,
         context: Context
     ) {
@@ -28,12 +28,14 @@ class LoginViewModel: ViewModel() {
                 Toast.makeText(context, token, Toast.LENGTH_LONG).show()
             }else{
 
-                Log.d("Token : ", token)
+
                 dataStore.saveToken(token)
 
                 dataStore.getToken.collect{token->
                     if(token != null){
                         MyContainer.ACCESS_TOKEN = token
+                        //melihat token yang generated di log
+                        Log.d("Token : ", MyContainer.ACCESS_TOKEN)
                     }
                 }
             }

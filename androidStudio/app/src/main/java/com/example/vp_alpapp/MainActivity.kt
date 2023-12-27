@@ -1,15 +1,28 @@
 package com.example.vp_alpapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,10 +51,76 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     VPALPAPPTheme {
+        BottomNavigationBar()
+    }
+}
+
+@Composable
+fun BottomNavigationBar() {
+    val context = LocalContext.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFF3F3F3)),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        IconButton(onClick = {
+            Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show()
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.home),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+
+        }
+
+        IconButton(onClick = {
+            Toast.makeText(context, "Explore", Toast.LENGTH_SHORT).show()
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.search),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+        }
+        IconButton(onClick = {
+            Toast.makeText(context, "Reels", Toast.LENGTH_SHORT).show()
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.post),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+        }
+        IconButton(onClick = {
+            Toast.makeText(context, "DMS", Toast.LENGTH_SHORT).show()
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.dms),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+        }
+        IconButton(onClick = {
+            Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.profilepic),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+        }
 
     }
 }

@@ -17,6 +17,7 @@ import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.HomeUIState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 
 
 @Composable
@@ -28,7 +29,7 @@ fun TestView (
 
 ) {
 
-
+    val detailKontenViewModel: DetailKontenViewModel = viewModel()
     Row {
         Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
         }) {
@@ -44,6 +45,12 @@ fun TestView (
 
             Text(text = "PRINT")
         }
+        
+        Button(onClick = {
+            detailKontenViewModel.getById("9")
+        }) {
+            Text(text = "DETAILKONTEN")
+        }
 
     }
    
@@ -58,7 +65,7 @@ fun GetAllContent(
 
     LaunchedEffect(key1 = true) {
         for (kontent in listKonten) {
-            Log.d("Output : ", kontent.headline)
+            Log.d("Output : ", kontent.id.toString())
         }
     }
 }

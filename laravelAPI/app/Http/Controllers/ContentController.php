@@ -56,13 +56,13 @@ class ContentController extends Controller
     public function show($id)
     {
         $content = Content::with('user:id,name')->findOrFail($id);
-        return new ContentDetailResource($content);
+        return $content;
     }
 
     public function show1($id)
     {
         $content = Content::findOrFail($id);
-        return new ContentDetailResource($content);
+        return $content;
     }
 
     public function update(Request $request, $id)

@@ -18,7 +18,7 @@ class MyContainer {
         }
     }
     companion object{
-        var ACCESS_TOKEN = "p"
+        var ACCESS_TOKEN = "9|Jcct0S0Xs8881JTBQFuyZTDhJNqfMcq9SSGVoZhF3d50bf96"
     }
 
     private val BASE_URL = "http://10.0.2.2:8000/api/"

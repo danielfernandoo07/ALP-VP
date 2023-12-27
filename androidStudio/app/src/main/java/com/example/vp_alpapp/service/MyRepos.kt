@@ -1,6 +1,5 @@
 package com.example.vp_alpapp.service
 
-import androidx.datastore.dataStore
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Login
 import java.net.HttpURLConnection
@@ -29,6 +28,11 @@ class MyRepos(private val userClient: UserClient) {
         return userClient.getAllContent("Bearer $token")
 
 
+    }
+
+    suspend fun getKontenById(token: String, id: String): Content {
+
+        return userClient.getKontenById("Bearer $token", id)
     }
 
 

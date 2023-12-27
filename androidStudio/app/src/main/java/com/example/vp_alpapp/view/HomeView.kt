@@ -273,7 +273,7 @@ fun Home() {
                 }
             }
         }
-        BottomNavigationBar()
+//        BottomNavigationBar()
     }
 }
 

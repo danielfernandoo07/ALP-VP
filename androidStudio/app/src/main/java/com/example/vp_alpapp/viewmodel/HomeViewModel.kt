@@ -49,7 +49,8 @@ class HomeViewModel() : ViewModel() {
             data = MyContainer().myRepos.getAllContent(MyContainer.ACCESS_TOKEN)
 
             for (konten in data) {
-                Log.d("data", konten.headline)
+                Log.d("data", konten.id.toString())
+                Log.d("dataheadline", konten.headline)
             }
         }
     }

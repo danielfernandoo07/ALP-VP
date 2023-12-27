@@ -2,6 +2,9 @@ package com.example.vp_alpapp.view
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -20,17 +23,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun TestView (
     context: Context,
     dataStore: DataStore,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    homeViewModel: HomeViewModel
 
 ) {
 
-    LaunchedEffect(key1 = true ) {
 
-        loginViewModel.login(context = context, dataStore = dataStore)
+    Row {
+        Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
+        }) {
 
+            Text(text = "LOGIN")
+        }
 
+        Button(onClick = {
+
+            homeViewModel.logTest()
+
+        }) {
+
+            Text(text = "PRINT")
+        }
 
     }
+   
+    
 
 }
 
@@ -49,27 +66,27 @@ fun GetAllContent(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 private fun TestPreview() {
-//    val context = LocalContext.current
-//    val dataStore = DataStore(context)
-//    val loginViewModel = LoginViewModel()
+    val context = LocalContext.current
+    val dataStore = DataStore(context)
+    val loginViewModel: LoginViewModel = viewModel()
+
+    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = HomeViewModel())
 //
-//    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel)
-
-     val homeViewModel :HomeViewModel = viewModel()
-    
-    val status = homeViewModel.homeUIState
-
-    when(status){
-        is HomeUIState.Loading -> {}
-        is HomeUIState.Success -> {
-                GetAllContent(listKonten = status.data)
-            }
-        
-        is HomeUIState.Error ->{
-
-            Log.d("ERRROR","ERROORR")
-        }
-    }
+//     val homeViewModel :HomeViewModel = viewModel()
+//
+//    val status = homeViewModel.homeUIState
+//
+//    when(status){
+//        is HomeUIState.Loading -> {}
+//        is HomeUIState.Success -> {
+//                GetAllContent(listKonten = status.data)
+//            }
+//
+//        is HomeUIState.Error ->{
+//
+//            Log.d("ERRROR","ERROORR")
+//        }
+//    }
 
 
 

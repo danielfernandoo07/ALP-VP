@@ -1,6 +1,7 @@
 package com.example.vp_alpapp.viewmodel
 
 import android.content.Context
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.widget.Toast
 import androidx.datastore.dataStore
@@ -15,13 +16,15 @@ class LoginViewModel: ViewModel() {
 
     fun login(
         dataStore: DataStore,
-        context: Context
+        context: Context,
+        email: String,
+        password: String
     ) {
 
 
 
         viewModelScope.launch {
-            val token = MyContainer().myRepos.login("admin@example.com", "123")
+            val token = MyContainer().myRepos.login(email, password)
             if(token.equals("Incorrect Password", true)){
                 Toast.makeText(context, token, Toast.LENGTH_LONG).show()
             }else if(token.equals("User not found", true)){

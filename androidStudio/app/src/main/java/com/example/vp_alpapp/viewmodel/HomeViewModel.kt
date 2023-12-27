@@ -42,6 +42,18 @@ class HomeViewModel() : ViewModel() {
         }
     }
 
+    public fun logTest() {
+
+        viewModelScope.launch {
+
+            data = MyContainer().myRepos.getAllContent(MyContainer.ACCESS_TOKEN)
+
+            for (konten in data) {
+                Log.d("data", konten.headline)
+            }
+        }
+    }
+
 
 
 

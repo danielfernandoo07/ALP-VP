@@ -20,6 +20,7 @@ class MyContainer {
         }
     }
     companion object{
+        //ganti token sesuai postman masing-masing saat login api
         var ACCESS_TOKEN = "31|x3xv8g3VTvo4lZdDPRyOTQkpqkULhCaUzHzfyaFXcf6ac91e";
         lateinit var user: Pengguna
     }

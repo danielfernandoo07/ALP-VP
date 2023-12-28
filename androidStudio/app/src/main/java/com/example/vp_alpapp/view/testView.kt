@@ -124,7 +124,7 @@ private fun TestPreview() {
     val homeViewModel: HomeViewModel = viewModel()
 
     TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = homeViewModel)
-    
+
 //     val homeViewModel :HomeViewModel = viewModel()
 //
 //    val status = homeViewModel.homeUIState

@@ -3,6 +3,7 @@ package com.example.vp_alpapp.service
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
+import com.example.vp_alpapp.model.Pengguna
 import java.net.HttpURLConnection
 
 class MyRepos(private val userClient: UserClient) {
@@ -46,6 +47,10 @@ class MyRepos(private val userClient: UserClient) {
 
     suspend fun delete(token: String, id:String){
         return userClient.delete(token,id)
+    }
+
+    suspend fun getUser(token: String): Pengguna{
+        return userClient.getUser(token)
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.vp_alpapp.service
 
+import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.model.User
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,7 +20,8 @@ class MyContainer {
         }
     }
     companion object{
-        var ACCESS_TOKEN = "20|B2duhkKGihDXVF3OCqywwyYnhDaXRlWAzcgyu5m537dc701a"
+        var ACCESS_TOKEN = "31|x3xv8g3VTvo4lZdDPRyOTQkpqkULhCaUzHzfyaFXcf6ac91e";
+        lateinit var user: Pengguna
     }
 
     private val BASE_URL = "http://10.0.2.2:8000/api/"

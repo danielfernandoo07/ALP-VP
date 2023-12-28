@@ -3,6 +3,8 @@ public class User {
     private int id;
     private String name;
 
+
+
     // Konstruktor, getter, dan setter
 
     public User(int id, String name) {

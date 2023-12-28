@@ -4,6 +4,9 @@ import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.LoginToken
+import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.model.User
+import com.example.vp_alpapp.model.UserId
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -33,4 +36,7 @@ public interface UserClient {
 
     @DELETE("content/{id}")
     suspend fun delete(@Header("Authorization") token: String, @Path("id") contentId: String)
+
+    @GET("user")
+    suspend fun getUser(@Header("Authorization") token: String): Pengguna
 }

@@ -23,6 +23,7 @@ import com.example.vp_alpapp.viewmodel.HomeUIState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.User
+import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 
@@ -37,6 +38,7 @@ fun TestView (
 ) {
 
     val detailKontenViewModel: DetailKontenViewModel = viewModel()
+
     Row {
         Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
         }) {
@@ -46,7 +48,7 @@ fun TestView (
 
         Button(onClick = {
 
-            homeViewModel.logTest()
+            Log.d("USER",MyContainer.user.name)
 
         }) {
 
@@ -60,14 +62,14 @@ fun TestView (
         }
 
     }
-
-    LazyColumn(Modifier.fillMaxSize()) {
-
-        items(homeViewModel.data) {
-            
-            Text(text = it.headline)
-        }
-    }
+//
+//    LazyColumn(Modifier.fillMaxSize()) {
+//
+//        items(homeViewModel.data) {
+//
+//            Text(text = it.headline)
+//        }
+//    }
    
     
 
@@ -108,7 +110,7 @@ fun buatKonten(
 
 ) {
 
-    createContentViewModel.createContent("HEADLINE","IMAGE","CONTENT TEXT",1, User(1,"Admin"))
+    createContentViewModel.createContent("HEADLINE","IMAGE","CONTENT TEXT",1)
 
 }
 
@@ -116,13 +118,13 @@ fun buatKonten(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 private fun TestPreview() {
-//    val context = LocalContext.current
-//    val dataStore = DataStore(context)
-//    val loginViewModel: LoginViewModel = viewModel()
-//    val homeViewModel: HomeViewModel = viewModel()
-//
-//    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = homeViewModel)
+    val context = LocalContext.current
+    val dataStore = DataStore(context)
+    val loginViewModel: LoginViewModel = viewModel()
+    val homeViewModel: HomeViewModel = viewModel()
 
+    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = homeViewModel)
+    
 //     val homeViewModel :HomeViewModel = viewModel()
 //
 //    val status = homeViewModel.homeUIState
@@ -139,12 +141,12 @@ private fun TestPreview() {
 //        }
 //    }
 
-val createContentViewModel: CreateContentViewModel= viewModel()
-
-    buatKonten(createContentViewModel = createContentViewModel)
-
-    testLogout()
-
+//val createContentViewModel: CreateContentViewModel= viewModel()
+//
+//    buatKonten(createContentViewModel = createContentViewModel)
+//
+//    testLogout()
+//
 
 
 }

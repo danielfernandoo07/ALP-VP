@@ -24,6 +24,7 @@ fun DetailKontenView(
 
 }
 
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DetailKontenPreview() {

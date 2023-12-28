@@ -15,12 +15,12 @@ class CreateContentViewModel: ViewModel() {
         image: String,
         content_text: String,
         category_id: Int,
-        user: User
     ) {
 
 
         viewModelScope.launch {
 
+            val user = User(MyContainer.user.id, MyContainer.user.name)
             val konten = CreateContent(headline,image,content_text,category_id,user)
 
             MyContainer().myRepos.createContent(MyContainer.ACCESS_TOKEN,konten)

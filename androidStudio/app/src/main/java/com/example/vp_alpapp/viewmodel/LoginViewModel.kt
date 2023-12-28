@@ -37,6 +37,8 @@ class LoginViewModel: ViewModel() {
                 dataStore.getToken.collect{token->
                     if(token != null){
                         MyContainer.ACCESS_TOKEN = token
+
+                        MyContainer.user = MyContainer().myRepos.getUser(token)
                         //melihat token yang generated di log
                         Log.d("Token : ", MyContainer.ACCESS_TOKEN)
                     }

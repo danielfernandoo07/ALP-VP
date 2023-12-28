@@ -3,6 +3,7 @@ package com.example.vp_alpapp.view
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vp_alpapp.model.Content
@@ -25,12 +26,14 @@ fun DetailKontenView(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DetailKontenPrevew() {
+fun DetailKontenPreview() {
 
     val detailKontenViewModel: DetailKontenViewModel = viewModel()
 
     //test untuk konten id 9
-    detailKontenViewModel.getById("9")
+    LaunchedEffect(key1 = true) {
+        detailKontenViewModel.getById("9")
+    }
 
     val status = detailKontenViewModel.kontenDetailUiState
 
@@ -46,7 +49,6 @@ fun DetailKontenPrevew() {
 
        is KontenDetailUiState.Error ->{
 
-          Log.d("MASALAH", "FAILED")
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.vp_alpapp.service
 
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import java.net.HttpURLConnection
 
@@ -33,6 +34,18 @@ class MyRepos(private val userClient: UserClient) {
     suspend fun getKontenById(token: String, id: String): Content {
 
         return userClient.getKontenById("Bearer $token", id)
+    }
+
+    suspend fun createContent(token:String,content: CreateContent) {
+        return userClient.createContent("Bearer $token",content);
+    }
+
+    suspend fun logout(token: String) {
+        return userClient.logout(token)
+    }
+
+    suspend fun delete(token: String, id:String){
+        return userClient.delete(token,id)
     }
 
 

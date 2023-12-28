@@ -19,8 +19,8 @@ sealed interface KontenDetailUiState{
 class DetailKontenViewModel: ViewModel() {
 
     private lateinit var data: Content
-
     var kontenDetailUiState: KontenDetailUiState by mutableStateOf(KontenDetailUiState.Loading)
+        private set
 
     fun getById(id: String) {
         viewModelScope.launch {
@@ -28,8 +28,22 @@ class DetailKontenViewModel: ViewModel() {
             try {
                 data = MyContainer().myRepos.getKontenById(MyContainer.ACCESS_TOKEN,id)
                  kontenDetailUiState = KontenDetailUiState.Success(data)
-                Log.d("KONTEN", data.id.toString())
-                Log.d("KONTEN", data.image)
+
+            }catch(e: Exception){
+                Log.d("FAILED", e.message.toString())
+                kontenDetailUiState = KontenDetailUiState.Error
+            }
+        }
+    }
+
+    fun delete(id: String) {
+
+        viewModelScope.launch {
+
+            try {
+
+                MyContainer().myRepos.delete(MyContainer.ACCESS_TOKEN, id)
+
             }catch(e: Exception){
                 Log.d("FAILED", e.message.toString())
                 kontenDetailUiState = KontenDetailUiState.Error

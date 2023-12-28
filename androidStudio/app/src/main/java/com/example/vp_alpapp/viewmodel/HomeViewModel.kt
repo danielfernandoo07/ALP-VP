@@ -22,7 +22,7 @@ class HomeViewModel() : ViewModel() {
     var homeUIState: HomeUIState by mutableStateOf(HomeUIState.Loading)
         private set
 
-    private lateinit var data: List<Content>
+     lateinit var data: List<Content>
 
     init {
         loadKonten()
@@ -53,6 +53,18 @@ class HomeViewModel() : ViewModel() {
                 Log.d("dataheadline", konten.headline)
             }
         }
+    }
+
+    public fun logout() {
+
+        viewModelScope.launch {
+
+            MyContainer().myRepos.logout(MyContainer.ACCESS_TOKEN)
+
+            MyContainer.ACCESS_TOKEN = ""
+
+        }
+
     }
 
 

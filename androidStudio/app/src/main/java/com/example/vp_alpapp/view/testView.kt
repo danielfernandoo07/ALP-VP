@@ -2,6 +2,7 @@ package com.example.vp_alpapp.view
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,25 +47,12 @@ fun TestView (
         Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123", navController = navController)
         }) {
 
-            Text(text = "LOGIN")
         }
+        BottomNavigationBar()
 
-        Button(onClick = {
-
-            Log.d("USER",MyContainer.user.name)
-
-        }) {
-
-            Text(text = "PRINT")
-        }
-        
-        Button(onClick = {
-            detailKontenViewModel.getById("9")
-        }) {
-            Text(text = "DETAILKONTEN")
-        }
 
     }
+
 //
 //    LazyColumn(Modifier.fillMaxSize()) {
 //
@@ -100,7 +88,7 @@ fun testLogout() {
 
     LaunchedEffect(key1 = true) {
 
-        detailKontenViewModel.delete("1")
+        detailKontenViewModel.delete("2")
 
     }
 

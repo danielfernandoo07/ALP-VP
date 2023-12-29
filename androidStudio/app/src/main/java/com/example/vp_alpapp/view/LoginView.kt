@@ -19,7 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.vp_alpapp.DataStore
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 
@@ -28,7 +30,8 @@ import com.example.vp_alpapp.viewmodel.LoginViewModel
 fun LoginView(
     loginViewModel: LoginViewModel,
     dataStore: DataStore,
-    context: Context
+    context: Context,
+    navController: NavController
 ) {
     // Variabel email dan password yang bisa dirubah menggunakan TextField
     var email by rememberSaveable { mutableStateOf("") }
@@ -65,7 +68,7 @@ fun LoginView(
             onClick = {
                 // Cek apakah email valid sebelum melakukan login
                 if (isEmailValid) {
-                    loginViewModel.login(dataStore = dataStore, context, email, password)
+                    loginViewModel.login(dataStore = dataStore, context, email, password, navController)
                 } else {
                     // Tampilkan pesan kesalahan jika email tidak valid
                     // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
@@ -90,8 +93,8 @@ fun isValidEmail(email: String): Boolean {
 @Composable
 fun LoginPreview() {
 
-    val loginViewModel: LoginViewModel = viewModel()
-    val context = LocalContext.current
-    val dataStore = DataStore(context)
-    LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = context )
+//    val loginViewModel: LoginViewModel = viewModel()
+//    val context = LocalContext.current
+//    val dataStore = DataStore(context)
+//    LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = context )
 }

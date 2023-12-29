@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.datastore.dataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.vp_alpapp.DataStore
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.service.MyContainer
 import kotlinx.coroutines.launch
 
@@ -18,7 +20,8 @@ class LoginViewModel: ViewModel() {
         dataStore: DataStore,
         context: Context,
         email: String,
-        password: String
+        password: String,
+        navController: NavController
     ) {
 
 
@@ -32,6 +35,7 @@ class LoginViewModel: ViewModel() {
             }else{
 
 
+
                 dataStore.saveToken(token)
 
                 dataStore.getToken.collect{token->
@@ -41,8 +45,14 @@ class LoginViewModel: ViewModel() {
                         MyContainer.user = MyContainer().myRepos.getUser(token)
                         //melihat token yang generated di log
                         Log.d("Token : ", MyContainer.ACCESS_TOKEN)
+
+                        navController.navigate(ListScreen.Profile.name){
+                            popUpTo(ListScreen.Login.name){inclusive = true}
+                        }
                     }
                 }
+
+
             }
         }
 

@@ -21,6 +21,8 @@ import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.HomeUIState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.vp_alpapp.Routes
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.service.MyContainer
@@ -33,14 +35,15 @@ fun TestView (
     context: Context,
     dataStore: DataStore,
     loginViewModel: LoginViewModel,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    navController: NavController
 
 ) {
 
     val detailKontenViewModel: DetailKontenViewModel = viewModel()
 
     Row {
-        Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
+        Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123", navController = navController)
         }) {
 
             Text(text = "LOGIN")
@@ -123,7 +126,7 @@ private fun TestPreview() {
     val loginViewModel: LoginViewModel = viewModel()
     val homeViewModel: HomeViewModel = viewModel()
 
-    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = homeViewModel)
+//    TestView(context = context, dataStore = dataStore, loginViewModel = loginViewModel, homeViewModel = homeViewModel)
 
 //     val homeViewModel :HomeViewModel = viewModel()
 //
@@ -149,4 +152,11 @@ private fun TestPreview() {
 //
 
 
+}
+
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+private fun TestPreview2() {
+
+    Routes()
 }

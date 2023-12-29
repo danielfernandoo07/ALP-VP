@@ -22,6 +22,7 @@ fun DetailKontenView(
     Text(text = content.contentText )
 
 
+
 }
 
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
+                    Routes()
                 }
             }
         }
@@ -55,12 +57,18 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     VPALPAPPTheme {
-        BottomNavigationBar()
+//
+
+        Routes()
+
+//        BottomNavigationBar()
     }
 }
 
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBar(
+    navController: NavController
+) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -71,6 +79,8 @@ fun BottomNavigationBar() {
     ) {
         IconButton(onClick = {
             Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show()
+
+
         }) {
             Image(
                 painter = painterResource(id = R.drawable.home),
@@ -83,6 +93,7 @@ fun BottomNavigationBar() {
 
         IconButton(onClick = {
             Toast.makeText(context, "Explore", Toast.LENGTH_SHORT).show()
+            navController.navigate(ListScreen.Explore.name)
         }) {
             Image(
                 painter = painterResource(id = R.drawable.search),
@@ -113,6 +124,7 @@ fun BottomNavigationBar() {
         }
         IconButton(onClick = {
             Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
+            navController.navigate(ListScreen.Profile.name)
         }) {
             Image(
                 painter = painterResource(id = R.drawable.profilepic),

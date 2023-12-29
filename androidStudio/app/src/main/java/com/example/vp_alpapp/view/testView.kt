@@ -23,6 +23,7 @@ import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.HomeUIState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.Routes
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.User
@@ -48,7 +49,7 @@ fun TestView (
         }) {
 
         }
-        BottomNavigationBar()
+        BottomNavigationBar(navController = navController)
 
 
     }

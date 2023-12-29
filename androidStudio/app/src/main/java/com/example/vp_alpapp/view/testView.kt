@@ -2,6 +2,7 @@ package com.example.vp_alpapp.view
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.HomeUIState
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.service.MyContainer
@@ -39,29 +41,38 @@ fun TestView (
 
     val detailKontenViewModel: DetailKontenViewModel = viewModel()
 
-    Row {
-        Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
-        }) {
+    Column {
 
-            Text(text = "LOGIN")
+        Row {
+            Button(onClick = {        loginViewModel.login(context = context, dataStore = dataStore, email = "admin@example.com", password = "123")
+            }) {
+
+                Text(text = "LOGIN")
+            }
+
+            Button(onClick = {
+
+                Log.d("USER",MyContainer.user.name)
+
+            }) {
+
+                Text(text = "PRINT")
+            }
+
+            Button(onClick = {
+                detailKontenViewModel.getById("9")
+            }) {
+                Text(text = "DETAILKONTEN")
+            }
+
+
+
         }
+        BottomNavigationBar()
 
-        Button(onClick = {
-
-            Log.d("USER",MyContainer.user.name)
-
-        }) {
-
-            Text(text = "PRINT")
-        }
-        
-        Button(onClick = {
-            detailKontenViewModel.getById("9")
-        }) {
-            Text(text = "DETAILKONTEN")
-        }
 
     }
+
 //
 //    LazyColumn(Modifier.fillMaxSize()) {
 //
@@ -97,7 +108,7 @@ fun testLogout() {
 
     LaunchedEffect(key1 = true) {
 
-        detailKontenViewModel.delete("1")
+        detailKontenViewModel.delete("2")
 
     }
 

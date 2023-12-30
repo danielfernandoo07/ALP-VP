@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,9 +42,11 @@ class ContentController extends Controller
             $content->image = $request->image;
             $content->content_text = $request->content_text;
             $content->category_id = $request->category_id;
+            $content->created_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
+            $content->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $content->user_id = Auth::user()->id;
             $content->save();
-            return new ContentDetailResource($content->loadMissing('user:id,name'));
+            return $content->loadMissing('user:id,name');
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -56,7 +59,9 @@ class ContentController extends Controller
     public function show($id)
     {
         $content = Content::with('user:id,name')->findOrFail($id);
-        return $content;
+        $created_at_formatted = $content->created_at;
+        $created_at_formatted = $content->updated_at;
+        return $content->loadMissing('user:id,name');
     }
 
     public function show1($id)
@@ -80,9 +85,9 @@ class ContentController extends Controller
             $content->content_text = $request->content_text;
             $content->category_id = $request->category_id;
             $content->user_id = Auth::user()->id;
-            $content->updated_at = now();
+            $content->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $content->save();
-            return new ContentDetailResource($content->loadMissing('user:id,name'));
+            return $content->loadMissing('user:id,name');
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -95,6 +100,6 @@ class ContentController extends Controller
     public function delete($id){
         $content = Content::findOrFail($id);
         $content->delete();
-        return new ContentDetailResource($content->loadMissing('user:id,name'));
+        return $content->loadMissing('user:id,name');
     }
 }

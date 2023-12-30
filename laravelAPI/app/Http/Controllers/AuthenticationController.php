@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,40 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticationController extends Controller
 {
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'nim' => 'required',
+            'password' => 'required',
+            'prodi_id' => 'required'
+        ]);
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->nim = $request->nim;
+            $user->photo = $request->photo;
+            $user->bio = $request->bio;
+            $user->prodi_id = $request->prodi_id;
+            $user->save();
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => $user
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
     public function login(Request $request)
     {
         $request->validate([

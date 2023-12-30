@@ -33,7 +33,7 @@ class CommentController extends Controller
             'comment_text' => 'required'
         ]);
 
-        try{
+        try {
             $comment = new Comment();
             $comment->comment_text = $request->comment_text;
             $comment->content_id = $request->content_id;
@@ -42,7 +42,7 @@ class CommentController extends Controller
             $comment->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $comment->save();
             return $comment->loadMissing('user:id,name');
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => $e->getMessage(),
@@ -59,15 +59,14 @@ class CommentController extends Controller
 
     public function update(UpdateCommentRequest $request, $commentId)
     {
+        $validated = $request->validate([
+            'comment_text' => 'required'
+        ]);
         try {
-            $validated = $request->validate([
-                'comment_text' => 'required'
-            ]);
             $comment = Comment::findorFail($commentId);
             $comment->comment_text = $request->comment_text;
             $comment->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $comment->save();
-    
             return $comment->loadMissing('user:id,name');
         } catch (Exception $e) {
             return [

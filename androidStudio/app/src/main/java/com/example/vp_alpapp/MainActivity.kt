@@ -104,6 +104,7 @@ fun BottomNavigationBar(
         }
         IconButton(onClick = {
             Toast.makeText(context, "Add Post", Toast.LENGTH_SHORT).show()
+            navController.navigate(ListScreen.CreatePost.name)
         }) {
             Image(
                 painter = painterResource(id = R.drawable.post),

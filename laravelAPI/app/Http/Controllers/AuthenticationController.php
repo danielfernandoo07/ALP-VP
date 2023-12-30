@@ -34,13 +34,13 @@ class AuthenticationController extends Controller
             return [
                 'status' => Response::HTTP_OK,
                 'message' => "Success",
-                'data' => $user
+                'pengguna' => $user
             ];
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => $e->getMessage(),
-                'data' => []
+                'pengguna' => []
             ];
         }
     }

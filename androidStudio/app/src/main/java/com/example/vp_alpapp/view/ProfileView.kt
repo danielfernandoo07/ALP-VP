@@ -17,7 +17,7 @@ import com.example.vp_alpapp.viewmodel.ProfileViewModel
 fun ProfileView(
     navController: NavController,
     user: Pengguna,
-     profileViewModel: ProfileViewModel,
+    profileViewModel: ProfileViewModel,
 
 ) {
 

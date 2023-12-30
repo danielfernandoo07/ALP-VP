@@ -16,6 +16,8 @@ fun ExploreView(
     Column {
         Text(text = "EXPLORE")
 
+
+
         BottomNavigationBar(navController = navController)
 
 

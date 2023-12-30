@@ -3,8 +3,8 @@ package com.example.vp_alpapp.service
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
-import com.example.vp_alpapp.model.LoginToken
 import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.model.RegisterInfo
 import java.net.HttpURLConnection
 
 class MyRepos(private val userClient: UserClient) {
@@ -54,9 +54,11 @@ class MyRepos(private val userClient: UserClient) {
         return userClient.getUser(token)
     }
 
-    suspend fun register() {
+    suspend fun register(name:String, email: String,nim:String, password: String, prodi_id: Int): Pengguna {
 
-        
+        val pengguna = RegisterInfo(name,email,nim,password, prodi_id)
+
+        return userClient.register(pengguna).pengguna
 
     }
 

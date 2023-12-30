@@ -1,6 +1,7 @@
 package com.example.vp_alpapp.view
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,10 +31,11 @@ fun LoginView(
     loginViewModel: LoginViewModel,
     dataStore: DataStore,
     context: Context,
-    navController: NavController
+    navController: NavController,
+    firstvalue: String
 ) {
     // Variabel email dan password yang bisa dirubah menggunakan TextField
-    var email by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(firstvalue) }
     var password by rememberSaveable { mutableStateOf("") }
 
     // State untuk menyimpan status validasi email
@@ -76,9 +77,16 @@ fun LoginView(
                 }
             }
         ) {
-            // Desain tombol submit
+            Text(text = "Login")
+        }
+        
+        
+        Button(onClick = { navController.navigate(ListScreen.Register.name) }) {
+
+            Text(text = "Register")
         }
     }
+    
 
 }
 

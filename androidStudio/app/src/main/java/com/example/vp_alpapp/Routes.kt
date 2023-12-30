@@ -1,7 +1,6 @@
 package com.example.vp_alpapp
 
 import android.annotation.SuppressLint
-import android.provider.ContactsContract.Data
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,17 +14,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.vp_alpapp.service.MyContainer
+import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.ExploreView
 import com.example.vp_alpapp.view.LoginView
 import com.example.vp_alpapp.view.ProfileView
+import com.example.vp_alpapp.view.RegisterView
+import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.ProfileUiState
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
+import com.example.vp_alpapp.viewmodel.RegisterViewModel
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -36,7 +38,8 @@ enum class ListScreen() {
     DetailKonten,
     CreatePost,
     Profile,
-    Explore
+    Explore,
+    Register
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -59,7 +62,7 @@ fun Routes() {
         }
     }
 
-    Scaffold {
+    Scaffold { it ->
 
         NavHost(
             navController = navController,
@@ -74,7 +77,23 @@ fun Routes() {
                 if (MyContainer.ACCESS_TOKEN.isEmpty()) {
                     val loginViewModel: LoginViewModel = viewModel()
 
-                    LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController)
+                    LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, "" )
+
+                }
+                else {
+
+                    navController.navigate(ListScreen.Profile.name)
+
+                }
+            }
+
+            composable(ListScreen.Login.name+"/{email}") {
+
+
+                if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                    val loginViewModel: LoginViewModel = viewModel()
+
+                    it.arguments?.let { it1 -> LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, it1.getString("email", "") ) }
 
                 }
                 else {
@@ -145,6 +164,22 @@ fun Routes() {
 
 
             }
+
+            composable(ListScreen.CreatePost.name) {
+
+                val createContentViewModel:CreateContentViewModel = viewModel()
+                AddPostView(createContent = createContentViewModel, navController = navController)
+
+            }
+
+            composable(ListScreen.Register.name) {
+
+                val registerViewModel: RegisterViewModel = viewModel()
+
+                RegisterView(navController = navController, registerViewModel = registerViewModel)
+
+            }
         }
+
     }
 }

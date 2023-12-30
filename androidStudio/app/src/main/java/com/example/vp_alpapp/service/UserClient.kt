@@ -5,6 +5,8 @@ import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.LoginToken
 import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.model.Register
+import com.example.vp_alpapp.model.RegisterInfo
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.model.UserId
 import retrofit2.http.Body
@@ -20,7 +22,7 @@ public interface UserClient {
     suspend fun login(@Body login: Login) : LoginToken
 
     @POST("register")
-    suspend fun register()
+    suspend fun register(@Body registerInfo: RegisterInfo): Register
 
     @GET("content")
     suspend fun getAllContent(@Header("Authorization") token: String) : List<Content>

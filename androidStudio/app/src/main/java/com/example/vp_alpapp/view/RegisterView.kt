@@ -1,5 +1,6 @@
 package com.example.vp_alpapp.view
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,75 +15,70 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.vp_alpapp.BottomNavigationBar
-import com.example.vp_alpapp.model.CreateContent
-import com.example.vp_alpapp.model.User
-import com.example.vp_alpapp.service.MyContainer
-import com.example.vp_alpapp.viewmodel.CreateContentViewModel
-
+import com.example.vp_alpapp.viewmodel.RegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPostView(
-
-    createContent: CreateContentViewModel,
-    navController: NavController
-
+fun RegisterView(
+    navController: NavController,
+    registerViewModel: RegisterViewModel
 ) {
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var prodiId by rememberSaveable { mutableStateOf(1) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var nim by rememberSaveable { mutableStateOf("") }
 
-    var headline by rememberSaveable { mutableStateOf("") }
-    var image by rememberSaveable { mutableStateOf("") }
-    var contentText by rememberSaveable { mutableStateOf("") }
-    var categoryId by rememberSaveable { mutableStateOf(1) }
-
-
-    //desain chat gpt
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        // Headline TextField
+        // Email TextField
         TextField(
-            value = headline,
-            onValueChange = { headline = it },
-            label = { Text("Headline") },
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
 
-        // Image TextField
+        // Password TextField
         TextField(
-            value = image,
-            onValueChange = { image = it },
-            label = { Text("Image URL") },
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
 
-        // Content Text TextField
+        // NIM TextField
         TextField(
-            value = contentText,
-            onValueChange = { contentText = it },
-            label = { Text("Content Text") },
+            value = nim,
+            onValueChange = { nim = it },
+            label = { Text("NIM") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
 
-        // Category ID TextField
+        // Prodi ID TextField
         TextField(
-            value = categoryId.toString(),
-            onValueChange = { categoryId = it.toIntOrNull() ?: 0 },
-            label = { Text("Category ID") },
+            value = prodiId.toString(),
+            onValueChange = { prodiId = it.toIntOrNull() ?: 0 },
+            label = { Text("Prodi ID") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
             ),
@@ -91,35 +87,34 @@ fun AddPostView(
                 .padding(8.dp)
         )
 
+        // Name TextField
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+
         // Button to submit
         Button(
             onClick = {
-                createContent.createContent(
-                    headline = headline,
-                    image = image,
-                    content_text = contentText,
-                    category_id = categoryId
-                )
+                registerViewModel.register(email, password, nim, prodiId, name, navController)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Text(text = "POST")
+            Text(text = "Register")
         }
-
-        BottomNavigationBar(navController = navController)
     }
-
-
-
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AddPostPreview() {
+fun RegisterPreview() {
 
-    val createContent: CreateContentViewModel = viewModel()
-
+//    RegisterView()
 
 }

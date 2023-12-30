@@ -1,13 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\ContentAuthor;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContentController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Middleware\ContentAuthor;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,15 +27,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 //loginreg routes
-Route::post('/register', [AuthenticationController::class,'register']);
 Route::post('/login', [AuthenticationController::class,'login']);
+
+Route::post('/register',[AuthenticationController::class, 'register']);
+
 
 Route::middleware(['auth:sanctum'])->group(
     function () {
-        //user routes
-        Route::get('/users', [UserController::class, 'index']); //show all users
-        
-
         //category routes
         Route::get('/categories', [CategoryController::class, 'index']); //show specific category
         Route::get('/category/{id}', [CategoryController::class, 'show']); //show all categories

@@ -17,7 +17,10 @@ import retrofit2.http.Path
 public interface UserClient {
 
     @POST("login")
-    suspend fun login(@Body login: Login): LoginToken
+    suspend fun login(@Body login: Login) : LoginToken
+
+    @POST("register")
+    suspend fun register()
 
     @GET("content")
     suspend fun getAllContent(@Header("Authorization") token: String) : List<Content>

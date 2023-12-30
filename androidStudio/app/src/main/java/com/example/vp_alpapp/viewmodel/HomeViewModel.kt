@@ -55,17 +55,7 @@ class HomeViewModel() : ViewModel() {
         }
     }
 
-    public fun logout() {
 
-        viewModelScope.launch {
-
-            MyContainer().myRepos.logout(MyContainer.ACCESS_TOKEN)
-
-            MyContainer.ACCESS_TOKEN = ""
-
-        }
-
-    }
 
 
 

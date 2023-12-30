@@ -57,4 +57,14 @@ class LoginViewModel: ViewModel() {
         }
 
     }
+
+    fun register(navController: NavController) {
+
+        viewModelScope.launch {
+
+
+
+        }
+
+    }
 }

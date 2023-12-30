@@ -103,7 +103,7 @@ fun BottomNavigationBar(
             )
         }
         IconButton(onClick = {
-            Toast.makeText(context, "Reels", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Add Post", Toast.LENGTH_SHORT).show()
         }) {
             Image(
                 painter = painterResource(id = R.drawable.post),

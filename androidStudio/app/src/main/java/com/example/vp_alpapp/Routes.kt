@@ -22,6 +22,8 @@ import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
+import com.example.vp_alpapp.viewmodel.ProfileUiState
+import com.example.vp_alpapp.viewmodel.ProfileViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -46,11 +48,13 @@ fun Routes() {
     val dataStore = DataStore(LocalContext.current)
 
 
+
+
     GlobalScope.launch {
         dataStore.getToken.collect{
             if (it != null) {
                 MyContainer.ACCESS_TOKEN = it
-                MyContainer.user = MyContainer().myRepos.getUser(it)
+                MyContainer.user = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
             }
         }
     }
@@ -111,13 +115,34 @@ fun Routes() {
 
             composable(ListScreen.Profile.name) {
 
-                ProfileView(navController)
+                val profileViewModel: ProfileViewModel = viewModel()
 
+                val status = profileViewModel.profileUiState
+
+                when (status) {
+                    is ProfileUiState.Loading -> {
+                        Log.d("LOADING", "LOADING KONTEN")
+                    }
+
+                    is ProfileUiState.Success -> {
+
+                        ProfileView(navController, status.data, profileViewModel)
+
+                    }
+
+
+                    is ProfileUiState.Error -> {
+
+                    }
+
+                }
             }
 
             composable(ListScreen.Explore.name) {
 
                 ExploreView(navController = navController)
+
+
 
             }
         }

@@ -59,8 +59,8 @@ class ContentController extends Controller
     public function show($id)
     {
         $content = Content::with('user:id,name')->findOrFail($id);
-        $created_at_formatted = $content->created_at;
-        $created_at_formatted = $content->updated_at;
+        $content->created_at_formatted = $content->created_at;
+        $content->updated_at_formatted = $content->updated_at;
         return $content->loadMissing('user:id,name');
     }
 
@@ -95,6 +95,12 @@ class ContentController extends Controller
                 'data' => []
             ];
         }
+    }
+
+    public function contentsByUser($userId)
+    {
+        $contents = Content::where('user_id', $userId)->get();
+        return $contents->loadMissing('user:id,name');
     }
 
     public function delete($id){

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContentController;
@@ -16,10 +19,15 @@ use App\Http\Middleware\ContentAuthor;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+//get specific user data
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+//loginreg routes
+Route::post('/register', [UserController::class,'register']);
 Route::post('/login', [AuthenticationController::class,'login']);
 
 Route::post('/register',[AuthenticationController::class, 'createUser']);
@@ -27,12 +35,27 @@ Route::post('/register',[AuthenticationController::class, 'createUser']);
 
 Route::middleware(['auth:sanctum'])->group(
     function () {
-        Route::get('/content', [ContentController::class, 'index']);
-        Route::get('/content/{id}', [ContentController::class, 'show']);
+        //category routes
+        Route::get('/categories', [CategoryController::class, 'index']); //show specific category
+        Route::get('/category/{id}', [CategoryController::class, 'show']); //show all categories
+
+        //content routes
+        Route::get('/contents', [ContentController::class, 'index']); //show all contents
+        Route::get('/content/{id}', [ContentController::class, 'show']); //show specific content
         Route::get('/content1/{id}', [ContentController::class, 'show1']); //test
-        Route::post('/content', [ContentController::class, 'create']);
-        Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author');
-        Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author');
+        Route::post('/content', [ContentController::class, 'create']); //create content
+        Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author'); //update content
+        Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author'); //delete content
+        Route::get('/user/contents/{userId}', [ContentController::class, 'contentsByUser']); //show all contents by user
+
+        //comment routes
+        Route::get('/comment', [CommentController::class, 'index']); //test
+        Route::post('/comment', [CommentController::class, 'create']); //create comment
+        Route::patch('/comment/{id}', [CommentController::class, 'update'])->middleware('comment-writer'); //update comment
+        Route::delete('/comment/{id}', [CommentController::class, 'delete'])->middleware('comment-writer'); //delete comment
+        Route::get('/content/{contentId}/comments', [CommentController::class, 'showCommentsByContent']); //show all comments by content
+
+        //logout route
         Route::get('/logout', [AuthenticationController::class, 'logout']);
     }
     

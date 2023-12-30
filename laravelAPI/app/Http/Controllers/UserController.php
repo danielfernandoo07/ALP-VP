@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
+use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Models\User;
-use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,19 +19,19 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function checkPassword()
-    {
-        $users = User::all();
-        $check = [];
+    // public function checkPassword()
+    // {
+    //     $users = User::all();
+    //     $check = [];
 
-        foreach ($users as $user) {
-            array_push($check,
-                Hash::check("Evan1", $user->password));
-        }
-        return $check;
-    }
+    //     foreach ($users as $user) {
+    //         array_push($check,
+    //             Hash::check("Evan1", $user->password));
+    //     }
+    //     return $check;
+    // }
 
-    public function createUser(Request $request)
+    public function Register(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required',

@@ -30,10 +30,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
 
 @Composable
-fun Profile() {
+fun Profile(
+
+    navController: NavController
+
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -227,6 +233,8 @@ fun Profile() {
             }
         }
     }
+
+    BottomNavigationBar(navController = navController)
 }
 //            Box(
 //                modifier = Modifier
@@ -494,5 +502,5 @@ fun Profile() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
-    Profile()
+//    Profile()
 }

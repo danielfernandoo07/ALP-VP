@@ -80,6 +80,8 @@ fun BottomNavigationBar(
         IconButton(onClick = {
             Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show()
 
+            navController.navigate(ListScreen.Home.name)
+
 
         }) {
             Image(

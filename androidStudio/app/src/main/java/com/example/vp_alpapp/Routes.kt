@@ -17,7 +17,9 @@ import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.ExploreView
+import com.example.vp_alpapp.view.Home
 import com.example.vp_alpapp.view.LoginView
+import com.example.vp_alpapp.view.Profile
 //import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
@@ -145,7 +147,7 @@ fun Routes() {
 
                     is ProfileUiState.Success -> {
 
-//                        ProfileView(navController, status.data, profileViewModel)
+                        Profile(navController)
 
                     }
 
@@ -177,6 +179,12 @@ fun Routes() {
                 val registerViewModel: RegisterViewModel = viewModel()
 
                 RegisterView(navController = navController, registerViewModel = registerViewModel)
+
+            }
+
+            composable(ListScreen.Home.name) {
+
+                Home(navController)
 
             }
         }

@@ -52,6 +52,8 @@ fun DetailKontenPreview() {
        is KontenDetailUiState.Error ->{
 
         }
+
+        else -> {}
     }
 
 }

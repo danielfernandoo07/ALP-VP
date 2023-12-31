@@ -50,6 +50,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
 import java.text.NumberFormat
@@ -240,7 +241,9 @@ fun TopBar() {
 }
 
 @Composable
-fun Home() {
+fun Home(
+    navController: NavController
+) {
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
@@ -278,7 +281,7 @@ fun Home() {
 //                }
 //            }
 //        }
-//        BottomNavigationBar()
+        BottomNavigationBar(navController)
     }
 }
 
@@ -286,5 +289,5 @@ fun Home() {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 private fun HomeView() {
-    Home()
+//    Home()
 }

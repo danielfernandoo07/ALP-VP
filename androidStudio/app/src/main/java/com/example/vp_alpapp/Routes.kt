@@ -161,7 +161,7 @@ fun Routes() {
 
             composable(ListScreen.Explore.name) {
 
-                ExploreView(navController = navController)
+//                ExploreView(navController = navController)
 
 
 

@@ -281,7 +281,6 @@ fun Home(
 //                }
 //            }
 //        }
-        BottomNavigationBar(navController)
     }
 }
 

@@ -41,7 +41,8 @@ enum class ListScreen() {
     CreatePost,
     Profile,
     Explore,
-    Register
+    Register,
+    Profile2
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -64,7 +65,10 @@ fun Routes() {
         }
     }
 
-    Scaffold { it ->
+    Scaffold (
+        
+        bottomBar = { BottomNavigationBar(navController = navController)}
+    ){ it ->
 
         NavHost(
             navController = navController,
@@ -84,7 +88,8 @@ fun Routes() {
                 }
                 else {
 
-                    navController.navigate(ListScreen.Profile.name)
+
+                        navController.navigate(ListScreen.Profile2.name)
 
                 }
             }
@@ -100,7 +105,8 @@ fun Routes() {
                 }
                 else {
 
-                    navController.navigate(ListScreen.Profile.name)
+
+                        navController.navigate(ListScreen.Profile2.name)
 
                 }
             }
@@ -123,7 +129,12 @@ fun Routes() {
                     }
                     is KontenDetailUiState.Success -> {
 
-                        DetailKontenView(content = status.data)
+
+
+                            DetailKontenView(content = status.data)
+
+
+
                     }
 
 
@@ -142,12 +153,45 @@ fun Routes() {
 
                 when (status) {
                     is ProfileUiState.Loading -> {
-                        Log.d("LOADING", "LOADING KONTEN")
+
                     }
 
                     is ProfileUiState.Success -> {
 
-                        Profile(navController)
+
+                            Profile(navController)
+
+
+
+
+                    }
+
+
+                    is ProfileUiState.Error -> {
+
+                    }
+
+                }
+            }
+
+            composable(ListScreen.Profile2.name) {
+
+                val profileViewModel: ProfileViewModel = viewModel()
+
+                val status = profileViewModel.profileUiState
+
+                when (status) {
+                    is ProfileUiState.Loading -> {
+
+                    }
+
+                    is ProfileUiState.Success -> {
+
+
+                            Profile(navController)
+
+
+
 
                     }
 
@@ -161,7 +205,9 @@ fun Routes() {
 
             composable(ListScreen.Explore.name) {
 
-//                ExploreView(navController = navController)
+
+                    ExploreView()
+
 
 
 
@@ -170,7 +216,11 @@ fun Routes() {
             composable(ListScreen.CreatePost.name) {
 
                 val createContentViewModel:CreateContentViewModel = viewModel()
-                AddPostView(createContent = createContentViewModel, navController = navController)
+
+
+
+                    AddPostView(createContent = createContentViewModel)
+
 
             }
 
@@ -184,9 +234,12 @@ fun Routes() {
 
             composable(ListScreen.Home.name) {
 
-                Home(navController)
 
+
+
+                    Home(navController)
             }
+
         }
 
     }

@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
+
                     Routes()
                 }
             }
@@ -78,7 +79,6 @@ fun BottomNavigationBar(
         verticalAlignment = Alignment.Bottom
     ) {
         IconButton(onClick = {
-            Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show()
 
             navController.navigate(ListScreen.Home.name)
 
@@ -94,7 +94,6 @@ fun BottomNavigationBar(
         }
 
         IconButton(onClick = {
-            Toast.makeText(context, "Explore", Toast.LENGTH_SHORT).show()
             navController.navigate(ListScreen.Explore.name)
         }) {
             Image(
@@ -105,7 +104,6 @@ fun BottomNavigationBar(
             )
         }
         IconButton(onClick = {
-            Toast.makeText(context, "Add Post", Toast.LENGTH_SHORT).show()
             navController.navigate(ListScreen.CreatePost.name)
         }) {
             Image(
@@ -126,8 +124,10 @@ fun BottomNavigationBar(
             )
         }
         IconButton(onClick = {
-            Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
+
+
             navController.navigate(ListScreen.Profile.name)
+
         }) {
             Image(
                 painter = painterResource(id = R.drawable.profilepic),

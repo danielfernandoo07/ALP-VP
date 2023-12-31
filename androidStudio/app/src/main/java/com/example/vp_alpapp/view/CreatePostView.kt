@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.sp
 import com.example.vp_alpapp.R
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.input.ImeAction
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +46,7 @@ import androidx.compose.ui.text.input.ImeAction
 fun AddPostView(
 
     createContent: CreateContentViewModel,
-    navController: NavController
+//    navController: NavController
 
 ) {
 
@@ -58,29 +61,7 @@ fun AddPostView(
             .fillMaxSize()
             .background(Color(0xFFF3F3F3))
     ) {
-        Row {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-            ) {
-                // Button to submit
-        Button(
-            onClick = {
-                createContent.createContent(
-                    headline = headline,
-                    image = image,
-                    content_text = contentText,
-                    category_id = categoryId
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "POST")
-        }
-            }
-        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +162,33 @@ fun AddPostView(
                         .padding(8.dp),
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
                 )
+                Row {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                    ) {
+                        // Button to submit
+                        Button(
+                            onClick = {
+                                createContent.createContent(
+                                    headline = headline,
+                                    image = image,
+                                    content_text = contentText,
+                                    category_id = categoryId
+                                )
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Text(text = "POST")
+                        }
+                    }
+                }
+
             }
+
+
         }
 //        BottomNavigationBar(navController = navController)
     }
@@ -192,6 +199,8 @@ fun AddPostView(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun AddPostPreview() {
-//    AddPostView()
-//    val createContent: CreateContentViewModel = viewModel()
+
+    val createContent: CreateContentViewModel = viewModel()
+
+    AddPostView(createContent)
 }

@@ -234,7 +234,6 @@ fun Profile(
         }
     }
 
-    BottomNavigationBar(navController = navController)
 }
 
 @Preview(showBackground = true, showSystemUi = true)

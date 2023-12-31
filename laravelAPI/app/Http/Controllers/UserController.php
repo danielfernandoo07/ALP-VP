@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,14 +31,16 @@ class UserController extends Controller
     //     return $check;
     // }
 
-    public function updateUser(Request $request)
+    public function update(Request $request)
     {
-        if (!empty($request->email)) {
-            $user = User::where('email', $request->email)->first();
-        } else {
-            $user = User::where('id', $request->id)->first();
-        }
-
+        $user = Auth::user()->id;
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'nim' => 'required',
+            'password' => 'required',
+            'prodi_id' => 'required'
+        ]);
         if (!empty($user)) {
             try {
                 $user->name = $request->name;
@@ -69,7 +72,7 @@ class UserController extends Controller
         ];
     }
 
-    public function deleteUser(Request $request)
+    public function delete(Request $request)
     {
         if (!empty($request->email)) {
             $user = User::where('email', $request->email)->first();

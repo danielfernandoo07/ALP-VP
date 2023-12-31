@@ -34,6 +34,13 @@ Route::post('/register',[AuthenticationController::class, 'register']);
 
 Route::middleware(['auth:sanctum'])->group(
     function () {
+<<<<<<< Updated upstream
+=======
+        //user routes
+        Route::get('/users', [UserController::class, 'index']); //show all users
+        Route::patch('/user/{id}', [UserController::class, 'update']); //update user
+
+>>>>>>> Stashed changes
         //category routes
         Route::get('/categories', [CategoryController::class, 'index']); //show specific category
         Route::get('/category/{id}', [CategoryController::class, 'show']); //show all categories

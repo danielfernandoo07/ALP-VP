@@ -22,8 +22,8 @@ class CommentWriter
         $comment = Comment::findOrFail($request->id);
             if ($comment->user_id != $currentUser->id) {
                 return response()->json([
-                    'status' => Response::HTTP_FORBIDDEN,
-                    'message' => "You don't have permission to update this comment",
+                    'status' => Response::HTTP_UNAUTHORIZED,
+                    'message' => "You are not the owner of this comment",
                     'data' => []
                 ]);
             }

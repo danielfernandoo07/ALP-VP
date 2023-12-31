@@ -64,10 +64,12 @@ class ContentController extends Controller
         return $content->loadMissing('user:id,name');
     }
 
-    public function show1($id)
+    public function showWithComments($id)
     {
-        $content = Content::findOrFail($id);
-        return $content;
+        $content = Content::with('user:id,name', 'comment')->findOrFail($id);
+        $content->created_at_formatted = $content->created_at;
+        $content->updated_at_formatted = $content->updated_at;
+        return $content->loadMissing('user:id,name');
     }
 
     public function update(Request $request, $id)
@@ -104,8 +106,20 @@ class ContentController extends Controller
     }
 
     public function delete($id){
-        $content = Content::findOrFail($id);
-        $content->delete();
-        return $content->loadMissing('user:id,name');
+        try {
+            $content = Content::findorFail($id);
+            $content->delete();
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => "Success",
+                'data' => []
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
 }

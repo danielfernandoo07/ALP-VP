@@ -245,34 +245,39 @@ fun Home() {
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
-        BoxWithConstraints {
-            val bottomNavHeight = 45.dp
-            val gridHeight = maxHeight - bottomNavHeight
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(1),
-                modifier = Modifier
-                    .padding(bottom = 0.dp)
-                    .background(Color.Black)
-                    .height(gridHeight)
-            ) {
-                item(
-                    span = { GridItemSpan(1) }
-                ) {
-                    TopBar()
-                }
-                item(
-                    span = { GridItemSpan(1) }
-                ) {
-                    FilterMenu()
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                item(
-                    span = { GridItemSpan(1) }
-                ) {
-                    Post()
-                }
-            }
-        }
+        TopBar()
+        FilterMenu()
+        Spacer(modifier = Modifier.height(8.dp))
+        Post()
+//
+//        BoxWithConstraints {
+//            val bottomNavHeight = 45.dp
+//            val gridHeight = maxHeight - bottomNavHeight
+//            LazyVerticalGrid(
+//                columns = GridCells.Fixed(1),
+//                modifier = Modifier
+//                    .padding(bottom = 0.dp)
+//                    .background(Color.Black)
+//                    .height(gridHeight)
+//            ) {
+//                item(
+//                    span = { GridItemSpan(1) }
+//                ) {
+//                    TopBar()
+//                }
+//                item(
+//                    span = { GridItemSpan(1) }
+//                ) {
+//                    FilterMenu()
+//                    Spacer(modifier = Modifier.height(8.dp))
+//                }
+//                item(
+//                    span = { GridItemSpan(1) }
+//                ) {
+//                    Post()
+//                }
+//            }
+//        }
 //        BottomNavigationBar()
     }
 }

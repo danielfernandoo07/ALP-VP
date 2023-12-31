@@ -18,7 +18,7 @@ import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.ExploreView
 import com.example.vp_alpapp.view.LoginView
-import com.example.vp_alpapp.view.ProfileView
+//import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
@@ -145,7 +145,7 @@ fun Routes() {
 
                     is ProfileUiState.Success -> {
 
-                        ProfileView(navController, status.data, profileViewModel)
+//                        ProfileView(navController, status.data, profileViewModel)
 
                     }
 

@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
@@ -90,7 +91,7 @@ fun Routes() {
                 else {
 
 
-                        navController.navigate(ListScreen.Profile2.name)
+                        navController.navigate(ListScreen.Profile.name)
 
                 }
             }
@@ -107,7 +108,7 @@ fun Routes() {
                 else {
 
 
-                        navController.navigate(ListScreen.Profile2.name)
+                        navController.navigate(ListScreen.Profile.name)
 
                 }
             }
@@ -154,13 +155,14 @@ fun Routes() {
 
                 when (status) {
                     is ProfileUiState.Loading -> {
+                        Profile(navController, Pengguna("","","","","",0,"","","",0,""))
 
                     }
 
                     is ProfileUiState.Success -> {
 
 
-                            Profile(navController)
+                        Profile(navController, status.data)
 
 
 
@@ -175,34 +177,7 @@ fun Routes() {
                 }
             }
 
-            composable(ListScreen.Profile2.name) {
 
-                val profileViewModel: ProfileViewModel = viewModel()
-
-                val status = profileViewModel.profileUiState
-
-                when (status) {
-                    is ProfileUiState.Loading -> {
-
-                    }
-
-                    is ProfileUiState.Success -> {
-
-
-                            Profile(navController)
-
-
-
-
-                    }
-
-
-                    is ProfileUiState.Error -> {
-
-                    }
-
-                }
-            }
 
             composable(ListScreen.Explore.name) {
 
@@ -238,7 +213,36 @@ fun Routes() {
 
                 val homeViewModel: HomeViewModel = viewModel()
 
-                    Home(navController, homeViewModel = homeViewModel)
+                val profileViewModel: ProfileViewModel = viewModel()
+
+                val status = profileViewModel.profileUiState
+
+                when (status) {
+                    is ProfileUiState.Loading -> {
+
+                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""))
+
+                    }
+
+                    is ProfileUiState.Success -> {
+
+
+                        Home(navController, homeViewModel = homeViewModel, user = status.data)
+
+
+
+
+
+                    }
+
+
+                    is ProfileUiState.Error -> {
+
+                    }
+
+                }
+
+
             }
 
         }

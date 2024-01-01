@@ -33,11 +33,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Pengguna
 
 @Composable
 fun Profile(
 
-    navController: NavController
+    navController: NavController,
+    user: Pengguna
 
 ) {
     Column(
@@ -81,13 +83,13 @@ fun Profile(
                     ) {
                         Column() {
                             Text(
-                                text = "Username",
+                                text = user.name,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp
                             )
                             Text(
-                                text = "CAPTION E MEREKA Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+                                text= user.bio,
                                 color = Color.White
                             )
                         }

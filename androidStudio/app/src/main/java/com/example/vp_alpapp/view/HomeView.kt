@@ -58,7 +58,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.viewmodel.HomeViewModel
+import com.example.vp_alpapp.viewmodel.ProfileViewModel
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.random.Random
@@ -218,7 +220,8 @@ fun Post() {
 @Composable
 fun TopBar(
     homeViewModel: HomeViewModel,
-    navController: NavController
+    navController: NavController,
+    user: Pengguna
 ) {
     var isLogoutVisible by remember { mutableStateOf(false) }
 
@@ -239,7 +242,7 @@ fun TopBar(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "NAMA MU",
+            text = user.name ,
             style = TextStyle(
                 fontSize = 18.sp,
                 fontWeight = FontWeight(800),
@@ -278,13 +281,14 @@ fun TopBar(
 @Composable
 fun Home(
     navController: NavController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    user: Pengguna
 ) {
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
-        TopBar(homeViewModel, navController = navController)
+        TopBar(homeViewModel, navController = navController, user)
         FilterMenu()
         Spacer(modifier = Modifier.height(8.dp))
         Post()

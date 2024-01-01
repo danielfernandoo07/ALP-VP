@@ -69,8 +69,15 @@ fun Routes() {
     }
 
     Scaffold (
-        
-        bottomBar = { BottomNavigationBar(navController = navController)}
+
+        bottomBar = {
+            if (MyContainer.ACCESS_TOKEN.isNotEmpty()) {
+                BottomNavigationBar(navController = navController)
+            } else {
+                // Set bottomBar to null to hide it on the login page
+                null
+            }
+        }
     ){ it ->
 
         NavHost(

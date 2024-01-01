@@ -28,13 +28,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.viewmodel.HomeViewModel
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.random.Random
@@ -210,7 +216,12 @@ fun Post() {
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(
+    homeViewModel: HomeViewModel,
+    navController: NavController
+) {
+    var isLogoutVisible by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
@@ -220,7 +231,11 @@ fun TopBar() {
         Image(
             painter = painterResource(id = R.drawable.profilepic),
             contentDescription = "Profile Picture",
-            modifier = Modifier.width(40.dp)
+            modifier = Modifier
+                .width(40.dp)
+                .clickable {
+                    // Implement profile picture click action
+                }
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
@@ -235,20 +250,41 @@ fun TopBar() {
         Image(
             painter = painterResource(id = R.drawable.arrowdown),
             contentDescription = "Arrow Down",
-            modifier = Modifier.width(24.dp)
+            modifier = Modifier
+                .width(24.dp)
+                .clickable {
+                    // Toggle the visibility of the logout button
+                    isLogoutVisible = !isLogoutVisible
+                }
         )
+    }
+
+    // Show the logout button when isLogoutVisible is true
+    if (isLogoutVisible) {
+        Button(
+            onClick = {
+                // Implement logout button click action
+                      homeViewModel.logout(navController = navController)
+
+            },
+            modifier = Modifier.padding(8.dp),
+            colors = ButtonDefaults.buttonColors(Color.Red)
+        ) {
+            Text("Logout")
+        }
     }
 }
 
 @Composable
 fun Home(
-    navController: NavController
+    navController: NavController,
+    homeViewModel: HomeViewModel
 ) {
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
-        TopBar()
+        TopBar(homeViewModel, navController = navController)
         FilterMenu()
         Spacer(modifier = Modifier.height(8.dp))
         Post()

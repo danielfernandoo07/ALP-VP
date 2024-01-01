@@ -24,6 +24,7 @@ import com.example.vp_alpapp.view.Profile
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
+import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.ProfileUiState
@@ -235,9 +236,9 @@ fun Routes() {
             composable(ListScreen.Home.name) {
 
 
+                val homeViewModel: HomeViewModel = viewModel()
 
-
-                    Home(navController)
+                    Home(navController, homeViewModel = homeViewModel)
             }
 
         }

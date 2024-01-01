@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
@@ -112,7 +113,10 @@ fun FilterMenu() {
 }
 
 @Composable
-fun Post() {
+fun Post(
+
+    content: Content
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,7 +151,7 @@ fun Post() {
                             .clip(CircleShape)
                     )
                     Text(
-                        text = "Username",
+                        text = content.user.name,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -163,7 +167,7 @@ fun Post() {
 
             // Post Title
             Text(
-                text = "Post Title",
+                text = content.headline,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -171,7 +175,7 @@ fun Post() {
 
             // Post Content
             Text(
-                text = "This is the content of the Instagram post. It can be a long text that describes the post.",
+                text = content.contentText,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -291,7 +295,7 @@ fun Home(
         TopBar(homeViewModel, navController = navController, user)
         FilterMenu()
         Spacer(modifier = Modifier.height(8.dp))
-        Post()
+//        Post()
 //
 //        BoxWithConstraints {
 //            val bottomNavHeight = 45.dp

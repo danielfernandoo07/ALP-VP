@@ -24,7 +24,7 @@ public interface UserClient {
     @POST("register")
     suspend fun register(@Body registerInfo: RegisterInfo): Register
 
-    @GET("content")
+    @GET("contents")
     suspend fun getAllContent(@Header("Authorization") token: String) : List<Content>
 
     @GET("content/{id}")

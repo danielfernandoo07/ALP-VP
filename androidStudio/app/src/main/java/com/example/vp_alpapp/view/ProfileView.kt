@@ -88,8 +88,18 @@ fun Profile(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp
                             )
+                            var teks = "Your Bio";
+
+                            if (user.bio == null) {
+
+                                teks = "Share a bit about yourself. Let others know who you are, what you're passionate about, and what makes you unique. Highlight your interests, experiences, and anything else that you think defines you. This is your space to express yourself and connect with others."
+                            }
+                            else {
+                                teks = user.bio
+                            }
                             Text(
-                                text= user.bio,
+
+                                text= teks,
                                 color = Color.White
                             )
                         }
@@ -230,7 +240,7 @@ fun Profile(
 
                     //FORLOOP ND SINI YA NGAB
                     Spacer(modifier = Modifier.height(20.dp))
-                    Post()
+//                    Post()
                 }
             }
         }

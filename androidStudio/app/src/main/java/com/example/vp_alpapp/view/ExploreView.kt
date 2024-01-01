@@ -25,14 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Content
 
 @Composable
 fun ExploreView(
 
-//    navController: NavController
+    listData: List<Content>?
 ) {
 
     Column(
@@ -84,13 +83,21 @@ fun ExploreView(
                 .padding(20.dp)
         )
 
-        //FORLOOP ND SINI YA NGAB
-        Spacer(modifier = Modifier.height(20.dp))
-        repeat(5) { index ->
-            Post() // Pass a unique identifier, e.g., index + 1, to each Post
-            Spacer(modifier = Modifier.height(8.dp)) // Add space between posts
+//        Spacer(modifier = Modifier.height(20.dp))
+//        repeat(5) { index ->
+//            Post()
+//            Spacer(modifier = Modifier.height(8.dp))
+//        }
+
+        if (listData != null) {
+            repeat(listData.size) {
+
+                Post(content = listData[it])
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+            }
         }
-//        BottomNavigationBar(navController = navController)
     }
 
 }
@@ -98,5 +105,5 @@ fun ExploreView(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun ExplorePreview() {
-    ExploreView()
+//    ExploreView()
 }

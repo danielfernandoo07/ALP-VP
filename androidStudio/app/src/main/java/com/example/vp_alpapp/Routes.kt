@@ -25,6 +25,7 @@ import com.example.vp_alpapp.view.Profile
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
+import com.example.vp_alpapp.viewmodel.HomeUIState
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
@@ -182,7 +183,35 @@ fun Routes() {
             composable(ListScreen.Explore.name) {
 
 
-                    ExploreView()
+                val homeViewModel: HomeViewModel = viewModel()
+
+
+                when (val status = homeViewModel.homeUIState) {
+                    is HomeUIState.Loading -> {
+                        
+                        ExploreView(listData = null)
+
+                    }
+
+                    is HomeUIState.Success -> {
+
+
+                        
+                        ExploreView(listData = status.data)
+
+
+
+
+                    }
+
+
+                    is HomeUIState.Error -> {
+
+
+
+                    }
+
+                }
 
 
 

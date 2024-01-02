@@ -46,7 +46,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 fun LoadImage(url: Any) {
 
     GlideImage(model = url, contentDescription = "",
-        contentScale = ContentScale.FillWidth,
+        modifier = Modifier.height(350.dp),
+        contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply{setToScale(0.5f,0.5f,0.5f,1f)}))
 
 }

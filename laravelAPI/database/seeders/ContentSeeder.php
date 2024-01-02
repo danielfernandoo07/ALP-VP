@@ -15,7 +15,6 @@ class ContentSeeder extends Seeder
     {
         Content::create([
             'headline' => "Headline 1",
-            'image' => "https://picsum.photos/200/300",
             'content_text' => "Content Text 1",
             'category_id' => 1,
             'user_id' => 1

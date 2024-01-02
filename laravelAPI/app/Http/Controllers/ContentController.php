@@ -8,6 +8,7 @@ use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ContentResource;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreContentRequest;
 use App\Http\Requests\UpdateContentRequest;
 use App\Http\Resources\ContentDetailResource;
@@ -39,7 +40,16 @@ class ContentController extends Controller
         try {
             $content = new Content();
             $content->headline = $request->headline;
-            $content->image = $request->image;
+            if ($request->file) {
+                $filename = $this->generateRandomString();
+                $extension = $request->file->extension();
+
+                Storage::putFileAs('image', $request->file, $filename . '.' . $extension);
+                $content->image = $filename . '.' . $extension;
+            } 
+            else{
+                $content->image = null;
+            }
             $content->content_text = $request->content_text;
             $content->category_id = $request->category_id;
             $content->created_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
@@ -121,5 +131,15 @@ class ContentController extends Controller
                 'data' => []
             ];
         }
+    }
+
+    function generateRandomString($length = 30) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

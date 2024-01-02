@@ -25,6 +25,5 @@ class DatabaseSeeder extends Seeder
 
         Content::factory()->count(10)->create();
 
-
     }
 }

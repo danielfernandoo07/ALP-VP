@@ -1,15 +1,28 @@
 package com.example.vp_alpapp.view
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,11 +30,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.vp_alpapp.ListScreen
+import com.example.vp_alpapp.R
 import com.example.vp_alpapp.viewmodel.RegisterViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,78 +58,281 @@ fun RegisterView(
     var prodiId by rememberSaveable { mutableStateOf(1) }
     var name by rememberSaveable { mutableStateOf("") }
     var nim by rememberSaveable { mutableStateOf("") }
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(Color(0xFFF3F3F3))
+            .padding(30.dp)
     ) {
-        // Email TextField
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
+        Column{
+            Text(
+                text = "Welcome!\nCreate An Account!",
+                style = TextStyle(
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight(800),
+                    color = Color(0xFF000000),
 
-        // Password TextField
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
+                    )
+            )
+            Spacer(modifier = Modifier.height(50.dp))
 
-        // NIM TextField
-        TextField(
-            value = nim,
-            onValueChange = { nim = it },
-            label = { Text("NIM") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mail),
+                    contentDescription = "Email Picture",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                TextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = { Text("Email Address") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.key),
+                    contentDescription = "key Picture",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                TextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    placeholder = { Text("Password") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
 
-        // Prodi ID TextField
-        TextField(
-            value = prodiId.toString(),
-            onValueChange = { prodiId = it.toIntOrNull() ?: 0 },
-            label = { Text("Prodi ID") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
+            //NIM
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.nim),
+                    contentDescription = "NIM Picture",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                TextField(
+                    value = nim,
+                    onValueChange = { nim = it },
+                    placeholder = { Text("NIM") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            //PRODI ID
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.prodi),
+                    contentDescription = "prodi Picture",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                TextField(
+                    value = prodiId.toString(),
+                    onValueChange = { prodiId = it.toIntOrNull() ?: 0 },
+                    label = { Text("Prodi ID") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            //name
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.profilepic),
+                    contentDescription = "pp Picture",
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    placeholder = { Text("Name") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
+                )
+            }
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            )
+            Spacer(modifier = Modifier.height(20.dp))
 
-        // Name TextField
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-
-        // Button to submit
-        Button(
-            onClick = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(horizontal = 15.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier.fillMaxHeight()  // Added to center content vertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 50.dp)
+                            .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
+                            .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
+                            .padding(12.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    ) {
+                        Text(
+                            text = "Register",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(600),
+                                color = Color(0xFFFFFFFF),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier
+                                .clickable {
                 registerViewModel.register(email, password, nim, prodiId, name, navController)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = "Register")
+                                }
+                                .align(Alignment.Center)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "Already Have An Account? Click Here!",
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF8C8C8C),
+                            textAlign = TextAlign.Center,
+                        ),
+                        modifier = Modifier.clickable {
+                             navController.navigate(ListScreen.Login.name)
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -114,7 +340,5 @@ fun RegisterView(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun RegisterPreview() {
-
 //    RegisterView()
-
 }

@@ -241,7 +241,6 @@ fun Routes() {
                 val registerViewModel: RegisterViewModel = viewModel()
 
                 RegisterView(navController = navController, registerViewModel = registerViewModel)
-
             }
 
             composable(ListScreen.Home.name) {

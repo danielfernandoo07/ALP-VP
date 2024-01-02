@@ -31,15 +31,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 
 @Composable
 fun Profile(
 
     navController: NavController,
-    user: Pengguna
+    user: Pengguna,
+    listku: List<Content>?
 
 ) {
     Column(
@@ -239,7 +240,19 @@ fun Profile(
                     }
 
                     //FORLOOP ND SINI YA NGAB
-                    Spacer(modifier = Modifier.height(20.dp))
+                    if (listku != null) {
+                        repeat(listku.size) {
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Post(content = listku[it])
+
+
+                        }
+                    }
+                    else {
+
+                    }
+
 //                    Post()
                 }
             }

@@ -24,6 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +37,19 @@ import androidx.navigation.NavController
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun LoadImage(url: Any) {
+
+    GlideImage(model = url, contentDescription = "",
+        contentScale = ContentScale.FillWidth,
+        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply{setToScale(0.5f,0.5f,0.5f,1f)}))
+
+}
 @Composable
 fun Profile(
 
@@ -61,6 +76,9 @@ fun Profile(
                     .height(350.dp)
                     .background(Color.Blue) // GANTI IMAGE BACKGROUND
             ) {
+
+                LoadImage(url = user.photo)
+
                 Column() {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

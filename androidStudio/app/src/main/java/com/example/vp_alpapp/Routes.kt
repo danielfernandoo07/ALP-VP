@@ -231,7 +231,7 @@ fun Routes() {
 
 
 
-                    AddPostView(createContent = createContentViewModel)
+                    AddPostView(createContent = createContentViewModel, context = LocalContext.current)
 
 
             }

@@ -1,5 +1,10 @@
 package com.example.vp_alpapp.view
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,9 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vp_alpapp.R
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.remember
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 
 
@@ -47,9 +57,25 @@ import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 fun AddPostView(
 
     createContent: CreateContentViewModel,
+    context: Context
 //    navController: NavController
 
 ) {
+
+    var selectedImageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    var selectedImageUris by remember {
+        mutableStateOf<List<Uri>>(emptyList())
+    }
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> selectedImageUri = uri }
+    )
+    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        onResult = { uris -> selectedImageUris = uris }
+    )
 
     var headline by rememberSaveable { mutableStateOf("") }
     var image by rememberSaveable { mutableStateOf("") }
@@ -148,21 +174,40 @@ fun AddPostView(
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
                 )
                 // IMG URL
-                TextField(
-                    value = image,
-                    onValueChange = { image = it },
-                    label = { Text("Image URL") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = Color(0xFF8F8F8F),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        containerColor = Color.Transparent,
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
-                )
+//                TextField(
+//                    value = image,
+//                    onValueChange = { image = it },
+//                    label = { Text("Image URL") },
+//                    colors = TextFieldDefaults.textFieldColors(
+//                        cursorColor = Color(0xFF8F8F8F),
+//                        focusedIndicatorColor = Color.Transparent,
+//                        unfocusedIndicatorColor = Color.Transparent,
+//                        containerColor = Color.Transparent,
+//                    ),
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(8.dp),
+//                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
+//                )
+
+                Button(onClick = {
+                    singlePhotoPickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }) {
+                    Text(text = "Pick one photo")
+                }
+                LazyColumn() {
+                    item {
+                        AsyncImage(
+                            model = selectedImageUri,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+
                 Row {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -171,12 +216,15 @@ fun AddPostView(
                         // Button to submit
                         Button(
                             onClick = {
-                                createContent.createContent(
-                                    headline = headline,
-                                    image = image,
-                                    content_text = contentText,
-                                    category_id = categoryId
-                                )
+                                selectedImageUri?.let {
+                                    createContent.uploadAndCreateContent(
+                                        headline = headline,
+                                        image = it,
+                                        content_text = contentText,
+                                        category_id = categoryId,
+                                        context = context
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -204,5 +252,5 @@ fun AddPostPreview() {
 
     val createContent: CreateContentViewModel = viewModel()
 
-    AddPostView(createContent)
+//    AddPostView(createContent)
 }

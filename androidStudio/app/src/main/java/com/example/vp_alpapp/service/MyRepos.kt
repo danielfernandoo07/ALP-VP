@@ -62,5 +62,11 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
+    suspend fun getUserKonten(token: String, userId: String): List<Content> {
+
+        return userClient.getUserKonten(token,userId)
+
+    }
+
 
 }

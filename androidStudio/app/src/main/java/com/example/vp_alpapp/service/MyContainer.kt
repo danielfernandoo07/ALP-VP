@@ -21,7 +21,7 @@ class MyContainer {
     }
     companion object{
         //ganti token sesuai postman masing-masing saat login api
-        var ACCESS_TOKEN = "";
+        var ACCESS_TOKEN = ""
         lateinit var user: Pengguna
     }
 

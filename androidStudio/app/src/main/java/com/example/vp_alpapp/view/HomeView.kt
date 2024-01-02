@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
+import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
@@ -225,7 +226,8 @@ fun Post(
 fun TopBar(
     homeViewModel: HomeViewModel,
     navController: NavController,
-    user: Pengguna
+    user: Pengguna,
+    dataStore: DataStore
 ) {
     var isLogoutVisible by remember { mutableStateOf(false) }
 
@@ -271,7 +273,7 @@ fun TopBar(
         Button(
             onClick = {
                 // Implement logout button click action
-                      homeViewModel.logout(navController = navController)
+                      homeViewModel.logout(navController = navController, dataStore)
 
             },
             modifier = Modifier.padding(8.dp),
@@ -286,13 +288,14 @@ fun TopBar(
 fun Home(
     navController: NavController,
     homeViewModel: HomeViewModel,
-    user: Pengguna
+    user: Pengguna,
+    dataStore: DataStore
 ) {
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
-        TopBar(homeViewModel, navController = navController, user)
+        TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
         FilterMenu()
         Spacer(modifier = Modifier.height(8.dp))
 //        Post()

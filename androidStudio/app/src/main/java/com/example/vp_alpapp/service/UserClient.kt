@@ -44,4 +44,7 @@ public interface UserClient {
 
     @GET("user")
     suspend fun getUser(@Header("Authorization") token: String): Pengguna
+
+    @GET("user/contents/{userId}")
+    suspend fun getUserKonten(@Header("Aauthorization") token: String, @Path("userId") userId: String): List<Content>
 }

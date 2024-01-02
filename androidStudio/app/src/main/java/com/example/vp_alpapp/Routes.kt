@@ -32,6 +32,7 @@ import com.example.vp_alpapp.viewmodel.LoginViewModel
 import com.example.vp_alpapp.viewmodel.ProfileUiState
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
 import com.example.vp_alpapp.viewmodel.RegisterViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -49,7 +50,7 @@ enum class ListScreen() {
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
 @Composable
 fun Routes() {
 
@@ -63,7 +64,7 @@ fun Routes() {
         dataStore.getToken.collect{
             if (it != null) {
                 MyContainer.ACCESS_TOKEN = it
-                MyContainer.user = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
+//                MyContainer.user = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
             }
         }
     }
@@ -90,7 +91,7 @@ fun Routes() {
             composable(ListScreen.Login.name) {
 
 
-                if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                if (MyContainer.ACCESS_TOKEN.isNullOrEmpty()) {
                     val loginViewModel: LoginViewModel = viewModel()
 
                     LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, "" )
@@ -255,14 +256,14 @@ fun Routes() {
                 when (status) {
                     is ProfileUiState.Loading -> {
 
-                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""))
+                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""), dataStore)
 
                     }
 
                     is ProfileUiState.Success -> {
 
 
-                        Home(navController, homeViewModel = homeViewModel, user = status.data)
+                        Home(navController, homeViewModel = homeViewModel, user = status.data, dataStore = dataStore)
 
 
 

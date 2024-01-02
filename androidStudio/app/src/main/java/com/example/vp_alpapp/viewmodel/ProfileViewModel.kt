@@ -14,7 +14,7 @@ import com.example.vp_alpapp.service.MyContainer
 import kotlinx.coroutines.launch
 
 sealed interface ProfileUiState {
-    data class Success(val data: Pengguna) : ProfileUiState
+    data class Success(val data: Pengguna, val data1: List<Content>) : ProfileUiState
     object Error : ProfileUiState
     object Loading : ProfileUiState
 
@@ -27,6 +27,8 @@ class ProfileViewModel : ViewModel()
         private set
 
     lateinit var data: Pengguna
+    lateinit var data1: List<Content>
+
 
     init {
         load()
@@ -40,7 +42,8 @@ class ProfileViewModel : ViewModel()
 
             try {
                 data = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
-                profileUiState = ProfileUiState.Success(data)
+                data1 = MyContainer().myRepos.getUserKonten(MyContainer.ACCESS_TOKEN, data.id.toString())
+                profileUiState = ProfileUiState.Success(data, data1)
             }catch(e: Exception){
                 Log.d("FAILED", e.message.toString())
                 profileUiState = ProfileUiState.Error
@@ -49,6 +52,8 @@ class ProfileViewModel : ViewModel()
         }
 
     }
+
+
     public fun logout(
         navController: NavController
     ) {
@@ -58,6 +63,7 @@ class ProfileViewModel : ViewModel()
             MyContainer().myRepos.logout(MyContainer.ACCESS_TOKEN)
 
             MyContainer.ACCESS_TOKEN = ""
+
 
             navController.navigate(ListScreen.Login.name)
         }

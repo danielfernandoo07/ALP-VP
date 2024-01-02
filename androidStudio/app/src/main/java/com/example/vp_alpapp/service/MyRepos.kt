@@ -1,6 +1,7 @@
 package com.example.vp_alpapp.service
 
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.Pengguna
@@ -68,5 +69,16 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
+    suspend fun updateContent(id: Int, headline: String, image: String, contentText: String, categoryId: Int) {
+
+            // Prepare the request body
+            val request = ContentUpdateRequest(headline, image, contentText, categoryId)
+
+            // Make the API call using the userClient
+            val response = userClient.updateContent(id, request)
+
+
+       
+    }
 
 }

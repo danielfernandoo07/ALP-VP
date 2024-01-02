@@ -1,6 +1,7 @@
 package com.example.vp_alpapp.service
 
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.LoginToken
@@ -14,6 +15,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Header
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 public interface UserClient {
@@ -47,4 +49,8 @@ public interface UserClient {
 
     @GET("user/contents/{userId}")
     suspend fun getUserKonten(@Header("Aauthorization") token: String, @Path("userId") userId: String): List<Content>
+
+    @PUT("content/{id}")
+    suspend fun updateContent(@Path("id") id: Int, @Body request: ContentUpdateRequest)
+
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -50,6 +51,22 @@ fun LoadImage(url: Any) {
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply{setToScale(0.5f,0.5f,0.5f,1f)}))
 
+}
+@Composable
+@OptIn(ExperimentalGlideComposeApi::class)
+fun LoadImageCustom(url: String, modifier: Modifier = Modifier, contentScale: ContentScale) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 170.dp)
+    ) {
+        GlideImage(
+            model = url,
+            contentDescription = null,
+            contentScale = contentScale,
+            modifier = modifier
+        )
+    }
 }
 @Composable
 fun Profile(

@@ -249,6 +249,9 @@ fun Profile(
 
                         }
                     }
+                    else {
+
+                    }
 
 //                    Post()
                 }

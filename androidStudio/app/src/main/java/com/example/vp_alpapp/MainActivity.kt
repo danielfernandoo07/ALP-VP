@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -80,7 +81,13 @@ fun BottomNavigationBar(
     ) {
         IconButton(onClick = {
 
-            navController.navigate(ListScreen.Home.name)
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Home.name)
+
+            }
 
 
         }) {
@@ -94,7 +101,14 @@ fun BottomNavigationBar(
         }
 
         IconButton(onClick = {
-            navController.navigate(ListScreen.Explore.name)
+
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Explore.name)
+
+            }
         }) {
             Image(
                 painter = painterResource(id = R.drawable.search),
@@ -104,7 +118,13 @@ fun BottomNavigationBar(
             )
         }
         IconButton(onClick = {
-            navController.navigate(ListScreen.CreatePost.name)
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.CreatePost.name)
+
+            }
         }) {
             Image(
                 painter = painterResource(id = R.drawable.post),
@@ -126,7 +146,13 @@ fun BottomNavigationBar(
         IconButton(onClick = {
 
 
-            navController.navigate(ListScreen.Profile.name)
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Profile.name)
+
+            }
 
         }) {
             Image(

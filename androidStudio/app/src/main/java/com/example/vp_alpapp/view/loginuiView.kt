@@ -55,14 +55,14 @@ import com.example.vp_alpapp.viewmodel.LoginViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginUIView(
-//    loginViewModel: LoginViewModel,
-//    dataStore: DataStore,
-//    context: Context,
-//    navController: NavController,
-//    firstvalue: String
+    loginViewModel: LoginViewModel,
+    dataStore: DataStore,
+    context: Context,
+    navController: NavController,
+    firstvalue: String
 ) {
     // Variabel email dan password yang bisa dirubah menggunakan TextField
-    var email by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(firstvalue) }
     var password by rememberSaveable { mutableStateOf("") }
 
     // State untuk menyimpan status validasi email
@@ -204,13 +204,13 @@ fun LoginUIView(
                             ),
                             modifier = Modifier
                                 .clickable {
-//                                    if (isEmailValid) {
-//                        loginViewModel.login(dataStore = dataStore, context, email, password, navController)
-//                    } else {
-//                        // Tampilkan pesan kesalahan jika email tidak valid
-//                        // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
-//                        Log.d("LoginView", "Invalid email format")
-//                    }
+                                    if (isEmailValid) {
+                        loginViewModel.login(dataStore = dataStore, context, email, password, navController)
+                    } else {
+                        // Tampilkan pesan kesalahan jika email tidak valid
+                        // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
+                        Log.d("LoginView", "Invalid email format")
+                    }
                                 }
                                 .align(Alignment.Center)
                         )
@@ -225,7 +225,7 @@ fun LoginUIView(
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier.clickable {
-                            // navController.navigate(ListScreen.Register.name)
+                             navController.navigate(ListScreen.Register.name)
                         }
                     )
                 }
@@ -239,5 +239,5 @@ fun LoginUIView(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun loginViewUI() {
-    LoginUIView()
+//    LoginUIView()
 }

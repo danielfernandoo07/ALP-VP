@@ -7,6 +7,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,6 +21,7 @@ import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.ExploreView
 import com.example.vp_alpapp.view.Home
+import com.example.vp_alpapp.view.LoginUIView
 import com.example.vp_alpapp.view.LoginView
 import com.example.vp_alpapp.view.Profile
 //import com.example.vp_alpapp.view.ProfileView
@@ -46,7 +49,6 @@ enum class ListScreen() {
     Profile,
     Explore,
     Register,
-    Profile2
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -58,6 +60,7 @@ fun Routes() {
     val dataStore = DataStore(LocalContext.current)
 
 
+    val tokenState by dataStore.getToken.collectAsState(initial = null)
 
 
     GlobalScope.launch {
@@ -72,12 +75,8 @@ fun Routes() {
     Scaffold (
 
         bottomBar = {
-            if (MyContainer.ACCESS_TOKEN.isNotEmpty()) {
                 BottomNavigationBar(navController = navController)
-            } else {
-                // Set bottomBar to null to hide it on the login page
-                null
-            }
+
         }
     ){ it ->
 
@@ -94,7 +93,7 @@ fun Routes() {
                 if (MyContainer.ACCESS_TOKEN.isNullOrEmpty()) {
                     val loginViewModel: LoginViewModel = viewModel()
 
-                    LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, "" )
+                    LoginUIView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, "" )
 
                 }
                 else {
@@ -111,7 +110,7 @@ fun Routes() {
                 if (MyContainer.ACCESS_TOKEN.isEmpty()) {
                     val loginViewModel: LoginViewModel = viewModel()
 
-                    it.arguments?.let { it1 -> LoginView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, it1.getString("email", "") ) }
+                    it.arguments?.let { it1 -> LoginUIView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, it1.getString("email", "") ) }
 
                 }
                 else {

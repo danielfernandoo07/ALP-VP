@@ -164,14 +164,14 @@ fun Routes() {
 
                 when (status) {
                     is ProfileUiState.Loading -> {
-                        Profile(navController, Pengguna("","","","","",0,"","","",0,""))
+                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null)
 
                     }
 
                     is ProfileUiState.Success -> {
 
 
-                        Profile(navController, status.data)
+                        Profile(navController, status.data, status.data1)
 
 
 

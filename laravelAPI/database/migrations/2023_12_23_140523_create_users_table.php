@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('nim');
-            $table->string('photo')->nullable();
             $table->string('bio')->nullable();
             $table->unsignedBigInteger('prodi_id');
             $table->unsignedBigInteger('friend_id')->nullable();

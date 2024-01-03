@@ -85,17 +85,47 @@ class ContentController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'headline' => 'required',
-            'content_text' => 'required',
-            'category_id' => 'required',
+            'headline' => 'sometimes|required',
+            'content_text' => 'sometimes|required',
+            'image' => 'sometimes|required|image',
+            'category_id' => 'sometimes|required',
         ]);
 
         try {
             $content = Content::findOrFail($id);
-            $content->headline = $request->headline;
-            $content->image = $request->image;
-            $content->content_text = $request->content_text;
-            $content->category_id = $request->category_id;
+            $oldData = [
+                'headline' => $content->headline,
+                'image' => $content->image,
+                'content_text' => $content->content_text,
+                'category_id' => $content->category_id,
+            ];
+            if ($request->headline) {
+                $content->headline = $request->headline;
+            } else {
+                $content->headline = $oldData['headline'];
+            }
+
+            if ($request->file) {
+                $filename = $this->generateRandomString();
+                $extension = $request->file->extension();
+
+                Storage::putFileAs('image', $request->file, $filename . '.' . $extension);
+                $content->image = $filename . '.' . $extension;
+            } else {
+                $content->image = $oldData['image'];
+            }
+            
+            if ($request->content_text) {
+                $content->content_text = $request->content_text;
+            } else {
+                $content->content_text = $oldData['content_text'];
+            }
+
+            if ($request->category_id) {
+                $content->category_id = $request->category_id;
+            } else {
+                $content->category_id = $oldData['category_id'];
+            }
             $content->user_id = Auth::user()->id;
             $content->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $content->save();

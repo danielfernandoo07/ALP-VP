@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,8 +27,17 @@ class AuthenticationController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            if ($request->file) {
+                $filename = $this->generateRandomString();
+                $extension = $request->file->extension();
+
+                Storage::putFileAs('photo', $request->file, $filename . '.' . $extension);
+                $user->photo = $filename . '.' . $extension;
+            } 
+            else {
+                $user->photo = 'https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg';
+            }
             $user->nim = $request->nim;
-            $user->photo = $request->photo;
             $user->bio = $request->bio;
             $user->prodi_id = $request->prodi_id;
             $user->save();
@@ -86,5 +96,15 @@ class AuthenticationController extends Controller
             'data' => []
         ];
 
+    }
+
+    function generateRandomString($length = 30) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

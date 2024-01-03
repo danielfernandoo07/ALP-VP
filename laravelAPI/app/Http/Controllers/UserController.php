@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -46,40 +47,62 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'sometimes|required',
             'password' => 'sometimes|required',
-            'photo' => 'sometimes|required',
+            'photo' => 'sometimes|required|image',
             'bio' => 'sometimes|required',
         ]);
 
-        try {
-            if (isset($validatedData['name'])) {
-                $user->name = $validatedData['name'];
-            }
+        if (!empty($user)){
+            try {
+                $oldData = [
+                    'name' => $user->name,
+                    'password' => $user->password,
+                    'photo' => $user->photo,
+                    'bio' => $user->bio,
+                ];
+                if ($request->name) {
+                    $user->name = $request->name;
+                } else{
+                    $user->name = $oldData['name'];
+                }
     
-            if (isset($validatedData['password'])) {
-                $user->password = Hash::make($validatedData['password']);
-            }
-    
-            if (isset($validatedData['photo'])) {
-                $user->photo = $validatedData['photo'];
-            }
-    
-            if (isset($validatedData['bio'])) {
-                $user->bio = $validatedData['bio'];
-            }
-            $user->save();
+                if ($request->password) {
+                    $user->password = Hash::make($request->password);
+                } else{
+                    $user->password = $oldData['password'];
+                }
 
-            return [
-                'status' => Response::HTTP_OK,
-                'message' => "User updated successfully",
-                'data' => $user
-            ];
-        } catch (Exception $e) {
-            return [
-                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage(),
-                'data' => []
-            ];
+                if ($request->file) {
+                    $filename = $this->generateRandomString();
+                    $extension = $request->file->extension();
+    
+                    Storage::putFileAs('photo', $request->file, $filename . '.' . $extension);
+                    $user->photo = $filename . '.' . $extension;
+                } else{
+                    $user->photo = $oldData['photo'];
+                }
+
+                if ($request->bio) {
+                    $user->bio = $request->bio;
+                } else{
+                    $user->bio = $oldData['bio'];
+                }
+    
+                $user->save();
+    
+                return [
+                    'status' => Response::HTTP_OK,
+                    'message' => "User updated successfully",
+                    'data' => $user
+                ];
+            } catch (Exception $e) {
+                return [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ];
+            }
         }
+        
     }
 
     public function delete(Request $request)
@@ -92,7 +115,7 @@ class UserController extends Controller
                 'message' => "User not authenticated",
                 'data' => []
             ];
-        }else{
+        } else {
             $user->currentAccessToken()->delete();
             $user->delete();
             return [
@@ -101,5 +124,16 @@ class UserController extends Controller
                 'data' => []
             ];
         }
+    }
+
+    function generateRandomString($length = 30)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

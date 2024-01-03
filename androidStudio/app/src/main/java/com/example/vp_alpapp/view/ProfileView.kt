@@ -3,6 +3,7 @@ package com.example.vp_alpapp.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.vp_alpapp.ListScreen
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -57,8 +59,7 @@ fun LoadImage(url: Any) {
 fun LoadImageCustom(url: String, modifier: Modifier = Modifier, contentScale: ContentScale) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = 170.dp)
+
     ) {
         GlideImage(
             model = url,
@@ -161,7 +162,9 @@ fun Profile(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp),
+                                .padding(horizontal = 12.dp).clickable {
+                                        navController.navigate(ListScreen.EditProfile.name)
+                                },
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -170,6 +173,7 @@ fun Profile(
                                 color = Color.White,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
+
                             )
                             Image(
                                 painter = painterResource(id = R.drawable.arrdownwhite),

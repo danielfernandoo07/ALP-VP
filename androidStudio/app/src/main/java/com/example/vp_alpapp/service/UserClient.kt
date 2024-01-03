@@ -10,11 +10,13 @@ import com.example.vp_alpapp.model.Register
 import com.example.vp_alpapp.model.RegisterInfo
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.model.UserId
+import com.example.vp_alpapp.model.UserUpdateRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -51,6 +53,11 @@ public interface UserClient {
     suspend fun getUserKonten(@Header("Aauthorization") token: String, @Path("userId") userId: String): List<Content>
 
     @PUT("content/{id}")
-    suspend fun updateContent(@Path("id") id: Int, @Body request: ContentUpdateRequest)
+    suspend fun updateContent(@Header("Aauthorization") token: String,@Path("id") id: Int, @Body request: ContentUpdateRequest)
+
+    @PATCH("user")
+    suspend fun updateUser(@Header("Authorization") token: String, @Body request: UserUpdateRequest)
+
+
 
 }

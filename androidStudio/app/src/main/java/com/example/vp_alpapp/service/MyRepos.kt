@@ -6,6 +6,7 @@ import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.model.RegisterInfo
+import com.example.vp_alpapp.model.UserUpdateRequest
 import java.net.HttpURLConnection
 
 class MyRepos(private val userClient: UserClient) {
@@ -69,16 +70,24 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
-    suspend fun updateContent(id: Int, headline: String, image: String, contentText: String, categoryId: Int) {
+    suspend fun updateContent(token: String,id: Int, headline: String, image: String, contentText: String, categoryId: Int) {
 
             // Prepare the request body
             val request = ContentUpdateRequest(headline, image, contentText, categoryId)
 
             // Make the API call using the userClient
-            val response = userClient.updateContent(id, request)
+            val response = userClient.updateContent(token,id, request)
 
 
-       
+
+    }
+
+    suspend fun updateUser(token: String,name: String, password: String, image: String, bio:String) {
+
+        val  request = UserUpdateRequest(name,password,image,bio)
+
+        userClient.updateUser(token, request)
+
     }
 
 }

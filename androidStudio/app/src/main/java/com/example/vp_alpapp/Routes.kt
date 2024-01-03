@@ -19,15 +19,17 @@ import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
+import com.example.vp_alpapp.view.EditProfileView
+import com.example.vp_alpapp.view.EditProfileView1
 import com.example.vp_alpapp.view.ExploreView
 import com.example.vp_alpapp.view.Home
 import com.example.vp_alpapp.view.LoginUIView
-import com.example.vp_alpapp.view.LoginView
 import com.example.vp_alpapp.view.Profile
 //import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
+import com.example.vp_alpapp.viewmodel.EditProfileViewModel
 import com.example.vp_alpapp.viewmodel.HomeUIState
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
@@ -49,6 +51,7 @@ enum class ListScreen() {
     Profile,
     Explore,
     Register,
+    EditProfile
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -231,7 +234,7 @@ fun Routes() {
 
 
 
-                    AddPostView(createContent = createContentViewModel, context = LocalContext.current)
+                AddPostView(createContent = createContentViewModel, context = LocalContext.current)
 
 
             }
@@ -280,7 +283,40 @@ fun Routes() {
 
             }
 
+            composable(ListScreen.EditProfile.name) {
+
+                val profileViewModel: ProfileViewModel = viewModel()
+
+                val editProfileViewModel: EditProfileViewModel = viewModel()
+
+                val status = profileViewModel.profileUiState
+
+                when (status) {
+                    is ProfileUiState.Loading -> {
+
+
+                        EditProfileView1(navController = navController, editProfileViewModel = editProfileViewModel, user = null)
+
+                    }
+
+                    is ProfileUiState.Success -> {
+
+
+
+                        EditProfileView(navController = navController, editProfileViewModel = editProfileViewModel, user = status.data)
+
+                    }
+
+
+                    is ProfileUiState.Error -> {
+
+                    }
+
+                }
+            }
+
+
+            }
         }
 
     }
-}

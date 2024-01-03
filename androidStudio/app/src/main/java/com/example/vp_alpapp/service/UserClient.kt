@@ -11,13 +11,17 @@ import com.example.vp_alpapp.model.RegisterInfo
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.model.UserId
 import com.example.vp_alpapp.model.UserUpdateRequest
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 public interface UserClient {
@@ -34,10 +38,15 @@ public interface UserClient {
     @GET("content/{id}")
     suspend fun getKontenById(@Header("Authorization") token: String, @Path("id") contentId: String): Content
 
+    @Multipart
     @POST("content")
     suspend fun createContent(
         @Header("Authorization") token: String,
-        @Body content: CreateContent
+        @Part("headline") headline: RequestBody,
+        @Part("content_text") contentText: RequestBody,
+        @Part("category_id") categoryId: RequestBody,
+        @Part("user") user: RequestBody,
+        @Part image: MultipartBody.Part
     )
 
     @GET("logout")

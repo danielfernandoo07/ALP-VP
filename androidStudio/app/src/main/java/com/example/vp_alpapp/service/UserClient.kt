@@ -46,7 +46,7 @@ public interface UserClient {
         @Part("content_text") contentText: RequestBody,
         @Part("category_id") categoryId: RequestBody,
         @Part("user") user: RequestBody,
-        @Part image: MultipartBody.Part
+        @Part file: MultipartBody.Part
     )
 
     @GET("logout")

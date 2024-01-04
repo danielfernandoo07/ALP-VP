@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
@@ -63,6 +64,8 @@ import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.service.MyContainer
+import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
 import java.text.NumberFormat
@@ -118,7 +121,9 @@ fun FilterMenu() {
 @Composable
 fun Post(
 
-    content: Content
+    user: Pengguna,
+    content: Content,
+    exploreViewModel: ExploreViewModel
 ) {
     Box(
         modifier = Modifier
@@ -161,11 +166,20 @@ fun Post(
                 }
 
                 // Three Dot Menu
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = "Menu",
-                    modifier = Modifier.clickable { /* Handle menu click */ }
-                )
+                if (user!= null && user.id == content.user.id) {
+                    // Show delete button and make it clickable
+                    IconButton(
+                        onClick = {
+
+                                  exploreViewModel.delete(content.id.toString())
+
+                        },
+                        modifier = Modifier
+                            .size(48.dp)
+                    ) {
+
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")                    }
+                }
             }
 
             // Post Title
@@ -176,7 +190,8 @@ fun Post(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LoadImageCustom(url = content.image, modifier = Modifier.fillMaxWidth()
+            LoadImageCustom(url = content.image, modifier = Modifier
+                .fillMaxWidth()
                 .heightIn(max = 170.dp), contentScale = ContentScale.Crop)
             Spacer(modifier = Modifier.height(10.dp))
 

@@ -27,11 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.viewmodel.ExploreViewModel
 
 @Composable
 fun ExploreView(
 
-    listData: List<Content>?
+    listData: List<Content>?,
+    user: Pengguna?,
+    exploreViewModel: ExploreViewModel
 ) {
 
     Column(
@@ -92,7 +96,9 @@ fun ExploreView(
         if (listData != null) {
             repeat(listData.size) {
 
-                Post(content = listData[it])
+                if (user != null) {
+                    Post(content = listData[it], user = user, exploreViewModel = exploreViewModel)
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 

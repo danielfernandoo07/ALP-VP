@@ -30,7 +30,7 @@ import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.EditProfileViewModel
-import com.example.vp_alpapp.viewmodel.HomeUIState
+import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
@@ -161,19 +161,19 @@ fun Routes() {
             composable(ListScreen.Profile.name) {
 
                 val profileViewModel: ProfileViewModel = viewModel()
-
+                val exploreViewModel: ExploreViewModel = viewModel()
                 val status = profileViewModel.profileUiState
 
                 when (status) {
                     is ProfileUiState.Loading -> {
-                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null)
+                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null, exploreViewModel)
 
                     }
 
                     is ProfileUiState.Success -> {
 
 
-                        Profile(navController, status.data, status.data1)
+                        Profile(navController, status.data, status.data1, exploreViewModel)
 
 
 
@@ -193,29 +193,30 @@ fun Routes() {
             composable(ListScreen.Explore.name) {
 
 
-                val homeViewModel: HomeViewModel = viewModel()
-
-
-                when (val status = homeViewModel.homeUIState) {
-                    is HomeUIState.Loading -> {
-                        
-                        ExploreView(listData = null)
-
-                    }
-
-                    is HomeUIState.Success -> {
-
-
-                        
-                        ExploreView(listData = status.data)
+                val exploreViewModel: ExploreViewModel = viewModel()
 
 
 
+                when (val status = exploreViewModel.exploreUiState) {
+                    is ExploreViewModel.ExploreUiState.Loading -> {
+
+                        ExploreView(listData = null, null, exploreViewModel)
 
                     }
 
+                    is ExploreViewModel.ExploreUiState.Success -> {
 
-                    is HomeUIState.Error -> {
+
+                        
+                        ExploreView(listData = status.data, status.datauser, exploreViewModel)
+
+
+
+
+                    }
+
+
+                    is ExploreViewModel.ExploreUiState.Error -> {
 
 
 

@@ -42,6 +42,7 @@ import com.example.vp_alpapp.model.Pengguna
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.vp_alpapp.ListScreen
+import com.example.vp_alpapp.viewmodel.ExploreViewModel
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -73,7 +74,8 @@ fun Profile(
 
     navController: NavController,
     user: Pengguna,
-    listku: List<Content>?
+    listku: List<Content>?,
+    exploreViewModel: ExploreViewModel
 
 ) {
     Column(
@@ -295,7 +297,7 @@ fun Profile(
                         repeat(listku.size) {
                             Spacer(modifier = Modifier.height(20.dp))
 
-                            Post(content = listku[it])
+                            Post(content = listku[it], user = user, exploreViewModel = exploreViewModel)
 
 
                         }

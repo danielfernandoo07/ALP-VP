@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])->group(
         Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author'); //update content
         Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author'); //delete content
         Route::get('/user/contents/{userId}', [ContentController::class, 'contentsByUser']); //show all contents by user
+        Route::get('/content/{id}/image', [ContentController::class, 'showImage']); //show image by content
 
         //comment routes
         Route::get('/comment', [CommentController::class, 'index']); //test

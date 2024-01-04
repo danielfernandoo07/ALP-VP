@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Http\Resources\ContentResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreContentRequest;
@@ -40,14 +41,12 @@ class ContentController extends Controller
         try {
             $content = new Content();
             $content->headline = $request->headline;
-            if ($request->file) {
-                $filename = $this->generateRandomString();
-                $extension = $request->file->extension();
-
-                Storage::putFileAs('image', $request->file, $filename . '.' . $extension);
-                $content->image = $filename . '.' . $extension;
-            } 
-            else{
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->extension();
+                $image->move(public_path('images'), $imageName);
+                $content->image = $imageName;
+            } else {
                 $content->image = null;
             }
             $content->content_text = $request->content_text;
@@ -64,6 +63,12 @@ class ContentController extends Controller
                 'data' => []
             ];
         }
+    }
+
+    public function showImage($id){
+        $content = Content::findOrFail($id);
+        $path = public_path('images') . '/' . $content->image;
+        return response()->file($path);
     }
 
     public function show($id)
@@ -87,7 +92,7 @@ class ContentController extends Controller
         $validated = $request->validate([
             'headline' => 'sometimes|required',
             'content_text' => 'sometimes|required',
-            'image' => 'sometimes|required|image',
+            'image' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'sometimes|required',
         ]);
 
@@ -105,12 +110,16 @@ class ContentController extends Controller
                 $content->headline = $oldData['headline'];
             }
 
-            if ($request->file) {
-                $filename = $this->generateRandomString();
-                $extension = $request->file->extension();
-
-                Storage::putFileAs('image', $request->file, $filename . '.' . $extension);
-                $content->image = $filename . '.' . $extension;
+            if ($request->hasFile('image')) {
+                $oldImagePath = public_path('images') . '/' . $content->image;
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+            
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->extension();
+                $image->move(public_path('images'), $imageName);
+                $content->image = $imageName;
             } else {
                 $content->image = $oldData['image'];
             }
@@ -145,7 +154,8 @@ class ContentController extends Controller
         return $contents->loadMissing('user:id,name');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         try {
             $content = Content::findorFail($id);
             $content->delete();
@@ -161,15 +171,5 @@ class ContentController extends Controller
                 'data' => []
             ];
         }
-    }
-
-    function generateRandomString($length = 30) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 }

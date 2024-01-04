@@ -27,12 +27,11 @@ class AuthenticationController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-            if ($request->file) {
-                $filename = $this->generateRandomString();
-                $extension = $request->file->extension();
-
-                Storage::putFileAs('photo', $request->file, $filename . '.' . $extension);
-                $user->photo = $filename . '.' . $extension;
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $photoName = time() . '.' . $photo->extension();
+                $photo->move(public_path('photo'), $photoName);
+                $user->photo = $photoName;
             } 
             else {
                 $user->photo = 'https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg';

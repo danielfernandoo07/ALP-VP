@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'sometimes|required',
             'password' => 'sometimes|required',
-            'photo' => 'sometimes|required|image',
+            'photo' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'bio' => 'sometimes|required',
         ]);
 
@@ -71,15 +72,22 @@ class UserController extends Controller
                     $user->password = $oldData['password'];
                 }
 
-                if ($request->file) {
-                    $filename = $this->generateRandomString();
-                    $extension = $request->file->extension();
-    
-                    Storage::putFileAs('photo', $request->file, $filename . '.' . $extension);
-                    $user->photo = $filename . '.' . $extension;
-                } else{
+                if ($request->hasFile('photo')) {
+                    // Hapus gambar lama
+                    $oldPhotoPath = public_path('photo') . '/' . $user->photo;
+                    if (File::exists($oldPhotoPath)) {
+                        File::delete($oldPhotoPath);
+                    }
+                
+                    // Simpan gambar baru
+                    $photo = $request->file('photo');
+                    $photoName = time() . '.' . $photo->extension();
+                    $photo->move(public_path('photo'), $photoName);
+                    $user->photo = $photoName;
+                } else {
                     $user->photo = $oldData['photo'];
                 }
+                
 
                 if ($request->bio) {
                     $user->bio = $request->bio;
@@ -102,7 +110,6 @@ class UserController extends Controller
                 ];
             }
         }
-        
     }
 
     public function delete(Request $request)

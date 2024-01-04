@@ -41,8 +41,8 @@ class ContentController extends Controller
         try {
             $content = new Content();
             $content->headline = $request->headline;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+            if ($request->file) {
+                $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('images'), $imageName);
                 $content->image = $imageName;
@@ -110,13 +110,13 @@ class ContentController extends Controller
                 $content->headline = $oldData['headline'];
             }
 
-            if ($request->hasFile('image')) {
+            if ($request->file) {
                 $oldImagePath = public_path('images') . '/' . $content->image;
                 if (File::exists($oldImagePath)) {
                     File::delete($oldImagePath);
                 }
             
-                $image = $request->file('image');
+                $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('images'), $imageName);
                 $content->image = $imageName;

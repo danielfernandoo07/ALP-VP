@@ -27,8 +27,8 @@ class AuthenticationController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-            if ($request->hasFile('photo')) {
-                $photo = $request->file('photo');
+            if ($request->file) {
+                $photo = $request->file;
                 $photoName = time() . '.' . $photo->extension();
                 $photo->move(public_path('photo'), $photoName);
                 $user->photo = $photoName;

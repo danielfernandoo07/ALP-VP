@@ -72,15 +72,14 @@ class UserController extends Controller
                     $user->password = $oldData['password'];
                 }
 
-                if ($request->hasFile('photo')) {
-                    // Hapus gambar lama
+                if ($request->file){
                     $oldPhotoPath = public_path('photo') . '/' . $user->photo;
                     if (File::exists($oldPhotoPath)) {
                         File::delete($oldPhotoPath);
                     }
                 
                     // Simpan gambar baru
-                    $photo = $request->file('photo');
+                    $photo = $request->file;
                     $photoName = time() . '.' . $photo->extension();
                     $photo->move(public_path('photo'), $photoName);
                     $user->photo = $photoName;

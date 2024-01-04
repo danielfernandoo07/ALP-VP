@@ -48,7 +48,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 
 
@@ -57,8 +59,8 @@ import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 fun AddPostView(
 
     createContent: CreateContentViewModel,
-    context: Context
-//    navController: NavController
+    context: Context,
+    navController: NavController
 
 ) {
 
@@ -225,6 +227,9 @@ fun AddPostView(
                                         context = context
                                     )
                                 }
+
+                                navController.navigate(ListScreen.Profile.name)
+
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -232,6 +237,7 @@ fun AddPostView(
                             colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
                         ) {
                             Text(text = "POST")
+
                         }
                     }
                 }

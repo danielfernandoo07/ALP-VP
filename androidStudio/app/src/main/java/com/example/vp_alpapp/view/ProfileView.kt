@@ -46,9 +46,9 @@ import com.example.vp_alpapp.ListScreen
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun LoadImage(url: Any) {
+fun LoadImage(url: String?= null) {
 
-    GlideImage(model = url, contentDescription = "",
+    GlideImage(model = url ?: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png", contentDescription = "",
         modifier = Modifier.height(350.dp),
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply{setToScale(0.5f,0.5f,0.5f,1f)}))
@@ -56,13 +56,12 @@ fun LoadImage(url: Any) {
 }
 @Composable
 @OptIn(ExperimentalGlideComposeApi::class)
-fun LoadImageCustom(url: String, modifier: Modifier = Modifier, contentScale: ContentScale) {
+fun LoadImageCustom(url: String? = null, modifier: Modifier = Modifier, contentScale: ContentScale) {
     Box(
         modifier = Modifier
-
     ) {
         GlideImage(
-            model = url,
+            model = url ?: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             contentDescription = null,
             contentScale = contentScale,
             modifier = modifier
@@ -96,7 +95,19 @@ fun Profile(
                     .background(Color.Blue) // GANTI IMAGE BACKGROUND
             ) {
 
-                LoadImage(url = user.photo)
+                var gambaruser = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+
+                if ( user.photo == null) {
+                    LoadImage(url = gambaruser)
+
+                }
+
+                else {
+
+                    gambaruser = user.photo.toString()
+                    LoadImage(url = gambaruser)
+                }
+
 
                 Column() {
                     Row(

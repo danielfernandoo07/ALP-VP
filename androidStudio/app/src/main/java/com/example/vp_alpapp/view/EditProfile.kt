@@ -97,8 +97,25 @@ fun EditProfileView(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LoadImageCustom(url = user.photo.toString(), contentScale = ContentScale.Crop, modifier = Modifier.size(120.dp).clip(
-                    CircleShape))
+
+                var gambaruser = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+
+                if ( user.photo == null) {
+                    LoadImageCustom(url = user.photo, contentScale = ContentScale.Crop, modifier = Modifier.size(120.dp).clip(
+                        CircleShape))
+                }
+
+                else {
+
+                    gambaruser = user.photo.toString()
+
+                    LoadImageCustom(url = user.photo.toString(), contentScale = ContentScale.Crop, modifier = Modifier.size(120.dp).clip(
+                        CircleShape))
+                }
+
+
+
+
 
             }
             Spacer(modifier = Modifier.height(10.dp))

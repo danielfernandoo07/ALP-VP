@@ -234,7 +234,7 @@ fun Routes() {
 
 
 
-                AddPostView(createContent = createContentViewModel, context = LocalContext.current)
+                AddPostView(createContent = createContentViewModel, context = LocalContext.current, navController)
 
 
             }

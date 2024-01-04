@@ -45,7 +45,7 @@ class ContentController extends Controller
                 $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('images'), $imageName);
-                $content->image = $imageName;
+                $content->image = 'images/' . $imageName;
             } else {
                 $content->image = null;
             }

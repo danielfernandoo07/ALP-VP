@@ -52,6 +52,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
+import com.example.vp_alpapp.viewmodel.ProfileViewModel
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -101,7 +102,8 @@ fun Profile(
     navController: NavController,
     user: Pengguna,
     listku: List<Content>?,
-    exploreViewModel: ExploreViewModel
+    exploreViewModel: ExploreViewModel,
+    profileViewModel: ProfileViewModel
 ) {
     LazyColumn(
         modifier = Modifier
@@ -154,6 +156,7 @@ fun Profile(
                                 text = { Text(text = "Logout") },
                                 onClick = {
                                     showMenu = false
+                                    profileViewModel.logout(navController)
                                     // Handle logout action here
                                 }
                             )

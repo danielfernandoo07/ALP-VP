@@ -64,8 +64,15 @@ public interface UserClient {
     @PATCH("content/{id}")
     suspend fun updateContent(@Header("Aauthorization") token: String,@Path("id") id: String, @Body request: ContentUpdateRequest)
 
+    @Multipart
     @PATCH("user")
-    suspend fun updateUser(@Header("Authorization") token: String, @Body request: UserUpdateRequest)
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Part("name") name: RequestBody,
+        @Part("bio") bio: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part file: MultipartBody.Part
+    )
 
 
 

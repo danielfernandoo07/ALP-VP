@@ -31,6 +31,9 @@ fun EditContentView(
     navController: NavController
 ) {
 
+
+
+
     // Variabel untuk menyimpan nilai yang diedit
     var editedHeadline by rememberSaveable { mutableStateOf(contentId.headline) }
     var editedContentText by rememberSaveable { mutableStateOf(contentId.contentText) }

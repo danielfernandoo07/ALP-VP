@@ -292,7 +292,7 @@ fun Routes() {
 
 
 
-                        EditProfileView(navController = navController, editProfileViewModel = editProfileViewModel, user = status.data)
+                        EditProfileView(navController = navController, editProfileViewModel = editProfileViewModel, user = status.data, context = LocalContext.current )
 
                     }
 

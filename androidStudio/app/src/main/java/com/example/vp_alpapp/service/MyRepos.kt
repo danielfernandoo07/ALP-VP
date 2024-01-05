@@ -131,11 +131,45 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
+    suspend fun updateUserV2(
+        token: String,
+        name: String,
+        image: Uri,
+        bio: String,
+        context:Context,
+        password: String
+
+    ) {
+
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val bioPart = bio.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passwordPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
+
+
+        val fileDir = context.filesDir
+        val file = File(fileDir,"image.png")
+
+        val inputStream = context.contentResolver.openInputStream(image)
+        inputStream?.use { input ->
+            val outputStream = FileOutputStream(file)
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        userClient.updateUser(token, namePart, bioPart,file= imagePart, password= passwordPart)
+
+    }
+
     suspend fun updateUser(token: String,name: String, password: String, image: String, bio:String) {
 
         val  request = UserUpdateRequest(name,password,image,bio)
 
-        userClient.updateUser(token, request)
+//        userClient.updateUser(token, request)
 
     }
 

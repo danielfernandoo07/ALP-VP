@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -156,25 +157,6 @@ fun AddPostView(
                     textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
                 )
 
-                // Category ID
-                TextField(
-                    value = categoryId.toString(),
-                    onValueChange = { categoryId = it.toIntOrNull() ?: 0 },
-                    label = { Text("Category ID") },
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = Color(0xFF8F8F8F),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        containerColor = Color.Transparent,
-                    ),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
-                )
                 // IMG URL
 //                TextField(
 //                    value = image,
@@ -192,12 +174,32 @@ fun AddPostView(
 //                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
 //                )
 
-                Button(onClick = {
-                    singlePhotoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                Button(
+                    onClick = {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }, colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent, // Set to transparent
+                        contentColor = Color.Black // Set the text color
                     )
-                }) {
-                    Text(text = "Pick one photo")
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.upload),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clip(CircleShape)
+                        )
+                        Text(text = "Upload A Photo", color = Color.Black)
+                    }
                 }
                 LazyColumn() {
                     item {
@@ -210,6 +212,24 @@ fun AddPostView(
                     }
                 }
 
+                // Category ID
+                var categoryId by remember { mutableStateOf(0) }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .clickable {
+                            // Toggle between 1 and 2
+                            categoryId = if (categoryId == 1) 2 else 1
+                        }
+                ) {
+                    Text(
+                        "Category ID (Click To Switch): ${if (categoryId == 1) "News" else "Committee"}",
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
+                }
                 Row {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

@@ -35,6 +35,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +60,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -94,12 +97,12 @@ fun FilterMenu() {
 //                    .background(Color(0xFFE9E9E9))
                     .padding(8.dp)
             ) {
-                Tab("News",R.drawable.news, isNewsSelected) {
+                Tab("News", R.drawable.news, isNewsSelected) {
                     isNewsSelected = true
                     isCommitteesSelected = false
                     // Add any logic you want when the "News" tab is clicked
                 }
-                Tab("Committees",R.drawable.comit, isCommitteesSelected) {
+                Tab("Committees", R.drawable.comit, isCommitteesSelected) {
                     isNewsSelected = false
                     isCommitteesSelected = true
                     // Add any logic you want when the "Committees" tab is clicked
@@ -146,7 +149,6 @@ fun RowScope.Tab(
         }
     }
 }
-
 
 
 @Composable
@@ -213,7 +215,11 @@ fun Post(
                             .size(48.dp)
                     ) {
 
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete",tint = Color.Black)
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.Black
+                        )
                     }
                 }
 
@@ -282,7 +288,7 @@ fun Post(
                     IconButton(
                         onClick = {
 
-                        navController.navigate(ListScreen.EditKonten.name+"/"+content.id.toString())
+                            navController.navigate(ListScreen.EditKonten.name + "/" + content.id.toString())
 
                         },
                         modifier = Modifier.size(24.dp)
@@ -316,7 +322,10 @@ fun TopBar(
     Row(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable{
+                isLogoutVisible = !isLogoutVisible
+            },
         verticalAlignment = Alignment.Top // Set verticalAlignment to Alignment.Top
     ) {
         Image(
@@ -343,26 +352,25 @@ fun TopBar(
             contentDescription = "Arrow Down",
             modifier = Modifier
                 .width(24.dp)
-                .clickable {
-                    // Toggle the visibility of the logout button
-                    isLogoutVisible = !isLogoutVisible
-                }
         )
     }
 
-    // Show the logout button when isLogoutVisible is true
-    if (isLogoutVisible) {
-        Button(
+    // PopupMenu triggered by the click on the Image
+    DropdownMenu(
+        expanded = isLogoutVisible,
+        onDismissRequest = { isLogoutVisible = false },
+        modifier = Modifier.background(Color.Gray),
+        offset = DpOffset((30).dp, (-100).dp) // Adjust the offset as needed
+    ) {
+        // Menu item for logout
+        DropdownMenuItem(
+            text = { Text(text = "Logout") },
             onClick = {
-                // Implement logout button click action
+                isLogoutVisible = false
                 homeViewModel.logout(navController = navController, dataStore)
-
-            },
-            modifier = Modifier.padding(8.dp),
-            colors = ButtonDefaults.buttonColors(Color.Red)
-        ) {
-            Text("Logout")
-        }
+                // Handle logout action here
+            }
+        )
     }
 }
 
@@ -380,36 +388,6 @@ fun Home(
         TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
         FilterMenu()
         Spacer(modifier = Modifier.height(8.dp))
-//        Post()
-//
-//        BoxWithConstraints {
-//            val bottomNavHeight = 45.dp
-//            val gridHeight = maxHeight - bottomNavHeight
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(1),
-//                modifier = Modifier
-//                    .padding(bottom = 0.dp)
-//                    .background(Color.Black)
-//                    .height(gridHeight)
-//            ) {
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    TopBar()
-//                }
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    FilterMenu()
-//                    Spacer(modifier = Modifier.height(8.dp))
-//                }
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    Post()
-//                }
-//            }
-//        }
     }
 }
 

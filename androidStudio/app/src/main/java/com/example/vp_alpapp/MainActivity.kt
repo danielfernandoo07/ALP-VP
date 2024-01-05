@@ -133,16 +133,7 @@ fun BottomNavigationBar(
                     .size(24.dp)
             )
         }
-        IconButton(onClick = {
-            Toast.makeText(context, "DMS", Toast.LENGTH_SHORT).show()
-        }) {
-            Image(
-                painter = painterResource(id = R.drawable.dms),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(24.dp)
-            )
-        }
+
         IconButton(onClick = {
 
 

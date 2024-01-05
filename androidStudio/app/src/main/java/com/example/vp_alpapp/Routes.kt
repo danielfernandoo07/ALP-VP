@@ -19,6 +19,7 @@ import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.DetailKontenView
+import com.example.vp_alpapp.view.EditContentView
 import com.example.vp_alpapp.view.EditProfileView
 import com.example.vp_alpapp.view.EditProfileView1
 import com.example.vp_alpapp.view.ExploreView
@@ -29,6 +30,7 @@ import com.example.vp_alpapp.view.Profile
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
+import com.example.vp_alpapp.viewmodel.EditContentViewModel
 import com.example.vp_alpapp.viewmodel.EditProfileViewModel
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
@@ -51,7 +53,8 @@ enum class ListScreen() {
     Profile,
     Explore,
     Register,
-    EditProfile
+    EditProfile,
+    EditKonten
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -107,22 +110,7 @@ fun Routes() {
                 }
             }
 
-            composable(ListScreen.Login.name+"/{email}") {
 
-
-                if (MyContainer.ACCESS_TOKEN.isEmpty()) {
-                    val loginViewModel: LoginViewModel = viewModel()
-
-                    it.arguments?.let { it1 -> LoginUIView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, it1.getString("email", "") ) }
-
-                }
-                else {
-
-
-                        navController.navigate(ListScreen.Profile.name)
-
-                }
-            }
 
             composable(ListScreen.DetailKonten.name) {
 
@@ -200,7 +188,7 @@ fun Routes() {
                 when (val status = exploreViewModel.exploreUiState) {
                     is ExploreViewModel.ExploreUiState.Loading -> {
 
-                        ExploreView(listData = null, null, exploreViewModel)
+                        ExploreView(listData = null, null, exploreViewModel, navController)
 
                     }
 
@@ -208,7 +196,7 @@ fun Routes() {
 
 
                         
-                        ExploreView(listData = status.data, status.datauser, exploreViewModel)
+                        ExploreView(listData = status.data, status.datauser, exploreViewModel, navController)
 
 
 
@@ -312,6 +300,71 @@ fun Routes() {
                     is ProfileUiState.Error -> {
 
                     }
+
+                }
+            }
+
+
+            composable(ListScreen.EditKonten.name+"/{id}") {
+
+                val editContentViewModel: EditContentViewModel = viewModel()
+                val detailKontenViewModel: DetailKontenViewModel = viewModel()
+
+
+                it.arguments?.let { it1 ->  val kontenku = it1.getString("id", "")
+
+
+                    LaunchedEffect(key1 = true) {
+                        detailKontenViewModel.getById(kontenku)
+                    }
+
+                    val status = detailKontenViewModel.kontenDetailUiState
+
+                    when(status){
+                        is KontenDetailUiState.Loading -> {
+                            Log.d("LOADING", "LOADING KONTEN")
+                        }
+                        is KontenDetailUiState.Success -> {
+
+
+
+
+                            EditContentView(editContentViewModel = editContentViewModel, contentId = status.data, navController)
+
+
+                        }
+
+
+                        is KontenDetailUiState.Error ->{
+
+                        }
+                    }
+
+
+                }
+
+
+
+
+
+
+
+
+
+            }
+            composable(ListScreen.Login.name+"/{email}") {
+
+
+                if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                    val loginViewModel: LoginViewModel = viewModel()
+
+                    it.arguments?.let { it1 -> LoginUIView(loginViewModel = loginViewModel, dataStore = dataStore, context = LocalContext.current, navController = navController, it1.getString("email", "") ) }
+
+                }
+                else {
+
+
+                    navController.navigate(ListScreen.Profile.name)
 
                 }
             }

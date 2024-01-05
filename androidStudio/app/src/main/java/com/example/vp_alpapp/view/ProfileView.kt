@@ -297,7 +297,7 @@ fun Profile(
                         repeat(listku.size) {
                             Spacer(modifier = Modifier.height(20.dp))
 
-                            Post(content = listku[it], user = user, exploreViewModel = exploreViewModel)
+                            Post(content = listku[it], user = user, exploreViewModel = exploreViewModel, navController = navController)
 
 
                         }

@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
@@ -61,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.DataStore
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
@@ -123,7 +125,8 @@ fun Post(
 
     user: Pengguna,
     content: Content,
-    exploreViewModel: ExploreViewModel
+    exploreViewModel: ExploreViewModel,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -166,20 +169,24 @@ fun Post(
                 }
 
                 // Three Dot Menu
-                if (user!= null && user.id == content.user.id) {
+                if (user != null && user.id == content.user.id) {
+
+
                     // Show delete button and make it clickable
                     IconButton(
                         onClick = {
 
-                                  exploreViewModel.delete(content.id.toString())
+                            exploreViewModel.delete(content.id.toString())
 
                         },
                         modifier = Modifier
                             .size(48.dp)
                     ) {
 
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")                    }
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                    }
                 }
+
             }
 
             // Post Title
@@ -190,9 +197,11 @@ fun Post(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LoadImageCustom(url = content.image, modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 170.dp), contentScale = ContentScale.Crop)
+            LoadImageCustom(
+                url = content.image, modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 170.dp), contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.height(10.dp))
 
 
@@ -234,15 +243,33 @@ fun Post(
                         modifier = Modifier.size(24.dp)
                     )
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.saved),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
+
+                if (user != null && user.id == content.user.id) {
+
+
+                    IconButton(
+                        onClick = {
+
+                        navController.navigate(ListScreen.EditKonten.name+"/"+content.id.toString())
+
+                        },
+                        modifier = Modifier.size(24.dp)
+
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "edit"
+                        )
+                    }
+                }
             }
+
+
         }
     }
 }
+
 
 @Composable
 fun TopBar(
@@ -270,7 +297,7 @@ fun TopBar(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = user.name ,
+            text = user.name,
             style = TextStyle(
                 fontSize = 18.sp,
                 fontWeight = FontWeight(800),
@@ -295,7 +322,7 @@ fun TopBar(
         Button(
             onClick = {
                 // Implement logout button click action
-                      homeViewModel.logout(navController = navController, dataStore)
+                homeViewModel.logout(navController = navController, dataStore)
 
             },
             modifier = Modifier.padding(8.dp),

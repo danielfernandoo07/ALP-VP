@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.ContentUpdateRequest
-import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.model.RegisterInfo
@@ -117,10 +116,13 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
-    suspend fun updateContent(token: String,id: Int, headline: String, image: String, contentText: String, categoryId: Int) {
+    suspend fun updateContent(
+        token: String,
+        id: String, headline: String, contentText: String, categoryId: String
+    ) {
 
             // Prepare the request body
-            val request = ContentUpdateRequest(headline, image, contentText, categoryId)
+            val request = ContentUpdateRequest(headline,  contentText, categoryId)
 
             // Make the API call using the userClient
             val response = userClient.updateContent(token,id, request)

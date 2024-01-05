@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
@@ -35,7 +36,8 @@ fun ExploreView(
 
     listData: List<Content>?,
     user: Pengguna?,
-    exploreViewModel: ExploreViewModel
+    exploreViewModel: ExploreViewModel,
+    navController: NavController
 ) {
 
     Column(
@@ -97,7 +99,7 @@ fun ExploreView(
             repeat(listData.size) {
 
                 if (user != null) {
-                    Post(content = listData[it], user = user, exploreViewModel = exploreViewModel)
+                    Post(content = listData[it], user = user, exploreViewModel = exploreViewModel, navController = navController)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

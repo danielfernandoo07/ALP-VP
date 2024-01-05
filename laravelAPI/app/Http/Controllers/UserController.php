@@ -83,7 +83,6 @@ class UserController extends Controller
                         File::delete($oldPhotoPath);
                     }
                 
-                    // Simpan gambar baru
                     $photo = $request->file;
                     $photoName = time() . '.' . $photo->extension();
                     $photo->move(public_path('photo'), $photoName);
@@ -92,7 +91,6 @@ class UserController extends Controller
                     $user->photo = $oldData['photo'];
                 }
                 
-
                 if ($request->bio) {
                     $user->bio = $request->bio;
                 } else{

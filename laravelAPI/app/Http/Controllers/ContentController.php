@@ -45,7 +45,7 @@ class ContentController extends Controller
                 $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('images'), $imageName);
-                $content->image = 'http://10.0.2.2:8000/images/' . $imageName;
+                $content->image = 'https://alpvp.shop/images/' . $imageName;
             } else {
                 $content->image = null;
             }
@@ -119,7 +119,7 @@ class ContentController extends Controller
                 $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('images'), $imageName);
-                $content->image = $imageName;
+                $content->image = 'https://alpvp.shop/images/' . $imageName;
             } else {
                 $content->image = $oldData['image'];
             }

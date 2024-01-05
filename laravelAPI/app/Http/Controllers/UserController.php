@@ -32,6 +32,11 @@ class UserController extends Controller
     //     }
     //     return $check;
     // }
+    
+    public function showSpecificOtherProfile($id){
+        $user = User::with('content')->findOrFail($id);
+        return $user;
+    }
 
     public function update(Request $request)
     {
@@ -82,7 +87,7 @@ class UserController extends Controller
                     $photo = $request->file;
                     $photoName = time() . '.' . $photo->extension();
                     $photo->move(public_path('photo'), $photoName);
-                    $user->photo = $photoName;
+                    $user->photo = 'https://alpvp.shop/photo' . $photoName;
                 } else {
                     $user->photo = $oldData['photo'];
                 }
@@ -130,16 +135,5 @@ class UserController extends Controller
                 'data' => []
             ];
         }
-    }
-
-    function generateRandomString($length = 30)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 }

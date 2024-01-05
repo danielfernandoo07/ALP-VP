@@ -29,13 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //loginreg routes
 Route::post('/login', [AuthenticationController::class,'login']);
 Route::post('/register',[AuthenticationController::class, 'register']);
-Route::get('/content/{id}/image/{image}', [ContentController::class, 'showImage']); //show image by content
+Route::get('/content/{id}/image', [ContentController::class, 'showImage']); //show image by content
 Route::middleware(['auth:sanctum'])->group(
     function () {
         //user routes
         Route::get('/users', [UserController::class, 'getAllUser']); //show all users
         Route::patch('/user', [UserController::class, 'update']); //update current user
         Route::delete('/user', [UserController::class, 'delete']); //delete current user (sbnre gaperlu tp gpp iseng bikin)
+        Route::get('/user/{id}', [UserController::class, 'showSpecificOtherProfile']); //show specific user
 
         //category routes
         Route::get('/categories', [CategoryController::class, 'index']); //show specific category

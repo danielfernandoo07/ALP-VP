@@ -31,7 +31,7 @@ class AuthenticationController extends Controller
                 $photo = $request->file;
                 $photoName = time() . '.' . $photo->extension();
                 $photo->move(public_path('photo'), $photoName);
-                $user->photo = $photoName;
+                $user->photo = 'https://alpvp.shop/photo' . $photoName;
             } 
             else {
                 $user->photo = 'https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg';
@@ -95,15 +95,5 @@ class AuthenticationController extends Controller
             'data' => []
         ];
 
-    }
-
-    function generateRandomString($length = 30) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 }

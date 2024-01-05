@@ -20,10 +20,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProdiSeeder::class,
             UserSeeder::class,
-            ContentSeeder::class        
+            ContentSeeder::class,
+            CommentSeeder::class,   
         ]);
-
-        Content::factory()->count(10)->create();
-
     }
 }

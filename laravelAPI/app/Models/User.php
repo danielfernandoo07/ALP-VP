@@ -25,7 +25,6 @@ class User extends Authenticatable
         'nim',
         'bio',
         'prodi_id',
-        'friend_id'
     ];
 
     public function prodi(){

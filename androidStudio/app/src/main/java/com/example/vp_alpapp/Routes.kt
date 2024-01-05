@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
+import com.example.vp_alpapp.view.Blank
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.EditContentView
 import com.example.vp_alpapp.view.EditProfileView
@@ -55,7 +56,8 @@ enum class ListScreen() {
     Explore,
     Register,
     EditProfile,
-    EditKonten
+    EditKonten,
+    Blank
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -251,7 +253,7 @@ fun Routes() {
                     is HomeUIState.Loading -> {
 
 
-
+                        Blank()
                     }
 
                     is HomeUIState.Success -> {
@@ -366,6 +368,12 @@ fun Routes() {
                     navController.navigate(ListScreen.Profile.name)
 
                 }
+            }
+
+            composable(ListScreen.Blank.name) {
+
+                Blank()
+
             }
 
 

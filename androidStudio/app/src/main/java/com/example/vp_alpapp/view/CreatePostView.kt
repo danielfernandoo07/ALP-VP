@@ -68,6 +68,9 @@ fun AddPostView(
     var selectedImageUri by remember {
         mutableStateOf<Uri?>(null)
     }
+
+    var photoOrNot by remember { mutableStateOf(1) }
+
     var selectedImageUris by remember {
         mutableStateOf<List<Uri>>(emptyList())
     }
@@ -174,6 +177,8 @@ fun AddPostView(
 //                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
 //                )
 
+
+
                 Button(
                     onClick = {
                         singlePhotoPickerLauncher.launch(
@@ -212,6 +217,8 @@ fun AddPostView(
                     }
                 }
 
+
+
                 // Category ID
                 var categoryId by remember { mutableStateOf(0) }
 
@@ -226,6 +233,22 @@ fun AddPostView(
                 ) {
                     Text(
                         "Category ID (Click To Switch): ${if (categoryId == 1) "News" else "Committee"}",
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .clickable {
+                            // Toggle between 1 and 2
+                            photoOrNot = if (photoOrNot == 1) 2 else 1
+                        }
+                ) {
+                    Text(
+                        "Use Image (Click To Switch): ${if (photoOrNot == 1) "With Image" else "No Image"}",
                         fontSize = 12.sp,
                         color = Color.Black
                     )

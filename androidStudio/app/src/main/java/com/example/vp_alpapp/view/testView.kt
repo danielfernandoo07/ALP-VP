@@ -102,7 +102,7 @@ fun buatKonten(
 
 ) {
 
-    createContentViewModel.createContent("HEADLINE","IMAGE","CONTENT TEXT",1)
+//    createContentViewModel.createContent("HEADLINE","IMAGE","CONTENT TEXT",1)
 
 }
 

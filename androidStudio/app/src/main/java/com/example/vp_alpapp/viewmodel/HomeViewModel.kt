@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.example.vp_alpapp.DataStore
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.service.MyContainer
 import kotlinx.coroutines.launch
@@ -55,7 +58,23 @@ class HomeViewModel() : ViewModel() {
         }
     }
 
+    public fun logout(
+        navController: NavController,
+        dataStore: DataStore
+    ) {
 
+        viewModelScope.launch {
+
+            MyContainer().myRepos.logout(MyContainer.ACCESS_TOKEN)
+
+            MyContainer.ACCESS_TOKEN = ""
+
+            dataStore.saveToken(MyContainer.ACCESS_TOKEN)
+
+            navController.navigate(ListScreen.Login.name)
+        }
+
+    }
 
 
 

@@ -57,13 +57,13 @@ class CommentController extends Controller
         return $comments->loadMissing('user:id,name');
     }
 
-    public function update(UpdateCommentRequest $request, $commentId)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'comment_text' => 'required'
         ]);
         try {
-            $comment = Comment::findorFail($commentId);
+            $comment = Comment::findorFail($id);
             $comment->comment_text = $request->comment_text;
             $comment->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $comment->save();
@@ -77,10 +77,10 @@ class CommentController extends Controller
         }
     }
 
-    public function delete($commentId)
+    public function delete($id)
     {
         try {
-            $comment = Comment::findorFail($commentId);
+            $comment = Comment::findorFail($id);
             $comment->delete();
             return [
                 'status' => Response::HTTP_OK,

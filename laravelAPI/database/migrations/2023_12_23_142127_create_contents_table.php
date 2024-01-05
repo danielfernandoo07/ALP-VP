@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->string('headline', 255);
-            $table->string('image')->nullable();
             $table->text('content_text');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('user_id');

@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContentController;
-use App\Http\Controllers\AuthenticationController;
 use App\Http\Middleware\ContentAuthor;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthenticationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +28,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //loginreg routes
 Route::post('/login', [AuthenticationController::class,'login']);
-
 Route::post('/register',[AuthenticationController::class, 'register']);
-
-
+Route::get('/content/{id}/image', [ContentController::class, 'showImage']); //show image by content
 Route::middleware(['auth:sanctum'])->group(
     function () {
+        //user routes
+        Route::get('/users', [UserController::class, 'getAllUser']); //show all users
+        Route::patch('/user', [UserController::class, 'update']); //update current user
+        Route::delete('/user', [UserController::class, 'delete']); //delete current user (sbnre gaperlu tp gpp iseng bikin)
+        Route::get('/user/{id}', [UserController::class, 'showSpecificOtherProfile']); //show specific user
+
         //category routes
         Route::get('/categories', [CategoryController::class, 'index']); //show specific category
         Route::get('/category/{id}', [CategoryController::class, 'show']); //show all categories
@@ -41,11 +45,12 @@ Route::middleware(['auth:sanctum'])->group(
         //content routes
         Route::get('/contents', [ContentController::class, 'index']); //show all contents
         Route::get('/content/{id}', [ContentController::class, 'show']); //show specific content
-        Route::get('/content1/{id}', [ContentController::class, 'show1']); //test
+        Route::get('/content1/{id}', [ContentController::class, 'showWithComments']); //show specific content with comments
         Route::post('/content', [ContentController::class, 'create']); //create content
         Route::patch('/content/{id}', [ContentController::class, 'update'])->middleware('content-author'); //update content
         Route::delete('/content/{id}', [ContentController::class, 'delete'])->middleware('content-author'); //delete content
         Route::get('/user/contents/{userId}', [ContentController::class, 'contentsByUser']); //show all contents by user
+       
 
         //comment routes
         Route::get('/comment', [CommentController::class, 'index']); //test

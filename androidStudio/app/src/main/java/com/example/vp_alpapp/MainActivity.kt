@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.ui.theme.VPALPAPPTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
 
                     Routes()
                 }
@@ -78,7 +80,14 @@ fun BottomNavigationBar(
         verticalAlignment = Alignment.Bottom
     ) {
         IconButton(onClick = {
-            Toast.makeText(context, "Home", Toast.LENGTH_SHORT).show()
+
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Home.name)
+
+            }
 
 
         }) {
@@ -92,8 +101,14 @@ fun BottomNavigationBar(
         }
 
         IconButton(onClick = {
-            Toast.makeText(context, "Explore", Toast.LENGTH_SHORT).show()
-            navController.navigate(ListScreen.Explore.name)
+
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Explore.name)
+
+            }
         }) {
             Image(
                 painter = painterResource(id = R.drawable.search),
@@ -103,8 +118,13 @@ fun BottomNavigationBar(
             )
         }
         IconButton(onClick = {
-            Toast.makeText(context, "Add Post", Toast.LENGTH_SHORT).show()
-            navController.navigate(ListScreen.CreatePost.name)
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.CreatePost.name)
+
+            }
         }) {
             Image(
                 painter = painterResource(id = R.drawable.post),
@@ -113,19 +133,18 @@ fun BottomNavigationBar(
                     .size(24.dp)
             )
         }
+
         IconButton(onClick = {
-            Toast.makeText(context, "DMS", Toast.LENGTH_SHORT).show()
-        }) {
-            Image(
-                painter = painterResource(id = R.drawable.dms),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(24.dp)
-            )
-        }
-        IconButton(onClick = {
-            Toast.makeText(context, "Profile", Toast.LENGTH_SHORT).show()
-            navController.navigate(ListScreen.Profile.name)
+
+
+            if (MyContainer.ACCESS_TOKEN.isEmpty()) {
+                navController.navigate(ListScreen.Login.name)
+            }
+            else {
+                navController.navigate(ListScreen.Profile.name)
+
+            }
+
         }) {
             Image(
                 painter = painterResource(id = R.drawable.profilepic),

@@ -21,11 +21,13 @@ class MyContainer {
     }
     companion object{
         //ganti token sesuai postman masing-masing saat login api
-        var ACCESS_TOKEN = "";
+        var ACCESS_TOKEN = ""
         lateinit var user: Pengguna
     }
 
-    private val BASE_URL = "http://10.0.2.2:8000/api/"
+    private val BASE_URL = "https://alpvp.shop/api/"
+
+//    private val BASE_URL = "http://10.0.2.2:8000/api/"
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(AuthInterceptor(ACCESS_TOKEN))

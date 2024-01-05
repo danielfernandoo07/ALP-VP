@@ -7,7 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -29,28 +32,78 @@ class UserController extends Controller
     //     }
     //     return $check;
     // }
+    
+    public function showSpecificOtherProfile($id){
+        $user = User::with('content')->findOrFail($id);
+        return $user;
+    }
 
-    public function updateUser(Request $request)
+    public function update(Request $request)
     {
-        if (!empty($request->email)) {
-            $user = User::where('email', $request->email)->first();
-        } else {
-            $user = User::where('id', $request->id)->first();
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                'status' => Response::HTTP_UNAUTHORIZED,
+                'message' => "User not authenticated",
+                'data' => []
+            ];
         }
 
-        if (!empty($user)) {
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required',
+            'password' => 'sometimes|required',
+            'photo' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'bio' => 'sometimes|required',
+        ]);
+
+        if (!empty($user)){
             try {
-                $user->name = $request->name;
-                $user->email = $request->email;
-                $user->password = Hash::make($request->password);
-                $user->nim = $request->nim;
-                $user->photo = $request->photo;
-                $user->bio = $request->bio;
-                $user->prodi_id = $request->prodi_id;
+                $oldData = [
+                    'name' => $user->name,
+                    'password' => $user->password,
+                    'photo' => $user->photo,
+                    'bio' => $user->bio,
+                ];
+                if ($request->name) {
+                    $user->name = $request->name;
+                } else{
+                    $user->name = $oldData['name'];
+                }
+    
+                if ($request->password) {
+                    $user->password = Hash::make($request->password);
+                } else{
+                    $user->password = $oldData['password'];
+                }
+
+                if ($request->file){
+                    $oldPhotoPath = public_path('photo') . '/' . $user->photo;
+                    if (File::exists($oldPhotoPath)) {
+                        File::delete($oldPhotoPath);
+                    }
+                
+                    // Simpan gambar baru
+                    $photo = $request->file;
+                    $photoName = time() . '.' . $photo->extension();
+                    $photo->move(public_path('photo'), $photoName);
+                    $user->photo = 'https://alpvp.shop/photo' . $photoName;
+                } else {
+                    $user->photo = $oldData['photo'];
+                }
+                
+
+                if ($request->bio) {
+                    $user->bio = $request->bio;
+                } else{
+                    $user->bio = $oldData['bio'];
+                }
+    
                 $user->save();
+    
                 return [
                     'status' => Response::HTTP_OK,
-                    'message' => "Success",
+                    'message' => "User updated successfully",
                     'data' => $user
                 ];
             } catch (Exception $e) {
@@ -61,36 +114,26 @@ class UserController extends Controller
                 ];
             }
         }
-
-        return [
-            'status' => Response::HTTP_NOT_FOUND,
-            'message' => "User not found",
-            'data' => []
-        ];
     }
 
-    public function deleteUser(Request $request)
+    public function delete(Request $request)
     {
-        if (!empty($request->email)) {
-            $user = User::where('email', $request->email)->first();
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                'status' => Response::HTTP_UNAUTHORIZED,
+                'message' => "User not authenticated",
+                'data' => []
+            ];
         } else {
-            $user = User::where('id', $request->id)->first();
-        }
-
-        if (!empty($user)) {
+            $user->currentAccessToken()->delete();
             $user->delete();
-
             return [
                 'status' => Response::HTTP_OK,
                 'message' => "Success",
                 'data' => []
             ];
         }
-
-        return [
-            'status' => Response::HTTP_NOT_FOUND,
-            'message' => "User not found",
-            'data' => []
-        ];
     }
 }

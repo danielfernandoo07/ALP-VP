@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,8 +27,16 @@ class AuthenticationController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            if ($request->file) {
+                $photo = $request->file;
+                $photoName = time() . '.' . $photo->extension();
+                $photo->move(public_path('photo'), $photoName);
+                $user->photo = 'https://alpvp.shop/photo' . $photoName;
+            } 
+            else {
+                $user->photo = 'https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg';
+            }
             $user->nim = $request->nim;
-            $user->photo = $request->photo;
             $user->bio = $request->bio;
             $user->prodi_id = $request->prodi_id;
             $user->save();

@@ -3,7 +3,7 @@ package com.example.vp_alpapp.model
 import com.google.gson.annotations.SerializedName
 
 data class Pengguna(
-    @SerializedName("bio") val bio: Any,
+    @SerializedName("bio") val bio: String,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("email") val email: String,
     @SerializedName("email_verified_at") val emailVerifiedAt: Any,

@@ -21,11 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'nim',
         'photo',
+        'nim',
         'bio',
         'prodi_id',
-        'friend_id'
     ];
 
     public function prodi(){

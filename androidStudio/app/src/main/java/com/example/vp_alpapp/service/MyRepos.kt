@@ -1,10 +1,20 @@
 package com.example.vp_alpapp.service
 
+import android.content.Context
+import android.net.Uri
 import com.example.vp_alpapp.model.Content
-import com.example.vp_alpapp.model.CreateContent
+import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.model.RegisterInfo
+import com.example.vp_alpapp.model.UserUpdateRequest
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.io.FileOutputStream
 import java.net.HttpURLConnection
 
 class MyRepos(private val userClient: UserClient) {
@@ -38,8 +48,46 @@ class MyRepos(private val userClient: UserClient) {
         return userClient.getKontenById("Bearer $token", id)
     }
 
-    suspend fun createContent(token:String,content: CreateContent) {
-        return userClient.createContent("Bearer $token",content);
+    suspend fun createContent(
+        token: String,
+        headline: String,
+        contentText: String,
+        categoryId: Int,
+        image: Uri,
+        context:Context
+    ) {
+        // Mendapatkan objek user dan mengonversinya menjadi string JSON
+        val userJson = Gson().toJson(MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN))
+
+        // Membuat RequestBody untuk user
+        val userRequestBody = userJson.toRequestBody("application/json".toMediaTypeOrNull())
+
+        // Mengonversi headline, contentText, dan categoryId menjadi RequestBody
+        val headlinePart = headline.toRequestBody("text/plain".toMediaTypeOrNull())
+        val contentTextPart = contentText.toRequestBody("text/plain".toMediaTypeOrNull())
+        val categoryIdPart = categoryId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        // Mengonversi file Uri menjadi File
+
+        val fileDir = context.filesDir
+        val file = File(fileDir,"image.png")
+
+        val inputStream = context.contentResolver.openInputStream(image)
+        inputStream?.use { input ->
+            val outputStream = FileOutputStream(file)
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+
+
+        // Memanggil fungsi createContent di userClient
+        userClient.createContent(token, headlinePart, contentTextPart, categoryIdPart, userRequestBody, part)
     }
 
     suspend fun logout(token: String) {
@@ -62,5 +110,67 @@ class MyRepos(private val userClient: UserClient) {
 
     }
 
+    suspend fun getUserKonten(token: String, userId: String): List<Content> {
+
+        return userClient.getUserKonten(token,userId)
+
+    }
+
+    suspend fun updateContent(
+        token: String,
+        id: String, headline: String, contentText: String, categoryId: String
+    ) {
+
+            // Prepare the request body
+            val request = ContentUpdateRequest(headline,  contentText, categoryId)
+
+            // Make the API call using the userClient
+            userClient.updateContent(token,id, request)
+
+
+
+    }
+
+    suspend fun updateUserV2(
+        token: String,
+        name: String,
+        image: Uri,
+        bio: String,
+        context:Context,
+        password: String
+
+    ) {
+
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val bioPart = bio.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passwordPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
+
+
+        val fileDir = context.filesDir
+        val file = File(fileDir,"image.png")
+
+        val inputStream = context.contentResolver.openInputStream(image)
+        inputStream?.use { input ->
+            val outputStream = FileOutputStream(file)
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        userClient.updateUser(token, namePart, bioPart,file= imagePart, password= passwordPart)
+
+    }
+
+    suspend fun updateUser(token: String,name: String, password: String, image: String, bio:String) {
+
+        val  request = UserUpdateRequest(name,password,image,bio)
+
+//        userClient.updateUser(token, request)
+
+    }
 
 }

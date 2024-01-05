@@ -15,24 +15,40 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@ciputra.ac.id',
+            'password' => bcrypt('123'),
+            'nim' => '0000000000001',
+            'prodi_id' => 1,
+        ]);
+        User::create([
+            'name' => 'Steven',
+            'email' => 'sbudiman@student.ciputra.ac.id',
+            'password' => bcrypt('123'),
+            'nim' => '0706012210012',
+            'prodi_id' => 9,
+        ]);
+        User::create([
+            'name' => 'Daniel',
+            'email' => 'dfernando@student.ciputra.ac.id',
             'password' => bcrypt('123'),
             'nim' => '0706012210004',
-            'prodi_id' => 1,
+            'prodi_id' => 9,
         ]);
         User::create([
-            'name' => 'user1',
-            'email' => 'user1@example.com',
+            'name' => 'Nathan',
+            'email' => 'ndarrell@student.ciputra.ac.id',
             'password' => bcrypt('123'),
-            'nim' => '0706012210005',
-            'prodi_id' => 1,
+            'nim' => '0706012210034',
+            'prodi_id' => 9,
         ]);
         User::create([
-            'name' => 'user2',
-            'email' => 'user2@example.com',
+            'name' => 'Landy',
+            'email' => 'ferriogent@student.ciputra.ac.id',
             'password' => bcrypt('123'),
-            'nim' => '0706012210006',
-            'prodi_id' => 1,
+            'nim' => '0706012210062',
+            'prodi_id' => 9,
         ]);
+
+
     }
 }

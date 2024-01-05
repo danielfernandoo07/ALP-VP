@@ -242,23 +242,21 @@ fun Routes() {
 
                 val profileViewModel: ProfileViewModel = viewModel()
 
+                val exploreViewModel: ExploreViewModel = viewModel()
+
                 val status = profileViewModel.profileUiState
 
                 when (status) {
                     is ProfileUiState.Loading -> {
 
-                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""), dataStore)
+                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""), exploreViewModel,
+                            listData = null,dataStore)
 
                     }
 
                     is ProfileUiState.Success -> {
 
-
-                        Home(navController, homeViewModel = homeViewModel, user = status.data, dataStore = dataStore)
-
-
-
-
+                        Home(navController, homeViewModel = homeViewModel, user = status.data, dataStore = dataStore, exploreViewModel = exploreViewModel, listData = status.data)
 
                     }
 

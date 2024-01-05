@@ -1,14 +1,11 @@
 package com.example.vp_alpapp.view
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -19,22 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -49,38 +35,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
-import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.ui.theme.orangelight
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
-import com.example.vp_alpapp.viewmodel.ProfileViewModel
-import java.text.NumberFormat
-import java.util.Locale
 import kotlin.random.Random
 
 @Composable
-fun FilterMenu() {
+fun FilterMenu(
+    listData: List<Content>?,
+    user: Pengguna?,
+    exploreViewModel: ExploreViewModel,
+    navController: NavController
+) {
     var isNewsSelected by remember { mutableStateOf(true) }
     var isCommitteesSelected by remember { mutableStateOf(false) }
 
@@ -106,6 +87,37 @@ fun FilterMenu() {
                     isNewsSelected = false
                     isCommitteesSelected = true
                     // Add any logic you want when the "Committees" tab is clicked
+                }
+                if (listData != null) {
+                    repeat(listData.size) {
+                        if (isNewsSelected == true) {
+                            if (listData[it].categoryId == 1) {
+                                if (user != null) {
+                                    if (user.id != listData[it].userId) {
+                                        Post(
+                                            user = user,
+                                            content = listData[it],
+                                            exploreViewModel = exploreViewModel,
+                                            navController = navController
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            if (listData[it].categoryId == 2) {
+                                if (user != null) {
+                                    if (user.id != listData[it].userId) {
+                                        Post(
+                                            user = user,
+                                            content = listData[it],
+                                            exploreViewModel = exploreViewModel,
+                                            navController = navController
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -236,8 +248,7 @@ fun Post(
 
             if (content.image == null) {
 
-            }
-            else {
+            } else {
                 LoadImageCustom(
                     url = content.image, modifier = Modifier
                         .fillMaxWidth()
@@ -314,8 +325,6 @@ fun Post(
         }
     }
 }
-
-
 @Composable
 fun TopBar(
     homeViewModel: HomeViewModel,
@@ -329,7 +338,7 @@ fun TopBar(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
             .padding(16.dp)
-            .clickable{
+            .clickable {
                 isLogoutVisible = !isLogoutVisible
             },
         verticalAlignment = Alignment.Top // Set verticalAlignment to Alignment.Top
@@ -385,6 +394,8 @@ fun Home(
     navController: NavController,
     homeViewModel: HomeViewModel,
     user: Pengguna,
+    exploreViewModel: ExploreViewModel,
+    listData: Pengguna,
     dataStore: DataStore
 ) {
     Column(
@@ -392,7 +403,12 @@ fun Home(
             .background(Color(0xFFF3F3F3))
     ) {
         TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
-        FilterMenu()
+        FilterMenu(
+            listData = listData,
+            user = user,
+            exploreViewModel = exploreViewModel,
+            navController = navController
+        )
         Spacer(modifier = Modifier.height(8.dp))
     }
 }

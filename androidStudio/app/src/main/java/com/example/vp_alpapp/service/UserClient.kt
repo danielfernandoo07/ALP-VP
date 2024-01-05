@@ -1,5 +1,6 @@
 package com.example.vp_alpapp.service
 
+import android.provider.ContactsContract.DisplayPhoto
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.CreateContent
@@ -79,8 +80,8 @@ public interface UserClient {
         @Header("Authorization") token: String,
         @Part("name") name: RequestBody,
         @Part("bio") bio: RequestBody,
+        @Part photo: MultipartBody.Part,
         @Part("password") password: RequestBody,
-        @Part file: MultipartBody.Part
     )
 
 

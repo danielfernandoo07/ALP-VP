@@ -160,7 +160,7 @@ class MyRepos(private val userClient: UserClient) {
 
 
         val fileDir = context.filesDir
-        val file = File(fileDir, "image.png")
+        val file = File(fileDir, "photo.png")
 
         val inputStream = context.contentResolver.openInputStream(image)
         inputStream?.use { input ->
@@ -170,11 +170,11 @@ class MyRepos(private val userClient: UserClient) {
             }
         }
 
-        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val requestBody = file.asRequestBody("photo/*".toMediaTypeOrNull())
 
         val imagePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
 
-        userClient.updateUser(token, namePart, bioPart, file = imagePart, password = passwordPart)
+        userClient.updateUser(token, namePart, bioPart, imagePart, password = passwordPart)
 
     }
 

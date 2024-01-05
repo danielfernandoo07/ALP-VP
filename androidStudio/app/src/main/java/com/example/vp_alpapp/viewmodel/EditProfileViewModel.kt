@@ -32,7 +32,6 @@ class EditProfileViewModel : ViewModel() {
     }
 
 
-    @SuppressLint("Recycle")
     fun editProfileV2(
         name: String,
         image: Uri,

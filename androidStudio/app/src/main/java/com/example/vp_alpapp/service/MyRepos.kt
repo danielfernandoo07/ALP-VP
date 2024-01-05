@@ -125,7 +125,7 @@ class MyRepos(private val userClient: UserClient) {
             val request = ContentUpdateRequest(headline,  contentText, categoryId)
 
             // Make the API call using the userClient
-            val response = userClient.updateContent(token,id, request)
+            userClient.updateContent(token,id, request)
 
 
 

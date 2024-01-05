@@ -34,7 +34,6 @@ class EditContentViewModel: ViewModel() {
 
             MyContainer().myRepos.updateContent(MyContainer.ACCESS_TOKEN, kontenId, headline = headline, context_text , categoryId = categoryId)
             navController.navigate(ListScreen.Profile.name)
-            navController.navigate(ListScreen.Profile.name)
 
 
         }

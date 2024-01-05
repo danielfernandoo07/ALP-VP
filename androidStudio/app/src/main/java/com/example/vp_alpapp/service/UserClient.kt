@@ -61,7 +61,7 @@ public interface UserClient {
     @GET("user/contents/{userId}")
     suspend fun getUserKonten(@Header("Aauthorization") token: String, @Path("userId") userId: String): List<Content>
 
-    @PUT("content/{id}")
+    @PATCH("content/{id}")
     suspend fun updateContent(@Header("Aauthorization") token: String,@Path("id") id: String, @Body request: ContentUpdateRequest)
 
     @PATCH("user")

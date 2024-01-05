@@ -33,6 +33,7 @@ import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.EditContentViewModel
 import com.example.vp_alpapp.viewmodel.EditProfileViewModel
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
+import com.example.vp_alpapp.viewmodel.HomeUIState
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
@@ -244,27 +245,27 @@ fun Routes() {
 
                 val exploreViewModel: ExploreViewModel = viewModel()
 
-                val status = profileViewModel.profileUiState
+                val status = homeViewModel.homeUIState
 
                 when (status) {
-                    is ProfileUiState.Loading -> {
+                    is HomeUIState.Loading -> {
 
-                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""), exploreViewModel,
-                            listData = null,dataStore)
 
-                    }
-
-                    is ProfileUiState.Success -> {
-
-                        Home(navController, homeViewModel = homeViewModel, user = status.data, dataStore = dataStore, exploreViewModel = exploreViewModel, listData = status.data)
 
                     }
 
+                    is HomeUIState.Success -> {
 
-                    is ProfileUiState.Error -> {
+                        Home(navController, homeViewModel = homeViewModel, user = status.user, dataStore = dataStore, exploreViewModel = exploreViewModel, listData = status.data)
 
                     }
 
+
+                    is HomeUIState.Error -> {
+
+                    }
+
+                    else -> {}
                 }
 
 

@@ -10,12 +10,13 @@ import androidx.navigation.NavController
 import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import kotlinx.coroutines.launch
 
 
 sealed interface HomeUIState {
-    data class Success(val data: List<Content>) : HomeUIState
+    data class Success(val data: List<Content>,val user: Pengguna) : HomeUIState
     object Error : HomeUIState
     object Loading : HomeUIState
 
@@ -26,6 +27,8 @@ class HomeViewModel() : ViewModel() {
         private set
 
      lateinit var data: List<Content>
+    lateinit var user: Pengguna
+
 
     init {
         loadKonten()
@@ -37,7 +40,8 @@ class HomeViewModel() : ViewModel() {
         viewModelScope.launch{
             try {
                 data = MyContainer().myRepos.getAllContent(MyContainer.ACCESS_TOKEN)
-                homeUIState = HomeUIState.Success(data)
+                user = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
+                homeUIState = HomeUIState.Success(data, user)
             }catch(e: Exception){
                 Log.d("FAILED", e.message.toString())
                 homeUIState = HomeUIState.Error

@@ -395,7 +395,7 @@ fun Home(
     homeViewModel: HomeViewModel,
     user: Pengguna,
     exploreViewModel: ExploreViewModel,
-    listData: Pengguna,
+    listData: List<Content>,
     dataStore: DataStore
 ) {
     Column(

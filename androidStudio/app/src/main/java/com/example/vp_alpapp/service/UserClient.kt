@@ -15,6 +15,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Header
@@ -49,6 +50,14 @@ public interface UserClient {
         @Part file: MultipartBody.Part
     )
 
+    @POST("content")
+    suspend fun createContentWithoutPhoto(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    )
+
+
+
     @GET("logout")
     suspend fun logout(@Header("Authorization") token: String)
 
@@ -61,11 +70,19 @@ public interface UserClient {
     @GET("user/contents/{userId}")
     suspend fun getUserKonten(@Header("Aauthorization") token: String, @Path("userId") userId: String): List<Content>
 
-    @PUT("content/{id}")
-    suspend fun updateContent(@Header("Aauthorization") token: String,@Path("id") id: Int, @Body request: ContentUpdateRequest)
+    @PATCH("content/{id}")
+    suspend fun updateContent(@Header("Aauthorization") token: String,@Path("id") id: String, @Body request: ContentUpdateRequest)
 
+    @Multipart
     @PATCH("user")
-    suspend fun updateUser(@Header("Authorization") token: String, @Body request: UserUpdateRequest)
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Part("name") name: RequestBody,
+        @Part("bio") bio: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part file: MultipartBody.Part
+    )
+
 
 
 

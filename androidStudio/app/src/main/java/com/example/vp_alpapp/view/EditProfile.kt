@@ -1,5 +1,10 @@
 package com.example.vp_alpapp.view
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
@@ -30,6 +35,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.viewmodel.EditProfileViewModel
@@ -52,8 +59,24 @@ import com.example.vp_alpapp.viewmodel.EditProfileViewModel
 fun EditProfileView(
     navController: NavController,
     editProfileViewModel: EditProfileViewModel,
-    user: Pengguna
+    user: Pengguna,
+    context: Context
 ) {
+
+    var selectedImageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    var selectedImageUris by remember {
+        mutableStateOf<List<Uri>>(emptyList())
+    }
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> selectedImageUri = uri }
+    )
+    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        onResult = { uris -> selectedImageUris = uris }
+    )
 
     var bioku = ""
     if (user.bio.isNullOrEmpty()) {
@@ -100,18 +123,56 @@ fun EditProfileView(
 
                 var gambaruser = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
-                if ( user.photo == null) {
-                    LoadImageCustom(url = user.photo, contentScale = ContentScale.Crop, modifier = Modifier.size(120.dp).clip(
-                        CircleShape))
+
+                if (selectedImageUri == null) {
+                    if ( user.photo == null) {
+
+                        Box(
+                            Modifier.clickable {
+                                singlePhotoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            }
+                        ) {
+                            LoadImageCustom(url = user.photo, contentScale = ContentScale.Crop, modifier = Modifier
+                                .size(120.dp)
+                                .clip(
+                                    CircleShape
+                                ))
+                        }
+
+                    }
+
+                    else {
+
+                        gambaruser = user.photo.toString()
+
+                        Box(modifier = Modifier.clickable { }) {
+
+                            LoadImageCustom(url = user.photo.toString(), contentScale = ContentScale.Crop, modifier = Modifier
+                                .size(120.dp)
+                                .clip(
+                                    CircleShape
+                                ))
+                        }
+
+
+
+
+                    }
                 }
 
                 else {
 
-                    gambaruser = user.photo.toString()
+                    AsyncImage(
+                        model = selectedImageUri,
+                        contentDescription = null,
+                        modifier = Modifier.size(120.dp).clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
 
-                    LoadImageCustom(url = user.photo.toString(), contentScale = ContentScale.Crop, modifier = Modifier.size(120.dp).clip(
-                        CircleShape))
                 }
+
 
 
 
@@ -247,7 +308,10 @@ fun EditProfileView(
                             modifier = Modifier
                                 .clickable {
 
-                                    editProfileViewModel.editProfile(name,user.photo.toString(),password,bio)
+                                    selectedImageUri?.let {
+                                        editProfileViewModel.editProfileV2(name,
+                                            it,bio,context,navController, password)
+                                    }
                                 }
                                 .align(Alignment.Center)
                         )

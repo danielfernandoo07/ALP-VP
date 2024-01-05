@@ -1,6 +1,5 @@
 package com.example.vp_alpapp.viewmodel
 
-import android.service.autofill.UserData
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +58,21 @@ class ExploreViewModel: ViewModel() {
 
 
 
+    }
+
+    fun edit(
+        kontenId: String,
+        headline: String,
+        categoryId: String,
+        context_text: String,
+
+    ) {
+
+        viewModelScope.launch {
+
+            MyContainer().myRepos.updateContent(MyContainer.ACCESS_TOKEN, kontenId, headline = headline, context_text , categoryId = categoryId)
+
+        }
     }
 
 

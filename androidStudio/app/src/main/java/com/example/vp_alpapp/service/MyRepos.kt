@@ -10,6 +10,7 @@ import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.model.RegisterInfo
 import com.example.vp_alpapp.model.UserUpdateRequest
 import com.google.gson.Gson
+import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -20,15 +21,15 @@ import java.net.HttpURLConnection
 
 class MyRepos(private val userClient: UserClient) {
 
-    suspend fun login(email: String, password: String):String {
+    suspend fun login(email: String, password: String): String {
 
-        val loginInfo = Login(email,password)
+        val loginInfo = Login(email, password)
 
         val result = userClient.login(
             loginInfo
         )
 
-        if(result.status.toInt() == HttpURLConnection.HTTP_OK){
+        if (result.status.toInt() == HttpURLConnection.HTTP_OK) {
             return result.data as String
         }
 
@@ -55,7 +56,7 @@ class MyRepos(private val userClient: UserClient) {
         contentText: String,
         categoryId: Int,
         image: Uri,
-        context:Context
+        context: Context
     ) {
         // Mendapatkan objek user dan mengonversinya menjadi string JSON
         val userJson = Gson().toJson(MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN))
@@ -71,7 +72,7 @@ class MyRepos(private val userClient: UserClient) {
         // Mengonversi file Uri menjadi File
 
         val fileDir = context.filesDir
-        val file = File(fileDir,"image.png")
+        val file = File(fileDir, "image.png")
 
         val inputStream = context.contentResolver.openInputStream(image)
         inputStream?.use { input ->
@@ -86,26 +87,38 @@ class MyRepos(private val userClient: UserClient) {
         val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
 
 
-
         // Memanggil fungsi createContent di userClient
-        userClient.createContent(token, headlinePart, contentTextPart, categoryIdPart, userRequestBody, part)
+        userClient.createContent(
+            token,
+            headlinePart,
+            contentTextPart,
+            categoryIdPart,
+            userRequestBody,
+            part
+        )
     }
 
     suspend fun logout(token: String) {
         return userClient.logout(token)
     }
 
-    suspend fun delete(token: String, id:String){
-        return userClient.delete(token,id)
+    suspend fun delete(token: String, id: String) {
+        return userClient.delete(token, id)
     }
 
-    suspend fun getUser(token: String): Pengguna{
+    suspend fun getUser(token: String): Pengguna {
         return userClient.getUser(token)
     }
 
-    suspend fun register(name:String, email: String,nim:String, password: String, prodi_id: Int): Pengguna {
+    suspend fun register(
+        name: String,
+        email: String,
+        nim: String,
+        password: String,
+        prodi_id: Int
+    ): Pengguna {
 
-        val pengguna = RegisterInfo(name,email,nim,password, prodi_id)
+        val pengguna = RegisterInfo(name, email, nim, password, prodi_id)
 
         return userClient.register(pengguna).pengguna
 
@@ -113,27 +126,89 @@ class MyRepos(private val userClient: UserClient) {
 
     suspend fun getUserKonten(token: String, userId: String): List<Content> {
 
-        return userClient.getUserKonten(token,userId)
+        return userClient.getUserKonten(token, userId)
 
     }
 
-    suspend fun updateContent(token: String,id: Int, headline: String, image: String, contentText: String, categoryId: Int) {
+    suspend fun updateContent(
+        token: String,
+        id: String, headline: String, contentText: String, categoryId: String
+    ) {
 
-            // Prepare the request body
-            val request = ContentUpdateRequest(headline, image, contentText, categoryId)
+        // Prepare the request body
+        val request = ContentUpdateRequest(headline, contentText, categoryId)
 
-            // Make the API call using the userClient
-            val response = userClient.updateContent(token,id, request)
-
+        // Make the API call using the userClient
+        userClient.updateContent(token, id, request)
 
 
     }
 
-    suspend fun updateUser(token: String,name: String, password: String, image: String, bio:String) {
+    suspend fun updateUserV2(
+        token: String,
+        name: String,
+        image: Uri,
+        bio: String,
+        context: Context,
+        password: String
 
-        val  request = UserUpdateRequest(name,password,image,bio)
+    ) {
 
-        userClient.updateUser(token, request)
+        val namePart = name.toRequestBody("text/plain".toMediaTypeOrNull())
+        val bioPart = bio.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passwordPart = password.toRequestBody("text/plain".toMediaTypeOrNull())
+
+
+        val fileDir = context.filesDir
+        val file = File(fileDir, "image.png")
+
+        val inputStream = context.contentResolver.openInputStream(image)
+        inputStream?.use { input ->
+            val outputStream = FileOutputStream(file)
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val imagePart = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        userClient.updateUser(token, namePart, bioPart, file = imagePart, password = passwordPart)
+
+    }
+
+    suspend fun updateUser(
+        token: String,
+        name: String,
+        password: String,
+        image: String,
+        bio: String
+    ) {
+
+        val request = UserUpdateRequest(name, password, image, bio)
+
+//        userClient.updateUser(token, request)
+
+    }
+
+    suspend fun createContentWithoutPhoto(
+        token: String,
+        headline: String,
+        content_text: String,
+        category_id: String
+
+    ) {
+
+        val CreateContent = CreateContent(headline,content_text,category_id)
+
+        val requestBody = FormBody.Builder()
+            .add("headline", headline)
+            .add("content_text", content_text)
+            .add("category_id", category_id)
+            .build()
+
+        userClient.createContentWithoutPhoto(token,requestBody)
 
     }
 

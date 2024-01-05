@@ -3,6 +3,7 @@ package com.example.vp_alpapp.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,47 +48,64 @@ fun ExploreView(
             .background(Color(0xFFF3F3F3))
             .padding(10.dp)
     ) {
-        Text(
-            text = "Featured",
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
-        )
-        Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 15.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.logosc),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(100.dp)
+            Text(
+                text = "Explore",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
             )
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Image(
-                painter = painterResource(id = R.drawable.uc),
+                painter = painterResource(id = R.drawable.explore),
                 contentDescription = "",
                 modifier = Modifier
-                    .size(100.dp)
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.srb),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(100.dp)
+                    .size(20.dp)
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 12.dp),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.logosc),
+//                contentDescription = "",
+//                modifier = Modifier
+//                    .size(100.dp)
+//            )
+//            Spacer(modifier = Modifier.width(20.dp))
+//            Image(
+//                painter = painterResource(id = R.drawable.uc),
+//                contentDescription = "",
+//                modifier = Modifier
+//                    .size(100.dp)
+//            )
+//            Spacer(modifier = Modifier.width(20.dp))
+//            Image(
+//                painter = painterResource(id = R.drawable.srb),
+//                contentDescription = "",
+//                modifier = Modifier
+//                    .size(100.dp)
+//            )
+//        }
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Divider(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(20.dp)
+//        )
 
 //        Spacer(modifier = Modifier.height(20.dp))
 //        repeat(5) { index ->
@@ -99,7 +117,14 @@ fun ExploreView(
             repeat(listData.size) {
 
                 if (user != null) {
-                    Post(content = listData[it], user = user, exploreViewModel = exploreViewModel, navController = navController)
+                    if (user.id != listData[it].userId) {
+                        Post(
+                            content = listData[it],
+                            user = user,
+                            exploreViewModel = exploreViewModel,
+                            navController = navController
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

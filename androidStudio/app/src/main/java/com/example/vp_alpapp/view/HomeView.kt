@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -67,6 +68,7 @@ import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
+import com.example.vp_alpapp.ui.theme.orangelight
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
@@ -75,30 +77,10 @@ import java.util.Locale
 import kotlin.random.Random
 
 @Composable
-fun Tab(text: String, isSelected: Boolean) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(if (isSelected) Color(0xFFF89715) else Color.Transparent)
-            .padding(2.dp)
-            .padding(if (isSelected) 1.dp else 0.dp)
-            .width(120.dp)
-            .height(36.dp)
-    ) {
-        BasicText(
-            text = text,
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontWeight = FontWeight(600),
-                color = if (isSelected) Color.White else Color(0xFFA7A7A7),
-            ),
-            modifier = Modifier.padding(8.dp)
-        )
-    }
-}
-
-@Composable
 fun FilterMenu() {
+    var isNewsSelected by remember { mutableStateOf(true) }
+    var isCommitteesSelected by remember { mutableStateOf(false) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,16 +91,63 @@ fun FilterMenu() {
             Row(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
-                    .background(Color(0xFFE9E9E9))
+//                    .background(Color(0xFFE9E9E9))
                     .padding(8.dp)
             ) {
-                Tab("News", true)
-                Tab("Committees", false)
-                Tab("Following", false)
+                Tab("News",R.drawable.news, isNewsSelected) {
+                    isNewsSelected = true
+                    isCommitteesSelected = false
+                    // Add any logic you want when the "News" tab is clicked
+                }
+                Tab("Committees",R.drawable.comit, isCommitteesSelected) {
+                    isNewsSelected = false
+                    isCommitteesSelected = true
+                    // Add any logic you want when the "Committees" tab is clicked
+                }
             }
         }
     }
 }
+
+@Composable
+fun RowScope.Tab(
+    text: String,
+    iconRes: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .padding(8.dp)
+            .clickable { onClick() }
+            .background(
+                color = if (isSelected) orangelight else Color.Transparent,
+                shape = MaterialTheme.shapes.medium
+            )
+            .padding(12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Image(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+
+            Text(
+                text = text,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) Color.Black else Color.Gray,
+                modifier = Modifier.clickable { onClick() }
+            )
+        }
+    }
+}
+
+
 
 @Composable
 fun Post(

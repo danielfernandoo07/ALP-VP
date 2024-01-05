@@ -234,11 +234,17 @@ fun Post(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LoadImageCustom(
-                url = content.image, modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 170.dp), contentScale = ContentScale.Crop
-            )
+            if (content.image == null) {
+
+            }
+            else {
+                LoadImageCustom(
+                    url = content.image, modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 170.dp), contentScale = ContentScale.Crop
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
 
 

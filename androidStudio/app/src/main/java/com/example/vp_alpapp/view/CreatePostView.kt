@@ -16,13 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +36,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +47,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 
 
@@ -177,35 +172,39 @@ fun AddPostView(
 //                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
 //                )
 
+//
+                if (photoOrNot == 1) {
 
 
-                Button(
-                    onClick = {
-                        singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    Button(
+                        onClick = {
+                            singlePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent, // Set to transparent
+                            contentColor = Color.Black // Set the text color
                         )
-                    }, colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent, // Set to transparent
-                        contentColor = Color.Black // Set the text color
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.upload),
-                            contentDescription = "Profile Picture",
+                        Row(
                             modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                        )
-                        Text(text = "Upload A Photo", color = Color.Black)
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.upload),
+                                contentDescription = "Profile Picture",
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                            )
+                            Text(text = "Upload A Photo", color = Color.Black)
+                        }
                     }
                 }
+                //
                 LazyColumn() {
                     item {
                         AsyncImage(
@@ -220,7 +219,7 @@ fun AddPostView(
 
 
                 // Category ID
-                var categoryId by remember { mutableStateOf(0) }
+                var categoryId by remember { mutableStateOf(1) }
 
                 Row(
                     modifier = Modifier
@@ -258,30 +257,51 @@ fun AddPostView(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                     ) {
-                        // Button to submit
-                        Button(
-                            onClick = {
-                                selectedImageUri?.let {
-                                    createContent.uploadAndCreateContent(
-                                        headline = headline,
-                                        image = it,
-                                        content_text = contentText,
-                                        category_id = categoryId,
-                                        context = context
-                                    )
-                                }
 
-                                navController.navigate(ListScreen.Profile.name)
+                        if (photoOrNot == 1) {
+                            Button(
+                                onClick = {
+                                    selectedImageUri?.let {
+                                        createContent.uploadAndCreateContent(
+                                            headline = headline,
+                                            image = it,
+                                            content_text = contentText,
+                                            category_id = categoryId,
+                                            context = context,
+                                            navController
+                                        )
+                                    }
 
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
-                        ) {
-                            Text(text = "POST")
 
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
+                            ) {
+                                Text(text = "POST")
+
+                            }
                         }
+                        else {
+                            Button(
+                                onClick = {
+
+                                          createContent.createContent(headline, content_text = contentText, categoryId.toString(), navController)
+
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
+                            ) {
+                                Text(text = "POST")
+
+                            }
+                        }
+                        // Button to submit
+
+                        //
                     }
                 }
 

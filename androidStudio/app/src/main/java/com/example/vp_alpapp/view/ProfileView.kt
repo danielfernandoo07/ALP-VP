@@ -236,10 +236,11 @@ fun Profile(
         }
         // FOR LOOP HERE
         if (listku != null) {
-            items(listku.size) { index ->
+            val reversedList = listku.reversed()
+            items(reversedList.size) { index ->
                 Spacer(modifier = Modifier.height(20.dp))
                 Post(
-                    content = listku[index],
+                    content = reversedList[index],
                     user = user,
                     exploreViewModel = exploreViewModel,
                     navController = navController

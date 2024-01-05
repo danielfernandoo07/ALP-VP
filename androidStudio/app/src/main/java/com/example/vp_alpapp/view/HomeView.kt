@@ -164,7 +164,8 @@ fun Post(
                     Text(
                         text = content.user.name,
                         fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                 }
 
@@ -183,7 +184,7 @@ fun Post(
                             .size(48.dp)
                     ) {
 
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete",tint = Color.Black)
                     }
                 }
 
@@ -194,6 +195,7 @@ fun Post(
                 text = content.headline,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -209,6 +211,7 @@ fun Post(
             Text(
                 text = content.contentText,
                 fontSize = 14.sp,
+                color = Color.Black,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
@@ -225,23 +228,23 @@ fun Post(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.favorite),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+//                    Image(
+//                        painter = painterResource(id = R.drawable.favorite),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(24.dp)
+//                    )
+//                    Spacer(modifier = Modifier.width(16.dp))
                     Image(
                         painter = painterResource(id = R.drawable.comment),
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.share),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
+//                    Spacer(modifier = Modifier.width(16.dp))
+//                    Image(
+//                        painter = painterResource(id = R.drawable.share),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(24.dp)
+//                    )
                 }
 
                 if (user != null && user.id == content.user.id) {
@@ -259,7 +262,8 @@ fun Post(
 
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "edit"
+                            contentDescription = "edit",
+                            tint = Color.Black
                         )
                     }
                 }

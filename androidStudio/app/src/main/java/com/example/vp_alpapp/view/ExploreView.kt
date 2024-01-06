@@ -114,12 +114,18 @@ fun ExploreView(
 //        }
 
         if (listData != null) {
-            val shuffledList = listData.shuffled()
-            repeat(shuffledList.size) {
+            val sortedList = listData.sortedByDescending { it.createdAt } // Sort by createdAt, newer posts first
+            val newerPostsCount = (sortedList.size * 0.7).toInt()
+
+            val newerPosts = sortedList.take(newerPostsCount) // Take 70% of newer posts
+            val remainingPosts = sortedList.drop(newerPostsCount) // Remaining posts
+
+            val combinedList = (newerPosts + remainingPosts).shuffled()
+            repeat(combinedList.size) {
                 if (user != null) {
-                    if (user.id != shuffledList[it].userId) {
+                    if (user.id != combinedList[it].userId) {
                         Post(
-                            content = shuffledList[it],
+                            content = combinedList[it],
                             user = user,
                             exploreViewModel = exploreViewModel,
                             navController = navController

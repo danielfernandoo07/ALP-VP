@@ -2,6 +2,7 @@ package com.example.vp_alpapp.view
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -50,6 +51,7 @@ import androidx.navigation.NavController
 import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.ui.theme.orangelight
 import com.example.vp_alpapp.viewmodel.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,6 +67,8 @@ fun LoginUIView(
     var email by rememberSaveable { mutableStateOf(firstvalue) }
     var password by rememberSaveable { mutableStateOf("") }
 
+    var filled1 by remember { mutableStateOf(false) }
+    var filled2 by remember { mutableStateOf(false) }
     // State untuk menyimpan status validasi email
     var isEmailValid by remember { mutableStateOf(true) }
     Box(
@@ -105,6 +109,7 @@ fun LoginUIView(
                         email = it
                         // Validasi format email
                         isEmailValid = isValidEmail(email)
+                        filled1 = true
                     },
                     placeholder = { Text("Email Address") },
                     isError = !isEmailValid,
@@ -146,7 +151,10 @@ fun LoginUIView(
                 )
                 TextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                        filled2 = true
+                    },
                     placeholder = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
                     colors = TextFieldDefaults.textFieldColors(
@@ -180,54 +188,115 @@ fun LoginUIView(
                     .padding(horizontal = 15.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top,
-                    modifier = Modifier.fillMaxHeight()  // Added to center content vertically
-                ) {
-                    Box(
+                if (filled1 && filled2) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 50.dp)
-                            .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
-                            .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
-                            .padding(12.dp)
-                            .clip(RoundedCornerShape(10.dp))
+                            .fillMaxHeight()
                     ) {
-                        Text(
-                            text = "Login",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFFFFFFFF),
-                                textAlign = TextAlign.Center,
-                            ),
+                        Box(
                             modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 50.dp)
+                                .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
+                                .padding(12.dp)
+                                .clip(RoundedCornerShape(10.dp))
                                 .clickable {
                                     if (isEmailValid) {
-                        loginViewModel.login(dataStore = dataStore, context, email, password, navController)
-                    } else {
-                        // Tampilkan pesan kesalahan jika email tidak valid
-                        // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
-                        Log.d("LoginView", "Invalid email format")
-                    }
-                                }
-                                .align(Alignment.Center)
+                                        loginViewModel.login(
+                                            dataStore = dataStore,
+                                            context,
+                                            email,
+                                            password,
+                                            navController
+                                        )
+                                    } else {
+                                        // Tampilkan pesan kesalahan jika email tidak valid
+                                        // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
+                                        Log.d("LoginView", "Invalid email format")
+                                    }
+                                } // Added to center content vertically
+                        ) {
+                            Text(
+                                text = "Login",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight(600),
+                                    color = Color(0xFFFFFFFF),
+                                    textAlign = TextAlign.Center,
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Need An Account? Click Here!",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF8C8C8C),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier.clickable {
+                                navController.navigate(ListScreen.Register.name)
+                            }
                         )
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = "Need An Account? Click Here!",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF8C8C8C),
-                            textAlign = TextAlign.Center,
-                        ),
-                        modifier = Modifier.clickable {
-                             navController.navigate(ListScreen.Register.name)
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 50.dp)
+                                .background(orangelight, RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
+                                .padding(12.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable {
+                                    if (!filled1 || !filled2) {
+                                        // Show toast message if email or password is not filled
+                                        Toast.makeText(
+                                            context,
+                                            "Please Enter Your Email/Password!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                        ) {
+                            Text(
+                                text = "Login",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight(600),
+                                    color = Color(0xFFFFFFFF),
+                                    textAlign = TextAlign.Center,
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
                         }
-                    )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Need An Account? Click Here!",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(400),
+                                color = Color(0xFF8C8C8C),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier.clickable {
+                                navController.navigate(ListScreen.Register.name)
+                            }
+                        )
+                    }
                 }
             }
 

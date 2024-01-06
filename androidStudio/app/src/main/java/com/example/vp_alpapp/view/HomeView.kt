@@ -1,5 +1,6 @@
 package com.example.vp_alpapp.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,6 +32,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,12 +62,7 @@ import com.example.vp_alpapp.viewmodel.HomeViewModel
 import kotlin.random.Random
 
 @Composable
-fun FilterMenu(
-    listData: List<Content>?,
-    user: Pengguna?,
-    exploreViewModel: ExploreViewModel,
-    navController: NavController
-) {
+fun FilterMenu( onTabSelected: (Boolean) -> Unit, isNewsSelected: MutableState<Boolean>) {
     var isNewsSelected by remember { mutableStateOf(true) }
     var isCommitteesSelected by remember { mutableStateOf(false) }
 
@@ -75,54 +76,23 @@ fun FilterMenu(
             Row(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
-//                    .background(Color(0xFFE9E9E9))
                     .padding(8.dp)
             ) {
                 Tab("News", R.drawable.news, isNewsSelected) {
                     isNewsSelected = true
                     isCommitteesSelected = false
-                    // Add any logic you want when the "News" tab is clicked
+                    onTabSelected(isNewsSelected)
                 }
                 Tab("Committees", R.drawable.comit, isCommitteesSelected) {
                     isNewsSelected = false
                     isCommitteesSelected = true
-                    // Add any logic you want when the "Committees" tab is clicked
-                }
-                if (listData != null) {
-                    repeat(listData.size) {
-                        if (isNewsSelected == true) {
-                            if (listData[it].categoryId == 1) {
-                                if (user != null) {
-                                    if (user.id != listData[it].userId) {
-                                        Post(
-                                            user = user,
-                                            content = listData[it],
-                                            exploreViewModel = exploreViewModel,
-                                            navController = navController
-                                        )
-                                    }
-                                }
-                            }
-                        } else {
-                            if (listData[it].categoryId == 2) {
-                                if (user != null) {
-                                    if (user.id != listData[it].userId) {
-                                        Post(
-                                            user = user,
-                                            content = listData[it],
-                                            exploreViewModel = exploreViewModel,
-                                            navController = navController
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    onTabSelected(isNewsSelected)
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun RowScope.Tab(
@@ -325,6 +295,7 @@ fun Post(
         }
     }
 }
+
 @Composable
 fun TopBar(
     homeViewModel: HomeViewModel,
@@ -389,6 +360,7 @@ fun TopBar(
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun Home(
     navController: NavController,
@@ -398,17 +370,53 @@ fun Home(
     listData: List<Content>,
     dataStore: DataStore
 ) {
+    var isNewsSelected by remember { mutableStateOf(true) }
+    var lazyListState = rememberLazyListState()
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
         TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
-        FilterMenu(
-            listData = listData,
-            user = user,
-            exploreViewModel = exploreViewModel,
-            navController = navController
-        )
+        FilterMenu(onTabSelected = { isNewsSelected = it }, isNewsSelected = mutableStateOf(isNewsSelected))
+        // if newsselected is true print out the category = 1
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState
+        ) {
+            if (listData != null) {
+                val reversedList = listData.reversed()
+                items(reversedList.size) { index ->
+                    if (user != null) {
+                        if (reversedList[index].userId != user.id) {
+                            // Check if "News" is selected
+                            if (isNewsSelected && reversedList[index].categoryId == 1) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Post(
+                                    content = reversedList[index],
+                                    user = user,
+                                    exploreViewModel = exploreViewModel,
+                                    navController = navController
+                                )
+                            }
+                            // Check if "Committees" is selected
+                            else if (!isNewsSelected && reversedList[index].categoryId == 2) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Post(
+                                    content = reversedList[index],
+                                    user = user,
+                                    exploreViewModel = exploreViewModel,
+                                    navController = navController
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        LaunchedEffect(isNewsSelected) {
+            // Reset scroll position to top when isNewsSelected changes
+            lazyListState.scrollToItem(0)
+        }
         Spacer(modifier = Modifier.height(8.dp))
     }
 }

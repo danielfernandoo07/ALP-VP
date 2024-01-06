@@ -1,5 +1,6 @@
 package com.example.vp_alpapp.landy
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,6 +54,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -65,14 +68,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.Pengguna
+import com.example.vp_alpapp.view.Post
+import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
 
 @Composable
 fun AddFriendView(
     profileViewModel: ProfileViewModel = viewModel(),
-    navController : NavController
+    navController : NavController,
+    addFriendViewModel: AddFriendViewModel = viewModel(),
+    exploreViewModel: ExploreViewModel = viewModel(),
+    user: Pengguna,
+    listku: List<Content>?,
 ) {
+    val addFriendUIState by addFriendViewModel.uistate.collectAsState()
+
     var isClicked by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var follOrUnfoll by rememberSaveable {
         mutableStateOf(false)
     }
     LazyColumn(
@@ -162,26 +178,147 @@ fun AddFriendView(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable {  }
+                        .clickable {
+                            follOrUnfoll = !follOrUnfoll
+                            addFriendViewModel.isClicked(follOrUnfoll)
+                        }
                         .width(170.dp)
                         .height(40.dp)
                         .offset((0).dp, (-22).dp)
                         .background(color = Color(0XFFF89715), shape = RoundedCornerShape(12.dp))) {
                     Text(
-                        text = "Follow",
+                        text = if (!addFriendUIState.isFollow) { "Follow" } else { "Unfollow" },
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp
                     )
+                    val context = LocalContext.current
+                    if (follOrUnfoll) {
+                        Toast.makeText(context, "Follow berhasil!", Toast.LENGTH_LONG)
+                    }
+                    else {
+                        Toast.makeText(context, "Unfollow berhasil!", Toast.LENGTH_LONG)
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(horizontal = 46.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "1500",
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "Posts",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
+                }
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "328",
+                        fontSize = 16.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Followers",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
+                }
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "5993",
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "Following",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
+                }
+            }
+
+            Divider(color = Color.Black, thickness = 1.dp, modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.grid),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+                Spacer(modifier = Modifier.padding(end = 18.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.film),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+                Spacer(modifier = Modifier.padding(end = 18.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.tag),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp)
+                )
+
+            }
+        }
+        if (listku != null) {
+            val reversedList = listku.reversed()
+            items(reversedList.size) { index ->
+                Spacer(modifier = Modifier.height(20.dp))
+                Post(
+                    content = reversedList[index],
+                    user = user,
+                    exploreViewModel = exploreViewModel,
+                    navController = navController
+                )
+            }
+        }
+        if (listku != null) {
+            if (listku.isEmpty()) {
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                    )
+                    Text(
+                        text = "No Posts Yet!",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp) // Adjust the padding as needed
+                    )
                 }
             }
         }
+        item { Spacer(modifier = Modifier.height(20.dp)) }
 
     }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun AddFriendPreview() {
-    return AddFriendView(navController = rememberNavController())
 }

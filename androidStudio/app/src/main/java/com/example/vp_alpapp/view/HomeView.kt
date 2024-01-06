@@ -25,6 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -185,24 +187,57 @@ fun Post(
                 // Three Dot Menu
                 if (user != null && user.id == content.user.id) {
 
+                    var showDialog by remember { mutableStateOf(false) }
 
-                    // Show delete button and make it clickable
                     IconButton(
                         onClick = {
-
-                            exploreViewModel.delete(content.id.toString())
-
+                            showDialog = true
                         },
                         modifier = Modifier
                             .size(48.dp)
                     ) {
-
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete",
                             tint = Color.Black
                         )
                     }
+
+                    if (showDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                // Handle dialog dismissal if needed
+                                showDialog = false
+                            },
+                            title = {
+                                Text(text = "Delete Post")
+                            },
+                            text = {
+                                Text(text = "Are you sure you want to delete this post?")
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        exploreViewModel.delete(content.id.toString())
+                                        showDialog = false
+                                        navController.navigate(ListScreen.Profile.name)
+                                    }
+                                ) {
+                                    Text(text = "Yes")
+                                }
+                            },
+                            dismissButton = {
+                                Button(
+                                    onClick = {
+                                        showDialog = false
+                                    }
+                                ) {
+                                    Text(text = "No")
+                                }
+                            }
+                        )
+                    }
+
                 }
 
             }

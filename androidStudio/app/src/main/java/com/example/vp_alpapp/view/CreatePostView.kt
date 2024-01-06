@@ -82,7 +82,8 @@ fun AddPostView(
     var image by rememberSaveable { mutableStateOf("") }
     var contentText by rememberSaveable { mutableStateOf("") }
     var categoryId by rememberSaveable { mutableStateOf(1) }
-
+    var filled1 by remember { mutableStateOf(false) }
+    var filled2 by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -115,7 +116,10 @@ fun AddPostView(
                     )
                     TextField(
                         value = headline,
-                        onValueChange = { headline = it },
+                        onValueChange = {
+                            headline = it
+                            filled1 = true
+                        },
                         placeholder = { Text("What's New...") },
                         colors = TextFieldDefaults.textFieldColors(
                             textColor = Color.Black,
@@ -138,7 +142,10 @@ fun AddPostView(
                 // Content
                 TextField(
                     value = contentText,
-                    onValueChange = { contentText = it },
+                    onValueChange = {
+                        contentText = it
+                        filled2 = true
+                    },
                     placeholder = { Text("Your Content Goes Here...") },
                     colors = TextFieldDefaults.textFieldColors(
                         cursorColor = Color(0xFF8F8F8F),
@@ -152,7 +159,7 @@ fun AddPostView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    textStyle = TextStyle(fontSize = 12.sp, color = Color.Black)
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
                 )
 
                 // IMG URL
@@ -217,7 +224,6 @@ fun AddPostView(
                 }
 
 
-
                 // Category ID
                 var categoryId by remember { mutableStateOf(1) }
 
@@ -258,50 +264,66 @@ fun AddPostView(
                         horizontalArrangement = Arrangement.End,
                     ) {
 
-                        if (photoOrNot == 1) {
-                            Button(
-                                onClick = {
-                                    selectedImageUri?.let {
-                                        createContent.uploadAndCreateContent(
-                                            headline = headline,
-                                            image = it,
+                        if (filled1 && filled2) {
+                            if (photoOrNot == 1) {
+                                Button(
+                                    onClick = {
+                                        selectedImageUri?.let {
+                                            createContent.uploadAndCreateContent(
+                                                headline = headline,
+                                                image = it,
+                                                content_text = contentText,
+                                                category_id = categoryId,
+                                                context = context,
+                                                navController
+                                            )
+                                        }
+
+
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
+                                    colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
+                                ) {
+                                    Text(text = "POST")
+
+                                }
+                            } else {
+                                Button(
+                                    onClick = {
+
+                                        createContent.createContent(
+                                            headline,
                                             content_text = contentText,
-                                            category_id = categoryId,
-                                            context = context,
+                                            categoryId.toString(),
                                             navController
                                         )
-                                    }
 
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
+                                    colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
+                                ) {
+                                    Text(text = "POST")
 
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
-                            ) {
-                                Text(text = "POST")
-
+                                }
                             }
-                        }
-                        else {
+                        } else {
                             Button(
                                 onClick = {
 
-                                          createContent.createContent(headline, content_text = contentText, categoryId.toString(), navController)
-
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp),
-                                colors = ButtonDefaults.buttonColors(Color(0xFFF89715))
+                                colors = ButtonDefaults.buttonColors(Color.LightGray)
                             ) {
-                                Text(text = "POST")
+                                Text(text = "Headline & Content Required!")
 
                             }
                         }
-                        // Button to submit
-
-                        //
                     }
                 }
 

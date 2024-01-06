@@ -34,6 +34,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -199,7 +200,14 @@ fun EditProfileView(
                     value = name,
                     onValueChange = { name = it },
                     placeholder = { Text("Username") },
-                    modifier = Modifier.padding(10.dp)
+                    colors = TextFieldDefaults.textFieldColors(
+                        cursorColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    modifier = Modifier.padding(10.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
                     // ... (rest of the TextField configuration)
                 )
             }
@@ -228,7 +236,14 @@ fun EditProfileView(
                     value = password,
                     onValueChange = { password = it },
                     placeholder = { Text("New Password") },
-                    modifier = Modifier.padding(10.dp)
+                    colors = TextFieldDefaults.textFieldColors(
+                        cursorColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    modifier = Modifier.padding(10.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
                     // ... (rest of the TextField configuration)
                 )
             }
@@ -256,7 +271,14 @@ fun EditProfileView(
                     value = bio,
                     onValueChange = { bio = it },
                     placeholder = { Text("Bio") },
-                    modifier = Modifier.padding(10.dp)
+                    colors = TextFieldDefaults.textFieldColors(
+                        cursorColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
+                    ),
+                    modifier = Modifier.padding(10.dp),
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
                     // ... (rest of the TextField configuration)
                 )
             }

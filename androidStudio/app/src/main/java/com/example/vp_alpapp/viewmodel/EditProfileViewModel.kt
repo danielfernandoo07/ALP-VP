@@ -54,5 +54,26 @@ class EditProfileViewModel : ViewModel() {
 
     }
 
+    fun editProfileV3(
+        name: String,
+        bio: String,
+        context: Context,
+        navController: NavController,
+        password: String
+
+    ) {
+
+        viewModelScope.launch {
+
+
+            MyContainer().myRepos.updateUserV3(MyContainer.ACCESS_TOKEN, name,bio,password,context)
+
+            navController.navigate(ListScreen.Profile.name)
+
+
+        }
+
+    }
+
 
 }

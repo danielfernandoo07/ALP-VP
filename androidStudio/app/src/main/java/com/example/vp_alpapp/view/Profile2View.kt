@@ -1,14 +1,13 @@
 package com.example.vp_alpapp.view
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,11 +27,8 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,102 +39,166 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
-import com.example.vp_alpapp.ui.theme.orangelight
+import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
-import com.example.vp_alpapp.viewmodel.HomeViewModel
-import kotlin.random.Random
+import com.example.vp_alpapp.viewmodel.ProfileViewModel
 
 @Composable
-fun FilterMenu( onTabSelected: (Boolean) -> Unit, isNewsSelected: MutableState<Boolean>) {
-    var isNewsSelected by remember { mutableStateOf(true) }
-    var isCommitteesSelected by remember { mutableStateOf(false) }
-
+fun Profile2(
+    navController: NavController,
+    user: Pengguna,
+    curUser: Pengguna,
+    listku: List<Content>?,
+    exploreViewModel: ExploreViewModel,
+//    profileViewModel: ProfileViewModel
+) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalAlignment = Alignment.End
+            .fillMaxSize()
+            .background(Color(0xFFF3F3F3))
     ) {
         item {
-            Row(
+            Box(
                 modifier = Modifier
-                    .clip(MaterialTheme.shapes.medium)
-                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .height(350.dp)
+                    .background(Color.Gray)
             ) {
-                Tab("News", R.drawable.news, isNewsSelected) {
-                    isNewsSelected = true
-                    isCommitteesSelected = false
-                    onTabSelected(isNewsSelected)
+                var gambaruser =
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+
+                if (user.photo == null) {
+                    LoadImage(url = gambaruser)
+                } else {
+                    gambaruser = user.photo.toString()
+                    LoadImage(url = gambaruser)
                 }
-                Tab("Committees", R.drawable.comit, isCommitteesSelected) {
-                    isNewsSelected = false
-                    isCommitteesSelected = true
-                    onTabSelected(isNewsSelected)
+
+                Column() {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                    ) {
+                        var showMenu by remember { mutableStateOf(false) }
+
+                        // Image with onClick listener to show the popup menu
+                        Image(
+                            painter = painterResource(id = R.drawable.more),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(top = 16.dp)
+                                .clickable { showMenu = true }
+                        )
+
+
+                    }
+                    Spacer(modifier = Modifier.height(120.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column() {
+                            Text(
+                                text = user.name,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            )
+                            var teks = "Your Bio"
+
+                            if (user.bio == null) {
+                                teks =
+                                    "Share a bit about yourself. Let others know who you are, what you're passionate about. Highlight your interests, experiences, and anything else that you think defines you. This is your space to express yourself."
+                            } else {
+                                teks = user.bio
+                            }
+                            Text(
+                                text = teks,
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
-}
 
-
-@Composable
-fun RowScope.Tab(
-    text: String,
-    iconRes: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .weight(1f)
-            .padding(8.dp)
-            .clickable { onClick() }
-            .background(
-                color = if (isSelected) orangelight else Color.Transparent,
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(12.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Image(
-                painter = painterResource(id = iconRes),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Text(
-                text = text,
-                fontWeight = FontWeight.Bold,
-                color = if (isSelected) Color.Black else Color.Gray,
-                modifier = Modifier.clickable { onClick() }
-            )
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
         }
+
+//        item {
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 100.dp)
+//                    .background(Color(0xFFF89715), RoundedCornerShape(16.dp))
+//                    .border(1.dp, Color(0xFFF89715), RoundedCornerShape(16.dp))
+//                    .padding(12.dp)
+//                    .clip(RoundedCornerShape(20.dp))
+//            ) {
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 12.dp)
+//                        .clickable {
+//                            navController.navigate(ListScreen.EditProfile.name)
+//                        },
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = "Edit Profile",
+//                        color = Color.White,
+//                        fontSize = 18.sp,
+//                        fontWeight = FontWeight.Bold,
+//                    )
+//                    Image(
+//                        painter = painterResource(id = R.drawable.arrdownwhite),
+//                        contentDescription = "",
+//                        modifier = Modifier
+//                            .size(20.dp)
+//                    )
+//                }
+//            }
+//        }
+        // FOR LOOP HERE
+        if (listku != null) {
+            val reversedList = listku.reversed()
+            items(reversedList.size) { index ->
+                Spacer(modifier = Modifier.height(20.dp))
+                Post2(
+                    content = reversedList[index],
+                    user = user,
+                    curUser = curUser,
+                    exploreViewModel = exploreViewModel,
+                    navController = navController
+                )
+            }
+        }
+        item { Spacer(modifier = Modifier.height(20.dp)) }
+
     }
 }
-
-
 @Composable
-fun Post(
-
+fun Post2(
+    curUser: Pengguna,
     user: Pengguna,
     content: Content,
     exploreViewModel: ExploreViewModel,
-    navController: NavController,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -176,39 +233,17 @@ fun Post(
                             .size(40.dp)
                             .clip(CircleShape)
                     )
+                    Text(
+                        text = content.user.name,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
 
-                    if (user.id == content.user.id) {
-                        Text(
-                            text = content.user.name,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            modifier = Modifier.clickable {
-
-                                navController.navigate(ListScreen.Profile.name)
-                            }
-                        )
-                    }
-                    else {
-                        Text(
-                            text = content.user.name,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            modifier = Modifier.clickable {
-
-                                navController.navigate(ListScreen.Profile2.name+"/"+content.user.id.toString())
-                            }
-                        )
-                    }
-
-
-
+                    )
                 }
 
-
                 // Three Dot Menu
-                if (user != null && user.id == content.user.id) {
+                if (user != null && curUser.id == content.user.id) {
 
                     var showDialog by remember { mutableStateOf(false) }
 
@@ -327,7 +362,7 @@ fun Post(
 //                    )
                 }
 
-                if (user != null && user.id == content.user.id) {
+                if (user != null && curUser.id == content.user.id) {
 
 
                     IconButton(
@@ -354,134 +389,3 @@ fun Post(
     }
 }
 
-@Composable
-fun TopBar(
-    homeViewModel: HomeViewModel,
-    navController: NavController,
-    user: Pengguna,
-    dataStore: DataStore
-) {
-    var isLogoutVisible by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .clip(MaterialTheme.shapes.medium)
-            .padding(16.dp)
-            .clickable {
-                isLogoutVisible = !isLogoutVisible
-            },
-        verticalAlignment = Alignment.Top // Set verticalAlignment to Alignment.Top
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.profilepic),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .width(40.dp)
-                .clickable {
-                    // Implement profile picture click action
-                }
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = user.name,
-            style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight(800),
-                color = Color(0xFF000000),
-            )
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Image(
-            painter = painterResource(id = R.drawable.arrowdown),
-            contentDescription = "Arrow Down",
-            modifier = Modifier
-                .width(24.dp)
-        )
-    }
-
-    // PopupMenu triggered by the click on the Image
-    DropdownMenu(
-        expanded = isLogoutVisible,
-        onDismissRequest = { isLogoutVisible = false },
-        modifier = Modifier.background(Color.Gray),
-        offset = DpOffset((30).dp, (-100).dp) // Adjust the offset as needed
-    ) {
-        // Menu item for logout
-        DropdownMenuItem(
-            text = { Text(text = "Logout") },
-            onClick = {
-                isLogoutVisible = false
-                homeViewModel.logout(navController = navController, dataStore)
-                // Handle logout action here
-            }
-        )
-    }
-}
-
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun Home(
-    navController: NavController,
-    homeViewModel: HomeViewModel,
-    user: Pengguna,
-    exploreViewModel: ExploreViewModel,
-    listData: List<Content>,
-    dataStore: DataStore
-) {
-    var isNewsSelected by remember { mutableStateOf(true) }
-    var lazyListState = rememberLazyListState()
-    Column(
-        modifier = Modifier
-            .background(Color(0xFFF3F3F3))
-    ) {
-        TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
-        FilterMenu(onTabSelected = { isNewsSelected = it }, isNewsSelected = mutableStateOf(isNewsSelected))
-        // if newsselected is true print out the category = 1
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = lazyListState
-        ) {
-            if (listData != null) {
-                val reversedList = listData.reversed()
-                items(reversedList.size) { index ->
-                    if (user != null) {
-                        if (reversedList[index].userId != user.id) {
-                            // Check if "News" is selected
-                            if (isNewsSelected && reversedList[index].categoryId == 1) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Post(
-                                    content = reversedList[index],
-                                    user = user,
-                                    exploreViewModel = exploreViewModel,
-                                    navController = navController
-                                )
-                            }
-                            // Check if "Committees" is selected
-                            else if (!isNewsSelected && reversedList[index].categoryId == 2) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Post(
-                                    content = reversedList[index],
-                                    user = user,
-                                    exploreViewModel = exploreViewModel,
-                                    navController = navController
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        LaunchedEffect(isNewsSelected) {
-            // Reset scroll position to top when isNewsSelected changes
-            lazyListState.scrollToItem(0)
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-private fun HomeView() {
-//    Home()
-}

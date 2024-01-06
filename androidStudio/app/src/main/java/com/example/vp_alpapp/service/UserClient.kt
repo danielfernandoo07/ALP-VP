@@ -20,6 +20,7 @@ import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
@@ -83,8 +84,26 @@ public interface UserClient {
         @Part photo: MultipartBody.Part,
         @Part("password") password: RequestBody,
     )
+    @PATCH("user")
+    suspend fun updateUserRaw(
+        @Header("Authorization") token: String,
+        @Body requestBody: UserUpdateRequest,
+    )
+
+    @GET("user/{id}")
+    suspend fun getUserbyId(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+
+    ): Pengguna
 
 
+    @GET("user/contents/{userId}")
+    suspend fun getSomeUserContent(
+        @Header("Authorization") token: String,
+        @Path("userId") id: String
+
+    ) : List<Content>
 
 
 }

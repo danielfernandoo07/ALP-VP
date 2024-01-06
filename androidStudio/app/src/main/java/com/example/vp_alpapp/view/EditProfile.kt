@@ -330,10 +330,17 @@ fun EditProfileView(
                             modifier = Modifier
                                 .clickable {
 
-                                    selectedImageUri?.let {
+                                    if (selectedImageUri != null) {
                                         editProfileViewModel.editProfileV2(name,
-                                            it,bio,context,navController, password)
+                                            image = selectedImageUri!!,bio,context,navController, password)
                                     }
+                                    else {
+
+                                        editProfileViewModel.editProfileV3(name, bio, context, navController, password)
+
+                                    }
+
+
                                 }
                                 .align(Alignment.Center)
                         )

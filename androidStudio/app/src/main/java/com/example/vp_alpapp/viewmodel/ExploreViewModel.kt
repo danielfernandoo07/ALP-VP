@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
@@ -73,6 +74,25 @@ class ExploreViewModel: ViewModel() {
             MyContainer().myRepos.updateContent(MyContainer.ACCESS_TOKEN, kontenId, headline = headline, context_text , categoryId = categoryId)
 
         }
+    }
+
+    fun getUserById(
+
+        navController: NavController,
+        id: String
+
+    ) {
+
+        viewModelScope.launch {
+
+            val user = MyContainer().myRepos.getUserbyId(MyContainer.ACCESS_TOKEN, id)
+
+            Log.d("p", user.name)
+            Log.d("p", user.id.toString())
+
+
+        }
+
     }
 
 

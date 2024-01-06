@@ -9,8 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,6 +31,7 @@ import com.example.vp_alpapp.view.ExploreView
 import com.example.vp_alpapp.view.Home
 import com.example.vp_alpapp.view.LoginUIView
 import com.example.vp_alpapp.view.Profile
+import com.example.vp_alpapp.view.Profile2
 //import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.view.RegisterView
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
@@ -38,6 +43,7 @@ import com.example.vp_alpapp.viewmodel.HomeUIState
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
+import com.example.vp_alpapp.viewmodel.ProfileOtherViewModel
 import com.example.vp_alpapp.viewmodel.ProfileUiState
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
 import com.example.vp_alpapp.viewmodel.RegisterViewModel
@@ -57,7 +63,8 @@ enum class ListScreen() {
     Register,
     EditProfile,
     EditKonten,
-    Blank
+    Blank,
+    Profile2,
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -157,8 +164,7 @@ fun Routes() {
 
                 when (status) {
                     is ProfileUiState.Loading -> {
-                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null, exploreViewModel, profileViewModel)
-
+                    Blank()
                     }
 
                     is ProfileUiState.Success -> {
@@ -285,8 +291,7 @@ fun Routes() {
                     is ProfileUiState.Loading -> {
 
 
-                        EditProfileView1(navController = navController, editProfileViewModel = editProfileViewModel, user = null)
-
+                        Blank()
                     }
 
                     is ProfileUiState.Success -> {
@@ -323,7 +328,7 @@ fun Routes() {
 
                     when(status){
                         is KontenDetailUiState.Loading -> {
-                            Log.d("LOADING", "LOADING KONTEN")
+                            Blank()
                         }
                         is KontenDetailUiState.Success -> {
 
@@ -373,6 +378,63 @@ fun Routes() {
             composable(ListScreen.Blank.name) {
 
                 Blank()
+
+            }
+
+            composable(ListScreen.Profile2.name+"/{id}") {
+
+                val  exploreViewModel: ExploreViewModel = viewModel()
+
+                val profileOtherViewModel: ProfileOtherViewModel = viewModel()
+
+
+                var effectExecuted by remember { mutableStateOf(false) }
+
+
+                it.arguments?.let { it1 -> val id = it1.getString("id", "1")
+
+
+                    LaunchedEffect(key1 = id) {
+                        if (!effectExecuted) {
+                            profileOtherViewModel.load(id)
+                            effectExecuted = true
+                        }
+                    }
+
+                    val status = profileOtherViewModel.profile2UiState
+
+                    when(status){
+                        is ProfileOtherViewModel.Profile2UIState.Loading -> {
+
+                            Blank()
+                        }
+                        is ProfileOtherViewModel.Profile2UIState.Success -> {
+
+
+                            Profile2(
+                                navController = navController,
+                                user = status.data,
+                                listku = status.data1,
+                                exploreViewModel = exploreViewModel,
+                                curUser = status.data2
+                            )
+
+
+
+                        }
+
+
+                        is ProfileOtherViewModel.Profile2UIState.Error ->{
+
+                        }
+                    }
+
+
+
+                }
+
+
+
 
             }
 

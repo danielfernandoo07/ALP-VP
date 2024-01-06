@@ -148,7 +148,12 @@ fun EditProfileView(
 
                         gambaruser = user.photo.toString()
 
-                        Box(modifier = Modifier.clickable { }) {
+                        Box(modifier = Modifier.clickable {
+
+                            singlePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }) {
 
                             LoadImageCustom(url = user.photo.toString(), contentScale = ContentScale.Crop, modifier = Modifier
                                 .size(120.dp)

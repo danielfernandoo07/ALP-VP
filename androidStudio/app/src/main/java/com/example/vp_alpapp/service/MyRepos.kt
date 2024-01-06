@@ -267,7 +267,7 @@ class MyRepos(private val userClient: UserClient) {
             userClient.updateUserRaw1(token,UserUpdateRequest)
         }
         else {
-            val UserUpdateRequest = UserUpdateRequest(name,password,bio)
+            val UserUpdateRequest = UserUpdateRequest(name,password,bioku)
 
 
             userClient.updateUserRaw(token,UserUpdateRequest)

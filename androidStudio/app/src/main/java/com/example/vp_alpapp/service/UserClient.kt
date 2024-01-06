@@ -11,6 +11,7 @@ import com.example.vp_alpapp.model.Register
 import com.example.vp_alpapp.model.RegisterInfo
 import com.example.vp_alpapp.model.User
 import com.example.vp_alpapp.model.UserId
+import com.example.vp_alpapp.model.UserUpdateReq2
 import com.example.vp_alpapp.model.UserUpdateRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -88,6 +89,12 @@ public interface UserClient {
     suspend fun updateUserRaw(
         @Header("Authorization") token: String,
         @Body requestBody: UserUpdateRequest,
+    )
+
+    @PATCH("user")
+    suspend fun updateUserRaw1(
+        @Header("Authorization") token: String,
+        @Body requestBody: UserUpdateReq2,
     )
 
     @GET("user/{id}")

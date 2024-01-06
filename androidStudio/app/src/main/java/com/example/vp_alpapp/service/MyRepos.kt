@@ -9,6 +9,7 @@ import com.example.vp_alpapp.model.CreateContent
 import com.example.vp_alpapp.model.Login
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.model.RegisterInfo
+import com.example.vp_alpapp.model.UserUpdateReq2
 import com.example.vp_alpapp.model.UserUpdateRequest
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
@@ -254,11 +255,26 @@ class MyRepos(private val userClient: UserClient) {
         context:Context
     ) {
 
+        Log.d("bio", bio)
+        var bioku = bio
+        if (bio.isNullOrEmpty()) {
+            bioku = "{null}"
+        }
 
-        val UserUpdateRequest = UserUpdateRequest(name,password,bio)
+        if (password == "") {
+
+            val UserUpdateRequest = UserUpdateReq2(name,bioku)
+            userClient.updateUserRaw1(token,UserUpdateRequest)
+        }
+        else {
+            val UserUpdateRequest = UserUpdateRequest(name,password,bio)
 
 
-        userClient.updateUserRaw(token,UserUpdateRequest)
+            userClient.updateUserRaw(token,UserUpdateRequest)
+        }
+
+
+
 
     }
 

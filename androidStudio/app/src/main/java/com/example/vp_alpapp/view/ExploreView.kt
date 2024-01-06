@@ -114,12 +114,12 @@ fun ExploreView(
 //        }
 
         if (listData != null) {
-            repeat(listData.size) {
-
+            val shuffledList = listData.shuffled()
+            repeat(shuffledList.size) {
                 if (user != null) {
-                    if (user.id != listData[it].userId) {
+                    if (user.id != shuffledList[it].userId) {
                         Post(
-                            content = listData[it],
+                            content = shuffledList[it],
                             user = user,
                             exploreViewModel = exploreViewModel,
                             navController = navController

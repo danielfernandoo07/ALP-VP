@@ -247,6 +247,26 @@ fun Profile(
                 )
             }
         }
+        if (listku != null) {
+            if (listku.isEmpty()) {
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                    )
+                    Text(
+                        text = "No Posts Yet!",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp) // Adjust the padding as needed
+                    )
+                }
+            }
+        }
         item { Spacer(modifier = Modifier.height(20.dp)) }
 
     }

@@ -80,7 +80,7 @@ fun EditProfileView(
     )
 
     var bioku = ""
-    if (user.bio.isNullOrEmpty()) {
+    if (user.bio.isNullOrEmpty() || user.bio.equals("{null}")) {
 
         bioku = ""
 

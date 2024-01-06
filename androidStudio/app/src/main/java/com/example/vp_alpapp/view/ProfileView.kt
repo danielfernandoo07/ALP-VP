@@ -179,7 +179,7 @@ fun Profile(
                             )
                             var teks = "Your Bio"
 
-                            if (user.bio == null) {
+                            if (user.bio == null || user.bio.equals("{null}")) {
                                 teks =
                                     "Share a bit about yourself. Let others know who you are, what you're passionate about. Highlight your interests, experiences, and anything else that you think defines you. This is your space to express yourself."
                             } else {

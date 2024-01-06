@@ -1,5 +1,6 @@
 package com.example.vp_alpapp.view
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,6 +30,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,16 +41,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.viewmodel.RegisterViewModel
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +65,10 @@ fun RegisterView(
     var prodiId by rememberSaveable { mutableStateOf(1) }
     var name by rememberSaveable { mutableStateOf("") }
     var nim by rememberSaveable { mutableStateOf("") }
+    var filled1 by remember { mutableStateOf(false) }
+    var filled2 by remember { mutableStateOf(false) }
+    var filled3 by remember { mutableStateOf(false) }
+    var filled5 by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +79,7 @@ fun RegisterView(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-        ){
+        ) {
             Text(
                 text = "Welcome!\nCreate An Account!",
                 style = TextStyle(
@@ -98,7 +106,10 @@ fun RegisterView(
                 )
                 TextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        email = it
+                        filled1 = true
+                    },
                     placeholder = { Text("Email Address") },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
@@ -138,7 +149,10 @@ fun RegisterView(
                 )
                 TextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        password = it
+                        filled2 = true
+                    },
                     placeholder = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
                     colors = TextFieldDefaults.textFieldColors(
@@ -181,7 +195,10 @@ fun RegisterView(
                 )
                 TextField(
                     value = nim,
-                    onValueChange = { nim = it },
+                    onValueChange = {
+                        nim = it
+                        filled3 = true
+                    },
                     placeholder = { Text("NIM") },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
@@ -222,7 +239,9 @@ fun RegisterView(
                 )
                 TextField(
                     value = prodiId.toString(),
-                    onValueChange = { prodiId = it.toIntOrNull() ?: 0 },
+                    onValueChange = {
+                        prodiId = it.toIntOrNull() ?: 0
+                    },
                     label = { Text("Prodi ID") },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
@@ -263,7 +282,10 @@ fun RegisterView(
                 )
                 TextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = {
+                        name = it
+                        filled5 = true
+                    },
                     placeholder = { Text("Name") },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.Black,
@@ -301,31 +323,66 @@ fun RegisterView(
                     verticalArrangement = Arrangement.Top,
                     modifier = Modifier.fillMaxHeight()  // Added to center content vertically
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 50.dp)
-                            .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
-                            .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
-                            .padding(12.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                    ) {
-                        Text(
-                            text = "Register",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFFFFFFFF),
-                                textAlign = TextAlign.Center,
-                            ),
+                    if (filled1 && filled2 && filled3 && filled5) {
+
+                        Box(
                             modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 50.dp)
+                                .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
+                                .padding(12.dp)
+                                .clip(RoundedCornerShape(10.dp))
                                 .clickable {
-                registerViewModel.register(email, password, nim, prodiId, name, navController)
+                                    registerViewModel.register(
+                                        email,
+                                        password,
+                                        nim,
+                                        prodiId,
+                                        name,
+                                        navController
+                                    )
                                 }
-                                .align(Alignment.Center)
-                        )
+                        ) {
+                            Text(
+                                text = "Register",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight(600),
+                                    color = Color(0xFFFFFFFF),
+                                    textAlign = TextAlign.Center,
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        }
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 50.dp)
+                                .background(Color(0xFFAC6C17), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFAC6C17), RoundedCornerShape(8.dp))
+                                .padding(12.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .clickable {
+
+                                }
+                        ) {
+                            Text(
+                                text = "Please Fill In Your Details!",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight(600),
+                                    color = Color(0xFFFFFFFF),
+                                    textAlign = TextAlign.Center,
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Already Have An Account? Click Here!",
                         style = TextStyle(
@@ -335,7 +392,7 @@ fun RegisterView(
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier.clickable {
-                             navController.navigate(ListScreen.Login.name)
+                            navController.navigate(ListScreen.Login.name)
                         }
                     )
                 }

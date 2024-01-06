@@ -188,22 +188,23 @@ fun LoginUIView(
                     .padding(horizontal = 15.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (filled1 && filled2) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top,
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                ) {
+                    Box(
                         modifier = Modifier
-                            .fillMaxHeight()
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 50.dp)
-                                .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
-                                .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
-                                .padding(12.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .clickable {
+                            .fillMaxWidth()
+                            .padding(horizontal = 50.dp)
+                            .background(Color(0xFFF89715), RoundedCornerShape(8.dp))
+                            .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
+                            .padding(12.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable {
+                                if (filled1 && filled2) {
+
                                     if (isEmailValid) {
                                         loginViewModel.login(
                                             dataStore = dataStore,
@@ -217,86 +218,45 @@ fun LoginUIView(
                                         // (Anda bisa menambahkan log atau menampilkan pesan kesalahan ke pengguna)
                                         Log.d("LoginView", "Invalid email format")
                                     }
-                                } // Added to center content vertically
-                        ) {
-                            Text(
-                                text = "Login",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFFFFFFFF),
-                                    textAlign = TextAlign.Center,
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Need An Account? Click Here!",
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF8C8C8C),
-                                textAlign = TextAlign.Center,
-                            ),
-                            modifier = Modifier.clickable {
-                                navController.navigate(ListScreen.Register.name)
-                            }
-                        )
-                    }
-                } else {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 50.dp)
-                                .background(orangelight, RoundedCornerShape(8.dp))
-                                .border(1.dp, Color(0xFFF89715), RoundedCornerShape(8.dp))
-                                .padding(12.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .clickable {
+                                } else {
                                     if (!filled1 || !filled2) {
                                         // Show toast message if email or password is not filled
-                                        Toast.makeText(
-                                            context,
-                                            "Please Enter Your Email/Password!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Please Enter Your Email/Password!",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
                                     }
                                 }
-                        ) {
-                            Text(
-                                text = "Login",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFFFFFFFF),
-                                    textAlign = TextAlign.Center,
-                                ),
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+                            } // Added to center content vertically
+                    ) {
                         Text(
-                            text = "Need An Account? Click Here!",
+                            text = "Login",
                             style = TextStyle(
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF8C8C8C),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight(600),
+                                color = Color(0xFFFFFFFF),
                                 textAlign = TextAlign.Center,
                             ),
-                            modifier = Modifier.clickable {
-                                navController.navigate(ListScreen.Register.name)
-                            }
+                            modifier = Modifier
+                                .align(Alignment.Center)
                         )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Need An Account? Click Here!",
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF8C8C8C),
+                            textAlign = TextAlign.Center,
+                        ),
+                        modifier = Modifier.clickable {
+                            navController.navigate(ListScreen.Register.name)
+                        }
+                    )
                 }
             }
 

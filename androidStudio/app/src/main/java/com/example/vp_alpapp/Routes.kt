@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
+import com.example.vp_alpapp.view.Blank
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.EditContentView
 import com.example.vp_alpapp.view.EditProfileView
@@ -33,6 +34,7 @@ import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.EditContentViewModel
 import com.example.vp_alpapp.viewmodel.EditProfileViewModel
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
+import com.example.vp_alpapp.viewmodel.HomeUIState
 import com.example.vp_alpapp.viewmodel.HomeViewModel
 import com.example.vp_alpapp.viewmodel.KontenDetailUiState
 import com.example.vp_alpapp.viewmodel.LoginViewModel
@@ -54,7 +56,8 @@ enum class ListScreen() {
     Explore,
     Register,
     EditProfile,
-    EditKonten
+    EditKonten,
+    Blank
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -154,14 +157,14 @@ fun Routes() {
 
                 when (status) {
                     is ProfileUiState.Loading -> {
-                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null, exploreViewModel)
+                        Profile(navController, Pengguna("","","","","",0,"","","",0,""),null, exploreViewModel, profileViewModel)
 
                     }
 
                     is ProfileUiState.Success -> {
 
 
-                        Profile(navController, status.data, status.data1, exploreViewModel)
+                        Profile(navController, status.data, status.data1, exploreViewModel, profileViewModel)
 
 
 
@@ -242,31 +245,29 @@ fun Routes() {
 
                 val profileViewModel: ProfileViewModel = viewModel()
 
-                val status = profileViewModel.profileUiState
+                val exploreViewModel: ExploreViewModel = viewModel()
+
+                val status = homeViewModel.homeUIState
 
                 when (status) {
-                    is ProfileUiState.Loading -> {
+                    is HomeUIState.Loading -> {
 
-                        Home(navController, homeViewModel = homeViewModel, Pengguna("","","","","",0,"","","",0,""), dataStore)
 
+                        Blank()
                     }
 
-                    is ProfileUiState.Success -> {
+                    is HomeUIState.Success -> {
 
-
-                        Home(navController, homeViewModel = homeViewModel, user = status.data, dataStore = dataStore)
-
-
-
-
+                        Home(navController, homeViewModel = homeViewModel, user = status.user, dataStore = dataStore, exploreViewModel = exploreViewModel, listData = status.data)
 
                     }
 
 
-                    is ProfileUiState.Error -> {
+                    is HomeUIState.Error -> {
 
                     }
 
+                    else -> {}
                 }
 
 
@@ -367,6 +368,12 @@ fun Routes() {
                     navController.navigate(ListScreen.Profile.name)
 
                 }
+            }
+
+            composable(ListScreen.Blank.name) {
+
+                Blank()
+
             }
 
 

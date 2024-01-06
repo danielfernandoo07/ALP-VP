@@ -1,16 +1,16 @@
 package com.example.vp_alpapp.view
 
-import android.widget.Toast
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -18,27 +18,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,59 +43,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.vp_alpapp.BottomNavigationBar
 import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
-import com.example.vp_alpapp.service.MyContainer
+import com.example.vp_alpapp.ui.theme.orangelight
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.HomeViewModel
-import com.example.vp_alpapp.viewmodel.ProfileViewModel
-import java.text.NumberFormat
-import java.util.Locale
 import kotlin.random.Random
 
 @Composable
-fun Tab(text: String, isSelected: Boolean) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(if (isSelected) Color(0xFFF89715) else Color.Transparent)
-            .padding(2.dp)
-            .padding(if (isSelected) 1.dp else 0.dp)
-            .width(120.dp)
-            .height(36.dp)
-    ) {
-        BasicText(
-            text = text,
-            style = TextStyle(
-                fontSize = 14.sp,
-                fontWeight = FontWeight(600),
-                color = if (isSelected) Color.White else Color(0xFFA7A7A7),
-            ),
-            modifier = Modifier.padding(8.dp)
-        )
-    }
-}
+fun FilterMenu( onTabSelected: (Boolean) -> Unit, isNewsSelected: MutableState<Boolean>) {
+    var isNewsSelected by remember { mutableStateOf(true) }
+    var isCommitteesSelected by remember { mutableStateOf(false) }
 
-@Composable
-fun FilterMenu() {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,16 +78,62 @@ fun FilterMenu() {
             Row(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
-                    .background(Color(0xFFE9E9E9))
                     .padding(8.dp)
             ) {
-                Tab("News", true)
-                Tab("Committees", false)
-                Tab("Following", false)
+                Tab("News", R.drawable.news, isNewsSelected) {
+                    isNewsSelected = true
+                    isCommitteesSelected = false
+                    onTabSelected(isNewsSelected)
+                }
+                Tab("Committees", R.drawable.comit, isCommitteesSelected) {
+                    isNewsSelected = false
+                    isCommitteesSelected = true
+                    onTabSelected(isNewsSelected)
+                }
             }
         }
     }
 }
+
+
+@Composable
+fun RowScope.Tab(
+    text: String,
+    iconRes: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .padding(8.dp)
+            .clickable { onClick() }
+            .background(
+                color = if (isSelected) orangelight else Color.Transparent,
+                shape = MaterialTheme.shapes.medium
+            )
+            .padding(12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Image(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+
+            Text(
+                text = text,
+                fontWeight = FontWeight.Bold,
+                color = if (isSelected) Color.Black else Color.Gray,
+                modifier = Modifier.clickable { onClick() }
+            )
+        }
+    }
+}
+
 
 @Composable
 fun Post(
@@ -172,20 +187,57 @@ fun Post(
                 // Three Dot Menu
                 if (user != null && user.id == content.user.id) {
 
+                    var showDialog by remember { mutableStateOf(false) }
 
-                    // Show delete button and make it clickable
                     IconButton(
                         onClick = {
-
-                            exploreViewModel.delete(content.id.toString())
-
+                            showDialog = true
                         },
                         modifier = Modifier
                             .size(48.dp)
                     ) {
-
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete",tint = Color.Black)
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.Black
+                        )
                     }
+
+                    if (showDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                // Handle dialog dismissal if needed
+                                showDialog = false
+                            },
+                            title = {
+                                Text(text = "Delete Post")
+                            },
+                            text = {
+                                Text(text = "Are you sure you want to delete this post?")
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        exploreViewModel.delete(content.id.toString())
+                                        showDialog = false
+                                        navController.navigate(ListScreen.Profile.name)
+                                    }
+                                ) {
+                                    Text(text = "Yes")
+                                }
+                            },
+                            dismissButton = {
+                                Button(
+                                    onClick = {
+                                        showDialog = false
+                                    }
+                                ) {
+                                    Text(text = "No")
+                                }
+                            }
+                        )
+                    }
+
                 }
 
             }
@@ -199,11 +251,16 @@ fun Post(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LoadImageCustom(
-                url = content.image, modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 170.dp), contentScale = ContentScale.Crop
-            )
+            if (content.image == null) {
+
+            } else {
+                LoadImageCustom(
+                    url = content.image, modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 170.dp), contentScale = ContentScale.Crop
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
 
 
@@ -253,7 +310,7 @@ fun Post(
                     IconButton(
                         onClick = {
 
-                        navController.navigate(ListScreen.EditKonten.name+"/"+content.id.toString())
+                            navController.navigate(ListScreen.EditKonten.name + "/" + content.id.toString())
 
                         },
                         modifier = Modifier.size(24.dp)
@@ -274,7 +331,6 @@ fun Post(
     }
 }
 
-
 @Composable
 fun TopBar(
     homeViewModel: HomeViewModel,
@@ -287,7 +343,10 @@ fun TopBar(
     Row(
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable {
+                isLogoutVisible = !isLogoutVisible
+            },
         verticalAlignment = Alignment.Top // Set verticalAlignment to Alignment.Top
     ) {
         Image(
@@ -314,73 +373,86 @@ fun TopBar(
             contentDescription = "Arrow Down",
             modifier = Modifier
                 .width(24.dp)
-                .clickable {
-                    // Toggle the visibility of the logout button
-                    isLogoutVisible = !isLogoutVisible
-                }
         )
     }
 
-    // Show the logout button when isLogoutVisible is true
-    if (isLogoutVisible) {
-        Button(
+    // PopupMenu triggered by the click on the Image
+    DropdownMenu(
+        expanded = isLogoutVisible,
+        onDismissRequest = { isLogoutVisible = false },
+        modifier = Modifier.background(Color.Gray),
+        offset = DpOffset((30).dp, (-100).dp) // Adjust the offset as needed
+    ) {
+        // Menu item for logout
+        DropdownMenuItem(
+            text = { Text(text = "Logout") },
             onClick = {
-                // Implement logout button click action
+                isLogoutVisible = false
                 homeViewModel.logout(navController = navController, dataStore)
-
-            },
-            modifier = Modifier.padding(8.dp),
-            colors = ButtonDefaults.buttonColors(Color.Red)
-        ) {
-            Text("Logout")
-        }
+                // Handle logout action here
+            }
+        )
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun Home(
     navController: NavController,
     homeViewModel: HomeViewModel,
     user: Pengguna,
+    exploreViewModel: ExploreViewModel,
+    listData: List<Content>,
     dataStore: DataStore
 ) {
+    var isNewsSelected by remember { mutableStateOf(true) }
+    var lazyListState = rememberLazyListState()
     Column(
         modifier = Modifier
             .background(Color(0xFFF3F3F3))
     ) {
         TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
-        FilterMenu()
+        FilterMenu(onTabSelected = { isNewsSelected = it }, isNewsSelected = mutableStateOf(isNewsSelected))
+        // if newsselected is true print out the category = 1
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = lazyListState
+        ) {
+            if (listData != null) {
+                val reversedList = listData.reversed()
+                items(reversedList.size) { index ->
+                    if (user != null) {
+                        if (reversedList[index].userId != user.id) {
+                            // Check if "News" is selected
+                            if (isNewsSelected && reversedList[index].categoryId == 1) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Post(
+                                    content = reversedList[index],
+                                    user = user,
+                                    exploreViewModel = exploreViewModel,
+                                    navController = navController
+                                )
+                            }
+                            // Check if "Committees" is selected
+                            else if (!isNewsSelected && reversedList[index].categoryId == 2) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Post(
+                                    content = reversedList[index],
+                                    user = user,
+                                    exploreViewModel = exploreViewModel,
+                                    navController = navController
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        LaunchedEffect(isNewsSelected) {
+            // Reset scroll position to top when isNewsSelected changes
+            lazyListState.scrollToItem(0)
+        }
         Spacer(modifier = Modifier.height(8.dp))
-//        Post()
-//
-//        BoxWithConstraints {
-//            val bottomNavHeight = 45.dp
-//            val gridHeight = maxHeight - bottomNavHeight
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(1),
-//                modifier = Modifier
-//                    .padding(bottom = 0.dp)
-//                    .background(Color.Black)
-//                    .height(gridHeight)
-//            ) {
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    TopBar()
-//                }
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    FilterMenu()
-//                    Spacer(modifier = Modifier.height(8.dp))
-//                }
-//                item(
-//                    span = { GridItemSpan(1) }
-//                ) {
-//                    Post()
-//                }
-//            }
-//        }
     }
 }
 

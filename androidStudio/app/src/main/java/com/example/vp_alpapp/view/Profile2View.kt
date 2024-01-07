@@ -102,6 +102,24 @@ fun Profile2(
                         )
 
 
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                            modifier = Modifier.background(Color.Gray),
+                            offset = DpOffset((-8).dp, 0.dp) // Adjust the offset as needed
+                        ) {
+                            // Menu item for logout
+                            DropdownMenuItem(
+                                text = { Text(text = "Chat") },
+                                onClick = {
+                                    showMenu = false
+                                    // Handle logout action here
+                                }
+                            )
+                        }
+
+
+
                     }
                     Spacer(modifier = Modifier.height(120.dp))
                     Row(

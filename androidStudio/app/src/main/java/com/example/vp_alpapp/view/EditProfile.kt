@@ -335,15 +335,16 @@ fun EditProfileView(
                             modifier = Modifier
                                 .clickable {
 
-                                    if (selectedImageUri != null) {
-                                        editProfileViewModel.editProfileV2(name,
-                                            image = selectedImageUri!!,bio,context,navController, password)
+                                    selectedImageUri?.let {
+                                        editProfileViewModel.editImage(it, context = context)
+                                        editProfileViewModel.editProfileV3(name, bio, context, navController, password)
                                     }
-                                    else {
 
+                                    if (selectedImageUri == null) {
                                         editProfileViewModel.editProfileV3(name, bio, context, navController, password)
 
                                     }
+
 
 
                                 }

@@ -30,6 +30,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 public interface UserClient {
 
@@ -128,4 +129,14 @@ public interface UserClient {
         @Header("Authorization") token: String,
         @Body req: CommentReq
         )
+
+    @Multipart
+    @POST("user")
+    suspend fun updateIMG(
+
+        @Header("Authorization") token: String,
+        @Part file: MultipartBody.Part,
+        @Query("_method") method: String = "PUT"
+    )
+
 }

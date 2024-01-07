@@ -3,6 +3,7 @@ package com.example.vp_alpapp.viewmodel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -73,6 +74,18 @@ class EditProfileViewModel : ViewModel() {
 
         }
 
+    }
+
+    fun editImage(
+        image: Uri,
+        context: Context
+    ) {
+
+
+        viewModelScope.launch {
+
+            MyContainer().myRepos.updateImage(image, context = context)
+        }
     }
 
 

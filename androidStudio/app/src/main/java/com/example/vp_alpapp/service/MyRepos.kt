@@ -2,6 +2,7 @@ package com.example.vp_alpapp.service
 
 import android.content.Context
 import android.net.Uri
+import android.util.Base64
 import android.util.Log
 import com.example.vp_alpapp.model.CommentReq
 import com.example.vp_alpapp.model.Commentku
@@ -95,6 +96,9 @@ class MyRepos(private val userClient: UserClient) {
 
         val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
 
+        Log.d("img", image.toString())
+        // Memanggil fungsi
+        Log.d("imgfile", file.name)
 
         // Memanggil fungsi createContent di userClient
         userClient.createContent(
@@ -298,5 +302,46 @@ class MyRepos(private val userClient: UserClient) {
         userClient.createComment(token, req)
 
     }
+
+    suspend fun updateImage(
+        image: Uri,
+        context: Context
+    ) {
+        // Mendapatkan objek user dan mengonversinya menjadi string JSON
+
+
+        // Mengonversi file Uri menjadi File
+
+        val fileDir = context.filesDir
+        val file = File(fileDir, "image.png")
+
+        val inputStream = context.contentResolver.openInputStream(image)
+        inputStream?.use { input ->
+            val outputStream = FileOutputStream(file)
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val imageString = encodeImageToBase64(file.absolutePath)
+
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
+
+        Log.d("img", image.toString())
+        // Memanggil fungsi
+        Log.d("imgfile", file.absolutePath)
+        userClient.updateIMG(MyContainer.ACCESS_TOKEN, file= part)
+    }
+
+    fun encodeImageToBase64(imagePath: String): String {
+        val bytes = File(imagePath).readBytes()
+        return Base64.encodeToString(bytes, Base64.DEFAULT)
+    }
+
+
+
 
 }

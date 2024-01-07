@@ -98,13 +98,13 @@ class ContentController extends Controller
             $oldData = [
                 'image' => $content->image,
             ];
-            if ($request->hasFile('image')) {
+            if ($request->file) {
                 $oldImagePath = public_path('images') . '/' . $content->image;
                 if (File::exists($oldImagePath)) {
                     File::delete($oldImagePath);
                 }
             
-                $image = $request->file('image');
+                $image = $request->file;
                 if ($image && $image->isValid()) {
                     $imageName = time() . '.' . $image->extension();
                 } else {

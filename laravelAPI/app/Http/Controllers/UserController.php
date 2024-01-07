@@ -57,13 +57,13 @@ class UserController extends Controller
             $oldData = [
                 'photo' => $user->photo,
             ];
-            if ($request->hasFile('photo')) {
+            if ($request->file) {
                 $oldImagePath = public_path('photos') . '/' . $user->photo;
                 if (File::exists($oldImagePath)) {
                     File::delete($oldImagePath);
                 }
             
-                $photo = $request->file('photo');
+                $photo = $request->file;
                 if ($photo && $photo->isValid()) {
                     $photoName = time() . '.' . $photo->extension();
                 } else {

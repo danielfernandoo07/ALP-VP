@@ -3,6 +3,8 @@ package com.example.vp_alpapp.service
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.example.vp_alpapp.model.CommentReq
+import com.example.vp_alpapp.model.Commentku
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.CreateContent
@@ -20,6 +22,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import org.w3c.dom.Comment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -273,8 +276,26 @@ class MyRepos(private val userClient: UserClient) {
             userClient.updateUserRaw(token,UserUpdateRequest)
         }
 
+    }
 
+    suspend fun getComment(
+        token: String,
+        content_id: String
+    ): List<Commentku> {
 
+        return userClient.getComment(token, content_id)
+
+    }
+
+    suspend fun createComment(
+        token: String,
+        content_id: String,
+        comment_text: String
+    ) {
+
+        val req = CommentReq(content_id,comment_text)
+
+        userClient.createComment(token, req)
 
     }
 

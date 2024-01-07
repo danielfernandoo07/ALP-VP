@@ -287,7 +287,7 @@ fun Post(
                         .clickable {
                             navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
                         }
-                        .heightIn(max = 170.dp), contentScale = ContentScale.Crop
+                      , contentScale = ContentScale.Crop
                 )
             }
 

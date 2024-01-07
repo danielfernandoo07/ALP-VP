@@ -41,11 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Pengguna
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
-    messageViewModel: MessageViewModel = viewModel()
+    messageViewModel: MessageViewModel = viewModel(),
+    lawanBicara: Pengguna
 ) {
     val messageUIState by messageViewModel.uistate.collectAsState()
 
@@ -71,7 +73,7 @@ fun ChatScreen(
             Spacer(modifier = Modifier.padding(end = 16.dp))
 
             Text(
-                text = "User02",
+                text = lawanBicara.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
@@ -189,5 +191,5 @@ fun ChatRow(
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun ChatScreenPreview() {
-    return ChatScreen()
+//    return ChatScreen()
 }

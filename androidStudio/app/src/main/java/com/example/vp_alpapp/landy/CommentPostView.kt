@@ -65,6 +65,7 @@ import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Commentku
 import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.LoadImageCustom
 
@@ -74,7 +75,8 @@ fun CommentPostView(
     commentPostViewModel: CommentPostViewModel = viewModel(),
     content: Content,
     semuaKomen: List<Commentku>,
-    navController: NavController
+    navController: NavController,
+    curremt: Pengguna
 ) {
 
     var commentText by rememberSaveable {
@@ -133,7 +135,7 @@ fun CommentPostView(
                                         .clip(CircleShape)
                                 )
 
-                                if (content.userId == content.user.id) {
+                                if (curremt.id == content.user.id) {
                                     Text(
                                         text = content.user.name,
                                         fontSize = 12.sp,

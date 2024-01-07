@@ -113,7 +113,8 @@ fun Profile2(
                                 text = { Text(text = "Chat") },
                                 onClick = {
                                     showMenu = false
-                                    // Handle logout action here
+
+                                    navController.navigate(ListScreen.Chat.name+"/"+user.id.toString())
                                 }
                             )
                         }

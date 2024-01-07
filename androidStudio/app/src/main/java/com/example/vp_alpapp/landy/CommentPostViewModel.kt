@@ -23,7 +23,7 @@ class CommentPostViewModel : ViewModel() {
 //    private val _uistate = MutableStateFlow<List<User>>(emptyList())
 //    val uistate: StateFlow<List<User>> =_uistate.asStateFlow()
 sealed interface CommentPostViewUIState {
-    data class Success(val data: Content, val data1: List<Commentku>) : CommentPostViewUIState
+    data class Success(val data: Content, val data1: List<Commentku>, val data2: Pengguna) : CommentPostViewUIState
     object Error : CommentPostViewUIState
     object Loading : CommentPostViewUIState
 
@@ -34,7 +34,7 @@ sealed interface CommentPostViewUIState {
 
     lateinit var data: Content
     lateinit var data1: List<Commentku>
-
+    lateinit var data2: Pengguna
     fun getData(
         id: String,
     ) {
@@ -44,8 +44,9 @@ sealed interface CommentPostViewUIState {
 
             data= MyContainer().myRepos.getKontenById(MyContainer.ACCESS_TOKEN, id)
             data1 = MyContainer().myRepos.getComment(MyContainer.ACCESS_TOKEN, content_id = id)
+            data2 = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
 
-           commentPostViewUIState = CommentPostViewUIState.Success(data,data1)
+           commentPostViewUIState = CommentPostViewUIState.Success(data,data1, data2)
 
         }
 

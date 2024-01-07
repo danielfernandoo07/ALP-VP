@@ -19,8 +19,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.vp_alpapp.landy.ChatScreen
 import com.example.vp_alpapp.landy.CommentPostView
 import com.example.vp_alpapp.landy.CommentPostViewModel
+import com.example.vp_alpapp.landy.MessageViewModel
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
@@ -67,7 +69,8 @@ enum class ListScreen() {
     EditKonten,
     Blank,
     Profile2,
-    CommentView
+    CommentView,
+    Chat
 
 }
 
@@ -451,6 +454,8 @@ fun Routes() {
 
                 var effectExecuted by remember { mutableStateOf(false) }
 
+                var current: Pengguna
+
                 it.arguments?.let { it1 ->
 
                     val id = it1.getString("id", "1")
@@ -458,6 +463,8 @@ fun Routes() {
                         if (!effectExecuted) {
                             commentPostViewModel.getData(id)
                             effectExecuted = true
+                            current = MyContainer().myRepos.getUser(MyContainer.ACCESS_TOKEN)
+
                         }
                     }
 
@@ -470,7 +477,8 @@ fun Routes() {
                         is CommentPostViewModel.CommentPostViewUIState.Success -> {
 
 
-                            CommentPostView(content = status.data, semuaKomen = status.data1, navController = navController)
+
+                            CommentPostView(content = status.data, semuaKomen = status.data1, navController = navController, curremt = status.data2)
 
 
                         }
@@ -482,6 +490,55 @@ fun Routes() {
                     }
 
                 }
+            }
+
+            composable(ListScreen.Chat.name+"/{userId}") {
+
+                val messageViewModel: MessageViewModel = viewModel()
+
+                var effectExecuted by remember { mutableStateOf(false) }
+
+
+                it.arguments?.let { it1 ->
+                    val id = it1.getString("userId", "1")
+
+                    LaunchedEffect(key1 = id) {
+                        if (!effectExecuted) {
+                            messageViewModel.getYangDichat(id = id)
+                            effectExecuted = true
+
+                        }
+                    }
+
+
+                    val status = messageViewModel.messageUIState
+
+                    when(status) {
+
+
+                        is MessageViewModel.MessageUIState.Loading -> {
+
+                            Blank()
+                        }
+
+                        is MessageViewModel.MessageUIState.Success -> {
+
+                            ChatScreen(messageViewModel, status.data)
+
+                        }
+
+
+                        is MessageViewModel.MessageUIState.Error ->{
+
+
+                        }
+                    }
+
+
+
+                }
+
+
             }
 
 

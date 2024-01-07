@@ -38,6 +38,62 @@ class UserController extends Controller
         return $user;
     }
 
+    public function updateImage(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                'status' => Response::HTTP_UNAUTHORIZED,
+                'message' => "User not authenticated",
+                'data' => []
+            ];
+        }
+        $validated = $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $oldData = [
+                'photo' => $user->photo,
+            ];
+            if ($request->hasFile('photo')) {
+                $oldImagePath = public_path('photos') . '/' . $user->photo;
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+            
+                $photo = $request->file('photo');
+                if ($photo && $photo->isValid()) {
+                    $photoName = time() . '.' . $photo->extension();
+                } else {
+                   return [
+                        'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                        'message' => "Image is not valid",
+                        'data' => []
+                    ];
+                }
+                $photo->move(public_path('photos'), $photoName);
+                $user->photo = 'https://alpvp.shop/photos/' . $photoName;
+            } else {
+                $user->photo = $oldData['photo'];
+            }
+
+            $user->save();
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => "User updated successfully",
+                'data' => $user
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -53,7 +109,6 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'sometimes|required',
             'password' => 'sometimes|required',
-            'photo' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'bio' => 'sometimes|required',
         ]);
 
@@ -75,20 +130,6 @@ class UserController extends Controller
                     $user->password = Hash::make($request->password);
                 } else{
                     $user->password = $oldData['password'];
-                }
-
-                if ($request->file){
-                    $oldPhotoPath = public_path('photo') . '/' . $user->photo;
-                    if (File::exists($oldPhotoPath)) {
-                        File::delete($oldPhotoPath);
-                    }
-                
-                    $photo = $request->file;
-                    $photoName = time() . '.' . $photo->extension();
-                    $photo->move(public_path('photo'), $photoName);
-                    $user->photo = 'https://alpvp.shop/photo' . $photoName;
-                } else {
-                    $user->photo = $oldData['photo'];
                 }
                 
                 if ($request->bio) {

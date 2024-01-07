@@ -464,6 +464,7 @@ fun Routes() {
                     when (status) {
                         is CommentPostViewModel.CommentPostViewUIState.Loading -> {
 
+                            Blank()
                         }
 
                         is CommentPostViewModel.CommentPostViewUIState.Success -> {

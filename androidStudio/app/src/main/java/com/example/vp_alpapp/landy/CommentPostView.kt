@@ -240,7 +240,7 @@ fun CommentPostView(
                         keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                     ),
                     colors = TextFieldDefaults.textFieldColors(
-                        Color.Transparent,
+                        Color.Black,
                     ),
                     placeholder = {
                         Text(

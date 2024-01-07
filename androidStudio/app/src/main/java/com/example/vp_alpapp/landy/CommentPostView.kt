@@ -183,7 +183,7 @@ fun CommentPostView(
                             LoadImageCustom(
                                 url = content.image, modifier = Modifier
                                     .fillMaxWidth()
-                                    .heightIn(max = 170.dp), contentScale = ContentScale.Crop
+                                    .fillMaxHeight(), contentScale = ContentScale.Crop
                             )
                         }
 

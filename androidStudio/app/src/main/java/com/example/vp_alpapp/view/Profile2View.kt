@@ -119,7 +119,6 @@ fun Profile2(
                         }
 
 
-
                     }
                     Spacer(modifier = Modifier.height(120.dp))
                     Row(
@@ -211,6 +210,7 @@ fun Profile2(
 
     }
 }
+
 @Composable
 fun Post2(
     curUser: Pengguna,
@@ -258,7 +258,7 @@ fun Post2(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
 
-                    )
+                        )
                 }
 
                 // Three Dot Menu
@@ -325,11 +325,13 @@ fun Post2(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp).clickable {
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .clickable {
 
-                    navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+                        navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
 
-                }
+                    }
             )
 
             if (content.image == null) {
@@ -338,6 +340,9 @@ fun Post2(
                 LoadImageCustom(
                     url = content.image, modifier = Modifier
                         .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
+                        }
                         .heightIn(max = 170.dp), contentScale = ContentScale.Crop
                 )
             }
@@ -350,7 +355,11 @@ fun Post2(
                 text = content.contentText,
                 fontSize = 14.sp,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .clickable {
+                        navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
+                    }
             )
 
             // Bottom Section
@@ -375,11 +384,13 @@ fun Post2(
                     Image(
                         painter = painterResource(id = R.drawable.comment),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp).clickable {
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
 
-                            navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+                                navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
 
-                        }
+                            }
                     )
 //                    Spacer(modifier = Modifier.width(16.dp))
 //                    Image(

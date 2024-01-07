@@ -64,7 +64,7 @@ import com.example.vp_alpapp.viewmodel.HomeViewModel
 import kotlin.random.Random
 
 @Composable
-fun FilterMenu( onTabSelected: (Boolean) -> Unit, isNewsSelected: MutableState<Boolean>) {
+fun FilterMenu(onTabSelected: (Boolean) -> Unit, isNewsSelected: MutableState<Boolean>) {
     var isNewsSelected by remember { mutableStateOf(true) }
     var isCommitteesSelected by remember { mutableStateOf(false) }
 
@@ -188,8 +188,7 @@ fun Post(
                                 navController.navigate(ListScreen.Profile.name)
                             }
                         )
-                    }
-                    else {
+                    } else {
                         Text(
                             text = content.user.name,
                             fontSize = 12.sp,
@@ -197,11 +196,10 @@ fun Post(
                             color = Color.Black,
                             modifier = Modifier.clickable {
 
-                                navController.navigate(ListScreen.Profile2.name+"/"+content.user.id.toString())
+                                navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
                             }
                         )
                     }
-
 
 
                 }
@@ -271,11 +269,13 @@ fun Post(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp).clickable {
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .clickable {
 
-                    navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+                        navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
 
-                }
+                    }
             )
 
             if (content.image == null) {
@@ -284,6 +284,9 @@ fun Post(
                 LoadImageCustom(
                     url = content.image, modifier = Modifier
                         .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
+                        }
                         .heightIn(max = 170.dp), contentScale = ContentScale.Crop
                 )
             }
@@ -296,7 +299,11 @@ fun Post(
                 text = content.contentText,
                 fontSize = 14.sp,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .clickable {
+                        navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
+                    }
             )
 
             // Bottom Section
@@ -321,11 +328,13 @@ fun Post(
                     Image(
                         painter = painterResource(id = R.drawable.comment),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp).clickable {
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
 
-                            navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+                                navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
 
-                        }
+                            }
                     )
 //                    Spacer(modifier = Modifier.width(16.dp))
 //                    Image(
@@ -443,7 +452,10 @@ fun Home(
             .background(Color(0xFFF3F3F3))
     ) {
         TopBar(homeViewModel, navController = navController, user, dataStore = dataStore)
-        FilterMenu(onTabSelected = { isNewsSelected = it }, isNewsSelected = mutableStateOf(isNewsSelected))
+        FilterMenu(
+            onTabSelected = { isNewsSelected = it },
+            isNewsSelected = mutableStateOf(isNewsSelected)
+        )
         // if newsselected is true print out the category = 1
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

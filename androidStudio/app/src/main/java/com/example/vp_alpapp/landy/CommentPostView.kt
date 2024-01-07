@@ -4,12 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,7 +49,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,10 +61,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Commentku
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.service.MyContainer
+import com.example.vp_alpapp.view.LoadImageCustom
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,10 +80,6 @@ fun CommentPostView(
     var commentText by rememberSaveable {
         mutableStateOf("")
     }
-    var isClicked by rememberSaveable {
-        mutableStateOf(false)
-    }
-
 
     LazyColumn(
         modifier = Modifier
@@ -85,13 +88,8 @@ fun CommentPostView(
             .padding(horizontal = 12.dp, vertical = 12.dp),
     ) {
 
-        item {
 
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowLeft,
-                contentDescription = null,
-                modifier = Modifier.size(64.dp)
-            )
+        item {
 
             Spacer(modifier = Modifier.padding(bottom = 14.dp))
 
@@ -100,110 +98,114 @@ fun CommentPostView(
                     .fillMaxSize()
                     .padding(horizontal = 10.dp)
             ) {
-                Card(
+
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(220.dp)
-                        .clip(RoundedCornerShape(32.dp)),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
+//                        .padding(horizontal = 16.dp) // Use padding for left and right margins
+                        .clip(RoundedCornerShape(16.dp)) // Adjust the corner radius as needed
+                        .background(Color(0xFFFBFBFB))
+                        .padding(vertical = 4.dp),
                 ) {
-
                     Column(
-                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(horizontal = 16.dp) // Use padding for left and right margins
+                            .padding(vertical = 4.dp),
                     ) {
-
+                        // Top Section
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Image(
-                                painter = painterResource(R.drawable.profilepic),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(24.dp)
-
-                            )
-
-                            Spacer(modifier = Modifier.padding(end = 10.dp))
-
-                            Column(
-                                modifier = Modifier.weight(1f)
+                            // Profile Picture and Name
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Text(
-                                    text = content.user.name,
-                                    fontSize = 10.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                Image(
+                                    painter = painterResource(id = R.drawable.profilepic),
+                                    contentDescription = "Profile Picture",
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clip(CircleShape)
                                 )
+
+                                if (content.userId == content.user.id) {
+                                    Text(
+                                        text = content.user.name,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black,
+                                        modifier = Modifier.clickable {
+
+                                            navController.navigate(ListScreen.Profile.name)
+                                        }
+                                    )
+                                }
+                                else {
+                                    Text(
+                                        text = content.user.name,
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black,
+                                        modifier = Modifier.clickable {
+
+                                            navController.navigate(ListScreen.Profile2.name+"/"+content.user.id.toString())
+                                        }
+                                    )
+                                }
+
+
 
                             }
 
                         }
-                        Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
+                        // Post Title
                         Text(
                             text = content.headline,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.fillMaxWidth()
+                            color = Color.Black,
+                            modifier = Modifier.padding(bottom = 8.dp).clickable {
+
+                                navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+
+                            }
                         )
 
-                        Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                        if (content.image == null) {
 
-                        Text(
-                            text = content.contentText,
-                            fontSize = 12.sp,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.padding(bottom = 12.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Icon(
-                                imageVector = if (isClicked) {Icons.Outlined.Favorite} else { Icons.Outlined.FavoriteBorder},
-                                contentDescription = null,
-                                tint = if (isClicked) {Color.Red} else { Color.Black },
-                                modifier = Modifier.size(20.dp).clickable{ isClicked = !isClicked }
-                            )
-                            Spacer(modifier = Modifier.padding(end = 14.dp))
-                            Image(
-                                painter = painterResource(id = R.drawable.share),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable { }
-
-                            )
-
-                            Spacer(modifier = Modifier.padding(end = 220.dp))
-
-                            Image(
-                                painter = painterResource(id = R.drawable.saved),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable { }
+                        } else {
+                            LoadImageCustom(
+                                url = content.image, modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(max = 170.dp), contentScale = ContentScale.Crop
                             )
                         }
-                    }
 
+                        Spacer(modifier = Modifier.height(10.dp))
+
+
+                        // Post Content
+                        Text(
+                            text = content.contentText,
+                            fontSize = 14.sp,
+                            color = Color.Black,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
                 }
             }
-
+            Spacer(modifier = Modifier.padding(bottom = 14.dp))
         }
 
         items(semuaKomen) {
             CommentCard(
-                it
+                it, navController
             )
         }
 
@@ -217,12 +219,12 @@ fun CommentPostView(
                     .padding(horizontal = 14.dp)
             )
 
-            Spacer(modifier = Modifier.padding(bottom = 6.dp))
+            Spacer(modifier = Modifier.padding(bottom = 12.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .fillMaxHeight()
                     .padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -240,17 +242,23 @@ fun CommentPostView(
                         keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
                     ),
                     colors = TextFieldDefaults.textFieldColors(
-                        Color.Black,
+                        textColor = Color.Black,
+                        cursorColor = Color(0xFF8F8F8F),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        containerColor = Color.Transparent,
                     ),
                     placeholder = {
                         Text(
-                            text = "Write your comment...", fontSize = 12.sp
+                            text = "Write your comment...", fontSize = 18.sp
                         )
-                    }
+                        Spacer(modifier = Modifier.padding(bottom = 8.dp))
+                    },
+                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black)
                 )
             }
 
-            Spacer(modifier = Modifier.padding(bottom = 18.dp))
+            Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -262,7 +270,11 @@ fun CommentPostView(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .clickable {
-                            commentPostViewModel.create(content.id.toString(), commentText, navController)
+                            commentPostViewModel.create(
+                                content.id.toString(),
+                                commentText,
+                                navController
+                            )
                         }
                         .width(170.dp)
                         .height(40.dp)
@@ -282,6 +294,7 @@ fun CommentPostView(
 @Composable
 fun CommentCard(
     komen: Commentku,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
@@ -303,6 +316,9 @@ fun CommentCard(
 
             Row(
                 modifier = Modifier.fillMaxWidth()
+                    .clickable{
+                        navController.navigate(ListScreen.Profile2.name+"/"+komen.user.id.toString())
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.profilepic),
@@ -310,38 +326,28 @@ fun CommentCard(
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(24.dp)
-
                 )
 
                 Spacer(modifier = Modifier.padding(end = 10.dp))
 
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = komen.user.name,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
 
-                }
-
+                Text(
+                    text = komen.user.name,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
             }
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
             Text(
                 text = komen.comment_text,
-                fontSize = 12.sp,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Start,
+                color = Color.Black,
                 modifier = Modifier.fillMaxWidth()
             )
         }
 
     }
-}
-
-@Composable
-@Preview(showSystemUi = true, showBackground = true)
-fun CommentPostPreview() {
-//    return CommentPostView()
 }

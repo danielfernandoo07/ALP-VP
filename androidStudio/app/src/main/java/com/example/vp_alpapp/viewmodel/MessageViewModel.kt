@@ -1,7 +1,8 @@
-package com.example.vp_alpapp.landy
+package com.example.vp_alpapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Message
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

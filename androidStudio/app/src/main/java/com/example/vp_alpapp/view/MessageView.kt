@@ -1,4 +1,4 @@
-package com.example.vp_alpapp.landy
+package com.example.vp_alpapp.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Message
+import com.example.vp_alpapp.viewmodel.MessageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

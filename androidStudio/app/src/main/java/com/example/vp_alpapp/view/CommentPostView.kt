@@ -1,4 +1,5 @@
-package com.example.vp_alpapp.landy
+package com.example.vp_alpapp.view
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -77,7 +78,7 @@ import com.example.vp_alpapp.view.Post
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentPostView(
-    commentPostViewModel: CommentPostViewModel = viewModel(),
+    commentPostViewModel: com.example.vp_alpapp.viewmodel.CommentPostViewModel = viewModel(),
     content: Content,
     semuaKomen: List<Commentku>,
     navController: NavController
@@ -93,6 +94,7 @@ fun CommentPostView(
             .background(Color(0xFFF3F3F3))
             .padding(horizontal = 12.dp, vertical = 12.dp),
     ) {
+
 
         item {
 
@@ -336,12 +338,12 @@ fun CommentCard(
                 Spacer(modifier = Modifier.padding(end = 10.dp))
 
 
-                    Text(
-                        text = komen.user.name,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
-                    )
+                Text(
+                    text = komen.user.name,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
+                )
             }
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
 

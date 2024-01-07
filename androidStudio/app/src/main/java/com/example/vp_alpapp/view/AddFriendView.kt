@@ -1,4 +1,5 @@
-package com.example.vp_alpapp.landy
+package com.example.vp_alpapp.view
+
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -71,6 +72,7 @@ import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.view.Post
+import com.example.vp_alpapp.viewmodel.AddFriendViewModel
 import com.example.vp_alpapp.viewmodel.ExploreViewModel
 import com.example.vp_alpapp.viewmodel.ProfileViewModel
 

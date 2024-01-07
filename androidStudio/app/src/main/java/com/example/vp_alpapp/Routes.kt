@@ -19,12 +19,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.vp_alpapp.landy.CommentPostView
-import com.example.vp_alpapp.landy.CommentPostViewModel
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
 import com.example.vp_alpapp.view.Blank
+import com.example.vp_alpapp.view.CommentPostView
 import com.example.vp_alpapp.view.DetailKontenView
 import com.example.vp_alpapp.view.EditContentView
 import com.example.vp_alpapp.view.EditProfileView
@@ -36,6 +35,7 @@ import com.example.vp_alpapp.view.Profile
 import com.example.vp_alpapp.view.Profile2
 //import com.example.vp_alpapp.view.ProfileView
 import com.example.vp_alpapp.view.RegisterView
+import com.example.vp_alpapp.viewmodel.CommentPostViewModel
 import com.example.vp_alpapp.viewmodel.CreateContentViewModel
 import com.example.vp_alpapp.viewmodel.DetailKontenViewModel
 import com.example.vp_alpapp.viewmodel.EditContentViewModel

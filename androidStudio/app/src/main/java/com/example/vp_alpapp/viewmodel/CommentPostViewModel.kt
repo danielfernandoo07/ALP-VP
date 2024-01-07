@@ -1,4 +1,5 @@
-package com.example.vp_alpapp.landy
+package com.example.vp_alpapp.viewmodel
+
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,14 +21,14 @@ import kotlinx.coroutines.launch
 
 class CommentPostViewModel : ViewModel() {
 
-//    private val _uistate = MutableStateFlow<List<User>>(emptyList())
+    //    private val _uistate = MutableStateFlow<List<User>>(emptyList())
 //    val uistate: StateFlow<List<User>> =_uistate.asStateFlow()
-sealed interface CommentPostViewUIState {
-    data class Success(val data: Content, val data1: List<Commentku>) : CommentPostViewUIState
-    object Error : CommentPostViewUIState
-    object Loading : CommentPostViewUIState
+    sealed interface CommentPostViewUIState {
+        data class Success(val data: Content, val data1: List<Commentku>) : CommentPostViewUIState
+        object Error : CommentPostViewUIState
+        object Loading : CommentPostViewUIState
 
-}
+    }
 
     var commentPostViewUIState:  CommentPostViewUIState  by mutableStateOf(CommentPostViewUIState.Loading)
         private set
@@ -45,7 +46,7 @@ sealed interface CommentPostViewUIState {
             data= MyContainer().myRepos.getKontenById(MyContainer.ACCESS_TOKEN, id)
             data1 = MyContainer().myRepos.getComment(MyContainer.ACCESS_TOKEN, content_id = id)
 
-           commentPostViewUIState = CommentPostViewUIState.Success(data,data1)
+            commentPostViewUIState = CommentPostViewUIState.Success(data,data1)
 
         }
 

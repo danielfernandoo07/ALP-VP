@@ -40,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
 import com.example.vp_alpapp.model.Pengguna
 
@@ -47,7 +49,8 @@ import com.example.vp_alpapp.model.Pengguna
 @Composable
 fun ChatScreen(
     messageViewModel: MessageViewModel = viewModel(),
-    lawanBicara: Pengguna
+    lawanBicara: Pengguna,
+    navController: NavController
 ) {
     val messageUIState by messageViewModel.uistate.collectAsState()
 
@@ -75,7 +78,12 @@ fun ChatScreen(
             Text(
                 text = lawanBicara.name,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                modifier = Modifier.clickable {
+
+                    navController.navigate(ListScreen.Profile2.name+"/"+lawanBicara.id.toString())
+
+                }
             )
         }
         Spacer(modifier = Modifier.padding(bottom = 16.dp))

@@ -523,7 +523,7 @@ fun Routes() {
 
                         is MessageViewModel.MessageUIState.Success -> {
 
-                            ChatScreen(messageViewModel, status.data)
+                            ChatScreen(messageViewModel, status.data, navController)
 
                         }
 

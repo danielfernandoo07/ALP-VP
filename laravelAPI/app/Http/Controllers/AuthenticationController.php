@@ -31,7 +31,7 @@ class AuthenticationController extends Controller
                 $photo = $request->file;
                 $photoName = time() . '.' . $photo->extension();
                 $photo->move(public_path('photo'), $photoName);
-                $user->photo = 'https://alpvp.shop/photo' . $photoName;
+                $user->photo = 'https://alpvp.shop/photos/' . $photoName;
             } 
             else {
                 $user->photo = 'https://yourteachingmentor.com/wp-content/uploads/2020/12/istockphoto-1223671392-612x612-1.jpg';

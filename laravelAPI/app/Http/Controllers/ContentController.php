@@ -87,20 +87,62 @@ class ContentController extends Controller
         return $content->loadMissing('user:id,name');
     }
 
+    public function updateImage(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $content = Content::findOrFail($id);
+            $oldData = [
+                'image' => $content->image,
+            ];
+            if ($request->hasFile('image')) {
+                $oldImagePath = public_path('images') . '/' . $content->image;
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
+            
+                $image = $request->file('image');
+                if ($image && $image->isValid()) {
+                    $imageName = time() . '.' . $image->extension();
+                } else {
+                   return [
+                        'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                        'message' => "Image is not valid",
+                        'data' => []
+                    ];
+                }
+                $image->move(public_path('images'), $imageName);
+                $content->image = 'https://alpvp.shop/images/' . $imageName;
+            } else {
+                $content->image = $oldData['image'];
+            }
+
+            $content->save();
+            return $content->loadMissing('user:id,name');
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'headline' => 'sometimes|required',
             'content_text' => 'sometimes|required',
-            'image' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'sometimes|required',
+            'category_id' => 'sometimes|required'
         ]);
 
         try {
             $content = Content::findOrFail($id);
             $oldData = [
                 'headline' => $content->headline,
-                'image' => $content->image,
                 'content_text' => $content->content_text,
                 'category_id' => $content->category_id,
             ];
@@ -108,20 +150,6 @@ class ContentController extends Controller
                 $content->headline = $request->headline;
             } else {
                 $content->headline = $oldData['headline'];
-            }
-
-            if ($request->file) {
-                $oldImagePath = public_path('images') . '/' . $content->image;
-                if (File::exists($oldImagePath)) {
-                    File::delete($oldImagePath);
-                }
-            
-                $image = $request->file;
-                $imageName = time() . '.' . $image->extension();
-                $image->move(public_path('images'), $imageName);
-                $content->image = 'https://alpvp.shop/images/' . $imageName;
-            } else {
-                $content->image = $oldData['image'];
             }
             
             if ($request->content_text) {

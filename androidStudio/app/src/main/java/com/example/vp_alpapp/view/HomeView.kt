@@ -271,7 +271,11 @@ fun Post(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp).clickable {
+
+                    navController.navigate(ListScreen.CommentView.name+"/"+content.id.toString())
+
+                }
             )
 
             if (content.image == null) {

@@ -19,6 +19,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.vp_alpapp.landy.CommentPostView
+import com.example.vp_alpapp.landy.CommentPostViewModel
 import com.example.vp_alpapp.model.Pengguna
 import com.example.vp_alpapp.service.MyContainer
 import com.example.vp_alpapp.view.AddPostView
@@ -65,6 +67,8 @@ enum class ListScreen() {
     EditKonten,
     Blank,
     Profile2,
+    CommentView
+
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -436,6 +440,47 @@ fun Routes() {
 
 
 
+            }
+
+
+            composable(ListScreen.CommentView.name+"/{id}") {
+
+                val commentPostViewModel: CommentPostViewModel = viewModel()
+
+                val status = commentPostViewModel.commentPostViewUIState
+
+                var effectExecuted by remember { mutableStateOf(false) }
+
+                it.arguments?.let { it1 ->
+
+                    val id = it1.getString("id", "1")
+                    LaunchedEffect(key1 = id) {
+                        if (!effectExecuted) {
+                            commentPostViewModel.getData(id)
+                            effectExecuted = true
+                        }
+                    }
+
+                    when (status) {
+                        is CommentPostViewModel.CommentPostViewUIState.Loading -> {
+
+                        }
+
+                        is CommentPostViewModel.CommentPostViewUIState.Success -> {
+
+
+                            CommentPostView(content = status.data, semuaKomen = status.data1, navController = navController)
+
+
+                        }
+
+
+                        is CommentPostViewModel.CommentPostViewUIState.Error -> {
+
+                        }
+                    }
+
+                }
             }
 
 

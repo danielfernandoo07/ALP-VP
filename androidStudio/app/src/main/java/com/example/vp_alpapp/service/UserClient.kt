@@ -1,6 +1,8 @@
 package com.example.vp_alpapp.service
 
 import android.provider.ContactsContract.DisplayPhoto
+import com.example.vp_alpapp.model.CommentReq
+import com.example.vp_alpapp.model.Commentku
 import com.example.vp_alpapp.model.Content
 import com.example.vp_alpapp.model.ContentUpdateRequest
 import com.example.vp_alpapp.model.CreateContent
@@ -15,6 +17,7 @@ import com.example.vp_alpapp.model.UserUpdateReq2
 import com.example.vp_alpapp.model.UserUpdateRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.w3c.dom.Comment
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
@@ -113,4 +116,16 @@ public interface UserClient {
     ) : List<Content>
 
 
+    @GET("content/{contentId}/comments")
+    suspend fun getComment(
+        @Header("Authorization") token: String,
+        @Path("contentId") id: String,
+
+        ): List<Commentku>
+
+    @POST("comment")
+    suspend fun createComment(
+        @Header("Authorization") token: String,
+        @Body req: CommentReq
+        )
 }

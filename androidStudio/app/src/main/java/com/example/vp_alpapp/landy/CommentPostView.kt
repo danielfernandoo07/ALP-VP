@@ -55,14 +55,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.vp_alpapp.R
+import com.example.vp_alpapp.model.Commentku
+import com.example.vp_alpapp.model.Content
+import com.example.vp_alpapp.service.MyContainer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentPostView(
-    commentPostViewModel: CommentPostViewModel = viewModel()
+    commentPostViewModel: CommentPostViewModel = viewModel(),
+    content: Content,
+    semuaKomen: List<Commentku>,
+    navController: NavController
 ) {
-    val commentUIState by commentPostViewModel.uistate.collectAsState()
 
     var commentText by rememberSaveable {
         mutableStateOf("")
@@ -130,20 +136,18 @@ fun CommentPostView(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text(
-                                    text = "Llama05",
+                                    text = content.user.name,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
-                                Text(
-                                    text = "0987654321", fontSize = 10.sp, color = Color.LightGray
-                                )
+
                             }
 
                         }
                         Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
                         Text(
-                            text = "MUSEUM PENDIDIKAN",
+                            text = content.headline,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Start,
@@ -153,7 +157,7 @@ fun CommentPostView(
                         Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
                         Text(
-                            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+                            text = content.contentText,
                             fontSize = 12.sp,
                             textAlign = TextAlign.Start,
                             modifier = Modifier.fillMaxWidth()
@@ -197,7 +201,7 @@ fun CommentPostView(
 
         }
 
-        items(commentUIState) {
+        items(semuaKomen) {
             CommentCard(
                 it
             )
@@ -223,7 +227,7 @@ fun CommentPostView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ellipse_5),
+                    painter = painterResource(id = R.drawable.profilepic),
                     contentDescription = null,
                     modifier = Modifier.size(36.dp)
                 )
@@ -257,7 +261,9 @@ fun CommentPostView(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable { commentPostViewModel.createComment(commentText) }
+                        .clickable {
+                            commentPostViewModel.create(content.id.toString(), commentText, navController)
+                        }
                         .width(170.dp)
                         .height(40.dp)
                         .background(color = Color(0XFFF89715), shape = RoundedCornerShape(12.dp))) {
@@ -275,7 +281,7 @@ fun CommentPostView(
 
 @Composable
 fun CommentCard(
-    user: User,
+    komen: Commentku,
 ) {
     Card(
         modifier = Modifier
@@ -299,7 +305,7 @@ fun CommentCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = user.prof_pic),
+                    painter = painterResource(id = R.drawable.profilepic),
                     contentDescription = null,
                     modifier = Modifier
                         .clip(CircleShape)
@@ -313,20 +319,18 @@ fun CommentCard(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "${user.name}",
+                        text = komen.user.name,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.SemiBold
                     )
-                    Text(
-                        text = "${user.phone_number}", fontSize = 10.sp, color = Color.DarkGray
-                    )
+
                 }
 
             }
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
 
             Text(
-                text = "${user.comment}",
+                text = komen.comment_text,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth()
@@ -339,5 +343,5 @@ fun CommentCard(
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun CommentPostPreview() {
-    return CommentPostView()
+//    return CommentPostView()
 }

@@ -50,7 +50,7 @@ class UserController extends Controller
             ];
         }
         $validated = $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -77,6 +77,11 @@ class UserController extends Controller
                 $user->photo = 'https://alpvp.shop/photos/' . $photoName;
             } else {
                 $user->photo = $oldData['photo'];
+                return [
+                    'status' => Response::HTTP_OK,
+                    'message' => "No image uploaded",
+                    'data' => $user
+                ];
             }
 
             $user->save();

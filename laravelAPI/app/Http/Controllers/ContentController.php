@@ -90,7 +90,7 @@ class ContentController extends Controller
     public function updateImage(Request $request, $id)
     {
         $validated = $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -118,6 +118,11 @@ class ContentController extends Controller
                 $content->image = 'https://alpvp.shop/images/' . $imageName;
             } else {
                 $content->image = $oldData['image'];
+                return [
+                    'status' => Response::HTTP_OK,
+                    'message' => "No image uploaded",
+                    'data' => $content->loadMissing('user:id,name')
+                ];
             }
 
             $content->save();

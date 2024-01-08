@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
+use App\Models\UserImage;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,16 +34,16 @@ class UserController extends Controller
     //     }
     //     return $check;
     // }
-    
-    public function showSpecificOtherProfile($id){
+
+    public function showSpecificOtherProfile($id)
+    {
         $user = User::with('content')->findOrFail($id);
         return $user;
     }
 
-    public function updateImage(Request $request)
+    public function updateImage()
     {
         $user = Auth::user();
-
         if (!$user) {
             return [
                 'status' => Response::HTTP_UNAUTHORIZED,
@@ -49,54 +51,26 @@ class UserController extends Controller
                 'data' => []
             ];
         }
-        $validated = $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        try {
-            $oldData = [
-                'photo' => $user->photo,
-            ];
-            if ($request->file) {
-                $oldImagePath = public_path('photos') . '/' . $user->photo;
-                if (File::exists($oldImagePath)) {
-                    File::delete($oldImagePath);
-                }
-            
-                $photo = $request->file;
-                if ($photo && $photo->isValid()) {
-                    $photoName = time() . '.' . $photo->extension();
-                } else {
-                   return [
-                        'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                        'message' => "Image is not valid",
-                        'data' => []
-                    ];
-                }
-                $photo->move(public_path('photos'), $photoName);
-                $user->photo = 'https://alpvp.shop/photos/' . $photoName;
-            } else {
-                $user->photo = $oldData['photo'];
+        if (!empty($user)) {
+            try {
+                $userImage = UserImage::where('user_id', $user->id)->first();
+                $user->photo = $userImage->image;
+                $user->save();
                 return [
                     'status' => Response::HTTP_OK,
-                    'message' => "No image uploaded",
+                    'message' => "Success update image",
                     'data' => $user
                 ];
+            } catch (Exception $e) {
+                return [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ];
             }
-
-            $user->save();
-            return [
-                'status' => Response::HTTP_OK,
-                'message' => "User updated successfully",
-                'data' => $user
-            ];
-        } catch (Exception $e) {
-            return [
-                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage(),
-                'data' => []
-            ];
         }
+
+
     }
 
     public function update(Request $request)
@@ -117,7 +91,7 @@ class UserController extends Controller
             'bio' => 'sometimes|required',
         ]);
 
-        if (!empty($user)){
+        if (!empty($user)) {
             try {
                 $oldData = [
                     'name' => $user->name,
@@ -126,24 +100,24 @@ class UserController extends Controller
                 ];
                 if ($request->name) {
                     $user->name = $request->name;
-                } else{
+                } else {
                     $user->name = $oldData['name'];
                 }
-    
+
                 if ($request->password) {
                     $user->password = Hash::make($request->password);
-                } else{
+                } else {
                     $user->password = $oldData['password'];
                 }
-                
+
                 if ($request->bio) {
                     $user->bio = $request->bio;
-                } else{
+                } else {
                     $user->bio = $oldData['bio'];
                 }
-    
+
                 $user->save();
-    
+
                 return [
                     'status' => Response::HTTP_OK,
                     'message' => "User updated successfully",

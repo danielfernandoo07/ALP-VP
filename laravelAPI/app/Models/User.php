@@ -39,6 +39,9 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    public function photo(){
+        return $this->hasOne(UserImage::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

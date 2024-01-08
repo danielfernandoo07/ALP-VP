@@ -35,9 +35,9 @@ class UserImageController extends Controller
             ];
         }
 
-        $validated = $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        // $validated = $request->validate([
+        //     'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        // ]);
 
         try {
             $oldImage = UserImage::where('user_id', $user->id)->first();

@@ -311,7 +311,6 @@ class MyRepos(private val userClient: UserClient) {
 
 
         // Mengonversi file Uri menjadi File
-
         val fileDir = context.filesDir
         val file = File(fileDir, "image.png")
 
@@ -323,17 +322,14 @@ class MyRepos(private val userClient: UserClient) {
             }
         }
 
-        val imageString = encodeImageToBase64(file.absolutePath)
-
-
         val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 
-        val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
+        val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
 
-        Log.d("img", image.toString())
-        // Memanggil fungsi
-        Log.d("imgfile", file.absolutePath)
-        userClient.updateIMG(MyContainer.ACCESS_TOKEN,  part)
+
+        userClient.updateIMG(MyContainer.ACCESS_TOKEN,part)
+
+
 
     }
 
@@ -343,7 +339,9 @@ class MyRepos(private val userClient: UserClient) {
     }
 
     suspend fun gantiprofil() {
-        userClient.gantiPP(MyContainer.ACCESS_TOKEN )
+
+        Log.d("Loading for change", "profile")
+        userClient.gantiPP(MyContainer.ACCESS_TOKEN)
 
     }
 

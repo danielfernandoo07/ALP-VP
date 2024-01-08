@@ -11,7 +11,7 @@ data class Pengguna(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("nim") val nim: String,
-    @SerializedName("photo") val photo: Any,
+    @SerializedName("photo") val photo: String,
     @SerializedName("prodi_id") val prodiId: Int,
     @SerializedName("updated_at") val updatedAt: String
 )

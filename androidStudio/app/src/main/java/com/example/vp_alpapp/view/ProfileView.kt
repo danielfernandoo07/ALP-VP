@@ -123,7 +123,7 @@ fun Profile(
                 if (user.photo == null) {
                     LoadImage(url = gambaruser)
                 } else {
-                    gambaruser = user.photo.toString()
+                    gambaruser = user.photo
                     LoadImage(url = gambaruser)
                 }
 

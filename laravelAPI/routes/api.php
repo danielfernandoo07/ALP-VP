@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(
         Route::patch('/user', [UserController::class, 'update']); //update current user
         Route::patch('/userpp', [UserController::class, 'updateImage']); //update current user image
         Route::post('/user/image', [UserImageController::class, 'create']); //create user image
-        Route::get('/user/image', [UserImageController::class, 'getUserImage']); //get user image
+        Route::get('/user/image', [UserController::class, 'getUserImage']); //get user image
         Route::delete('/user', [UserController::class, 'delete']); //delete current user (sbnre gaperlu tp gpp iseng bikin)
         Route::get('/user/{id}', [UserController::class, 'showSpecificOtherProfile']); //show specific user
 

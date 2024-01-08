@@ -525,7 +525,6 @@ fun LoadProfileImage(
                     navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
                 } else {
                     navController.navigate(ListScreen.Profile.name)
-                    
                 }
             },
         contentScale = ContentScale.Crop,

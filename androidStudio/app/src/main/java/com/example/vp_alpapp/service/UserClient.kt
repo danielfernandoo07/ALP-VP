@@ -89,6 +89,14 @@ public interface UserClient {
         @Part photo: MultipartBody.Part,
         @Part("password") password: RequestBody,
     )
+    @Multipart
+    @POST("user/image")
+    suspend fun updateIMG(
+
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part,
+
+        )
     @PATCH("user")
     suspend fun updateUserRaw(
         @Header("Authorization") token: String,
@@ -130,13 +138,12 @@ public interface UserClient {
         @Body req: CommentReq
         )
 
-    @Multipart
-    @POST("user")
-    suspend fun updateIMG(
 
-        @Header("Authorization") token: String,
-        @Part file: MultipartBody.Part,
-        @Query("_method") method: String = "PUT"
+
+    @PATCH("user")
+    suspend fun gantiPP(
+
+        @Header("Authorization") token: String
     )
 
 }

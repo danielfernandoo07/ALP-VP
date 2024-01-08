@@ -333,12 +333,18 @@ class MyRepos(private val userClient: UserClient) {
         Log.d("img", image.toString())
         // Memanggil fungsi
         Log.d("imgfile", file.absolutePath)
-        userClient.updateIMG(MyContainer.ACCESS_TOKEN, file= part)
+        userClient.updateIMG(MyContainer.ACCESS_TOKEN,  part)
+
     }
 
     fun encodeImageToBase64(imagePath: String): String {
         val bytes = File(imagePath).readBytes()
         return Base64.encodeToString(bytes, Base64.DEFAULT)
+    }
+
+    suspend fun gantiprofil() {
+        userClient.gantiPP(MyContainer.ACCESS_TOKEN )
+
     }
 
 

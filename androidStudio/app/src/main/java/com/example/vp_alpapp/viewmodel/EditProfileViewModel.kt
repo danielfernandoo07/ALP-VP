@@ -75,7 +75,7 @@ class EditProfileViewModel : ViewModel() {
         }
 
     }
-
+    @SuppressLint("Recycle")
     fun editImage(
         image: Uri,
         context: Context
@@ -84,7 +84,9 @@ class EditProfileViewModel : ViewModel() {
 
         viewModelScope.launch {
 
+
             MyContainer().myRepos.updateImage(image, context = context)
+            MyContainer().myRepos.gantiprofil()
         }
     }
 

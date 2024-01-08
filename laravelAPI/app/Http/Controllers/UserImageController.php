@@ -23,7 +23,7 @@ class UserImageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request, )
+    public function create(Request $request)
     {
         $user = Auth::user();
 
@@ -51,7 +51,9 @@ class UserImageController extends Controller
                 $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('photos'), $imageName);
-                $userImage->image = 'https://alpvp.shop/photos/' . $imageName;
+                // $userImage->image = 'https://alpvp.shop/photos/' . $imageName;
+                                $userImage->image = 'http://127.0.0.1:8000/photos/' . $imageName;
+
             } else {
                 return [
                     'status' => Response::HTTP_BAD_REQUEST,

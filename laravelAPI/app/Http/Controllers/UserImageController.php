@@ -6,6 +6,7 @@ use Exception;
 use App\Models\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreUserImageRequest;
 use App\Http\Requests\UpdateUserImageRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,25 +46,34 @@ class UserImageController extends Controller
             if ($request->file) {
                 $userImage = new UserImage();
                 $userImage->user_id = $user->id;
-                if ($oldImage) {
+                if (!empty($oldImage)) {
+                    Storage::delete('public/photos/' . $oldImage->image);
                     $oldImage->delete();
                 }
                 $image = $request->file;
                 $imageName = time() . '.' . $image->extension();
                 $image->move(public_path('photos'), $imageName);
+<<<<<<< Updated upstream
                 // $userImage->image = 'https://alpvp.shop/photos/' . $imageName;
                                 $userImage->image = 'http://127.0.0.1:8000/photos/' . $imageName;
 
             } else {
+=======
+                $userImage->image = 'https://alpvp.shop/photos/' . $imageName;
+            } 
+            else {
+                $userImage = $oldImage;
+>>>>>>> Stashed changes
                 return [
                     'status' => Response::HTTP_BAD_REQUEST,
-                    'message' => "Image not found",
-                    'data' => []
+                    'message' => "Image not updated",
+                    'data' => $userImage
                 ];
             }
             $userImage->save();
             return $userImage;
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => $e->getMessage(),

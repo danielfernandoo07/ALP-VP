@@ -177,10 +177,10 @@ fun Post(
                         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
                     if (user.photo == null) {
-                        LoadProfileImage(url = gambaruser)
+                        LoadProfileImage(url = gambaruser, navController, content, user)
                     } else {
                         gambaruser = user.photo
-                        LoadProfileImage(url = gambaruser)
+                        LoadProfileImage(url = gambaruser, navController, content, user)
                     }
                     if (user.id == content.user.id) {
                         Text(
@@ -505,7 +505,12 @@ fun Home(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun LoadProfileImage(url: String? = null) {
+fun LoadProfileImage(
+    url: String? = null,
+    navController: NavController,
+    content: Content,
+    user: Pengguna
+) {
 
     GlideImage(
         model = url
@@ -514,7 +519,15 @@ fun LoadProfileImage(url: String? = null) {
         modifier = Modifier
             .height(34.dp)
             .width(34.dp)
-            .clip(CircleShape),
+            .clip(CircleShape)
+            .clickable {
+                if (content.user.id != user.id) {
+                    navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
+                } else {
+                    navController.navigate(ListScreen.Profile.name)
+                    
+                }
+            },
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
             setToScale(

@@ -23,6 +23,12 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
+    public function getUserImage(){
+        $user = Auth::user();
+        $userImage = UserImage::where('user_id', $user->id)->first();
+        return $userImage;
+    }
+
     // public function checkPassword()
     // {
     //     $users = User::all();

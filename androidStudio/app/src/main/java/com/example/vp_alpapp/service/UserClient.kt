@@ -140,7 +140,7 @@ public interface UserClient {
 
 
 
-    @PATCH("user")
+    @PATCH("userpp")
     suspend fun gantiPP(
 
         @Header("Authorization") token: String

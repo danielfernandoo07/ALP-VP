@@ -44,6 +44,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -53,6 +55,8 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.vp_alpapp.DataStore
 import com.example.vp_alpapp.ListScreen
 import com.example.vp_alpapp.R
@@ -169,14 +173,15 @@ fun Post(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profilepic),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                    )
+                    var gambaruser =
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
+                    if (user.photo == null) {
+                        LoadProfileImage(url = gambaruser, navController, content, user)
+                    } else {
+                        gambaruser = user.photo
+                        LoadProfileImage(url = gambaruser, navController, content, user)
+                    }
                     if (user.id == content.user.id) {
                         Text(
                             text = content.user.name,
@@ -286,8 +291,7 @@ fun Post(
                         .fillMaxWidth()
                         .clickable {
                             navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
-                        }
-                      , contentScale = ContentScale.Crop
+                        }, contentScale = ContentScale.Crop
                 )
             }
 
@@ -499,6 +503,42 @@ fun Home(
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun LoadProfileImage(
+    url: String? = null,
+    navController: NavController,
+    content: Content,
+    user: Pengguna
+) {
+
+    GlideImage(
+        model = url
+            ?: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        contentDescription = "",
+        modifier = Modifier
+            .height(34.dp)
+            .width(34.dp)
+            .clip(CircleShape)
+            .clickable {
+                if (content.user.id != user.id) {
+                    navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
+                } else {
+                    navController.navigate(ListScreen.Profile.name)
+                }
+            },
+        contentScale = ContentScale.Crop,
+        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
+            setToScale(
+                0.5f,
+                0.5f,
+                0.5f,
+                1f
+            )
+        })
+    )
+
+}
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)

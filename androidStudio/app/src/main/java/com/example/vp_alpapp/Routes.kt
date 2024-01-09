@@ -122,7 +122,7 @@ fun Routes() {
                 else {
 
 
-                        navController.navigate(ListScreen.Profile.name)
+                        navController.navigate(ListScreen.Home.name)
 
                 }
             }

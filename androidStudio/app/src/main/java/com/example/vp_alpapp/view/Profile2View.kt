@@ -250,10 +250,10 @@ fun Post2(
                         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
                     if (user.photo == null) {
-                        LoadProfileImage(url = gambaruser, navController, content, curUser)
+                        LoadProfileImage(url = gambaruser, navController, content, user)
                     } else {
                         gambaruser = content.user.photo
-                        LoadProfileImage(url = gambaruser, navController, content, curUser)
+                        LoadProfileImage(url = gambaruser, navController, content, user)
                     }
                     Text(
                         text = content.user.name,

@@ -1,6 +1,9 @@
 package com.example.vp_alpapp.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import androidx.compose.ui.text.AnnotatedString
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +25,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -31,6 +35,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,8 +53,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -297,19 +305,8 @@ fun Post(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-
             // Post Content
-            Text(
-                text = content.contentText,
-                fontSize = 14.sp,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .clickable {
-                        navController.navigate(ListScreen.CommentView.name + "/" + content.id.toString())
-                    }
-            )
-
+            ClickableTextWithUrls(content.contentText,navController)
             // Bottom Section
             Row(
                 modifier = Modifier
@@ -520,6 +517,43 @@ fun LoadProfileImage(
         contentScale = ContentScale.Crop,
     )
 
+}
+@Composable
+fun ClickableTextWithUrls(
+    text: String,
+    navController: NavController
+) {
+    val annotatedText = buildAnnotatedString {
+        // Define a simple logic to find URLs in the text
+        val urlRegex = """\b(?:https?|ftp)://\S+""".toRegex()
+        urlRegex.findAll(text).forEach { result ->
+            val start = result.range.first
+            val end = result.range.last + 1
+            addStyle(
+                style = SpanStyle(color = Color.Blue, textDecoration = TextDecoration.Underline),
+                start = start,
+                end = end
+            )
+            addStringAnnotation("URL", result.value, start, end)
+        }
+        append(text)
+    }
+
+    ClickableText(
+        text = annotatedText,
+        onClick = { offset ->
+            val url = annotatedText.getStringAnnotations("URL", offset, offset)
+                .firstOrNull()?.item
+
+            url?.let {
+                // Open the URL in a external browser
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                navController.context.startActivity(intent)
+            }
+        },
+        modifier = Modifier.padding(bottom = 8.dp),
+        style = LocalTextStyle.current.copy(color = Color.Black)
+    )
 }
 
 @Composable

@@ -3,6 +3,8 @@ public class User {
     private int id;
     private String name;
 
+    private String photo;
+
 
 
     // Konstruktor, getter, dan setter
@@ -28,6 +30,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
 

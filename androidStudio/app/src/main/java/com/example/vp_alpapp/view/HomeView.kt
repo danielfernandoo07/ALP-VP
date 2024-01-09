@@ -179,7 +179,7 @@ fun Post(
                     if (user.photo == null) {
                         LoadProfileImage(url = gambaruser, navController, content, user)
                     } else {
-                        gambaruser = user.photo
+                        gambaruser = content.user.photo
                         LoadProfileImage(url = gambaruser, navController, content, user)
                     }
                     if (user.id == content.user.id) {

@@ -246,13 +246,15 @@ fun Post2(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profilepic),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                    )
+                    var gambaruser =
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+
+                    if (user.photo == null) {
+                        LoadProfileImage(url = gambaruser, navController, content, user)
+                    } else {
+                        gambaruser = content.user.photo
+                        LoadProfileImage(url = gambaruser, navController, content, user)
+                    }
                     Text(
                         text = content.user.name,
                         fontSize = 12.sp,

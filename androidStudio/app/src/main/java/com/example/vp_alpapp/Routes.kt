@@ -132,34 +132,34 @@ fun Routes() {
             composable(ListScreen.DetailKonten.name) {
 
 
-                val detailKontenViewModel: DetailKontenViewModel = viewModel()
-
-                //test untuk konten id 9
-                LaunchedEffect(key1 = true) {
-                    detailKontenViewModel.getById("9")
-                }
-
-                val status = detailKontenViewModel.kontenDetailUiState
-
-                when(status){
-                    is KontenDetailUiState.Loading -> {
-                        Log.d("LOADING", "LOADING KONTEN")
-                    }
-                    is KontenDetailUiState.Success -> {
-
-
-
-                            DetailKontenView(content = status.data)
-
-
-
-                    }
-
-
-                    is KontenDetailUiState.Error ->{
-
-                    }
-                }
+//                val detailKontenViewModel: DetailKontenViewModel = viewModel()
+//
+//                //test untuk konten id 9
+//                LaunchedEffect(key1 = true) {
+//                    detailKontenViewModel.getById("9")
+//                }
+//
+//                val status = detailKontenViewModel.kontenDetailUiState
+//
+//                when(status){
+//                    is KontenDetailUiState.Loading -> {
+//                        Log.d("LOADING", "LOADING KONTEN")
+//                    }
+//                    is KontenDetailUiState.Success -> {
+//
+//
+//
+//                            DetailKontenView(content = status.data)
+//
+//
+//
+//                    }
+//
+//
+//                    is KontenDetailUiState.Error ->{
+//
+//                    }
+//                }
 
             }
 

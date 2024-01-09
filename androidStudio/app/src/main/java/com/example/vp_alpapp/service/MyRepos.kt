@@ -157,7 +157,10 @@ class MyRepos(private val userClient: UserClient) {
 
     suspend fun updateContent(
         token: String,
-        id: String, headline: String, contentText: String, categoryId: String
+        id: String,
+        headline: String,
+        contentText: String,
+        categoryId: String
     ) {
 
         // Prepare the request body

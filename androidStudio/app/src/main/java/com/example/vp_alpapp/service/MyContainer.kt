@@ -24,7 +24,7 @@ class MyContainer {
         var ACCESS_TOKEN = ""
         lateinit var user: Pengguna
     }
-
+    //halo aku ...
     private val BASE_URL = "https://alpvp.shop/api/"
 
 //    private val BASE_URL = "http://10.0.2.2:8000/api/"

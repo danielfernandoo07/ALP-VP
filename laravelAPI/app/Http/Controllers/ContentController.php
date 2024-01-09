@@ -24,7 +24,7 @@ class ContentController extends Controller
     {
         $contents = Content::all();
         // return response()->json($content);
-        return $contents->loadMissing('user:id,name');
+        return $contents->loadMissing('user:id,name,photo');
     }
 
     /**
@@ -55,7 +55,7 @@ class ContentController extends Controller
             $content->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $content->user_id = Auth::user()->id;
             $content->save();
-            return $content->loadMissing('user:id,name');
+            return $content->loadMissing('user:id,name,photo');
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -76,7 +76,7 @@ class ContentController extends Controller
         $content = Content::with('user:id,name')->findOrFail($id);
         $content->created_at_formatted = $content->created_at;
         $content->updated_at_formatted = $content->updated_at;
-        return $content->loadMissing('user:id,name');
+        return $content->loadMissing('user:id,name,photo');
     }
 
     public function showWithComments($id)
@@ -84,7 +84,7 @@ class ContentController extends Controller
         $content = Content::with('user:id,name', 'comment')->findOrFail($id);
         $content->created_at_formatted = $content->created_at;
         $content->updated_at_formatted = $content->updated_at;
-        return $content->loadMissing('user:id,name');
+        return $content->loadMissing('user:id,name,photo');
     }
 
     public function updateImage(Request $request, $id)
@@ -121,12 +121,12 @@ class ContentController extends Controller
                 return [
                     'status' => Response::HTTP_OK,
                     'message' => "No image uploaded",
-                    'data' => $content->loadMissing('user:id,name')
+                    'data' => $content->loadMissing('user:id,name,photo')
                 ];
             }
 
             $content->save();
-            return $content->loadMissing('user:id,name');
+            return $content->loadMissing('user:id,name,photo');
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -171,7 +171,7 @@ class ContentController extends Controller
             $content->user_id = Auth::user()->id;
             $content->updated_at = Carbon::now()->timezone('Asia/Jakarta')->format('Y-m-d H:i:s');
             $content->save();
-            return $content->loadMissing('user:id,name');
+            return $content->loadMissing('user:id,name,photo');
         } catch (Exception $e) {
             return [
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -184,7 +184,7 @@ class ContentController extends Controller
     public function contentsByUser($userId)
     {
         $contents = Content::where('user_id', $userId)->get();
-        return $contents->loadMissing('user:id,name');
+        return $contents->loadMissing('user:id,name,photo');
     }
 
     public function delete($id)

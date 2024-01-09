@@ -393,16 +393,6 @@ fun TopBar(
             },
         verticalAlignment = Alignment.Top // Set verticalAlignment to Alignment.Top
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.profilepic),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .width(40.dp)
-                .clickable {
-                    // Implement profile picture click action
-                }
-        )
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = user.name,
             style = TextStyle(
@@ -524,18 +514,10 @@ fun LoadProfileImage(
                 if (content.user.id != user.id) {
                     navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
                 } else {
-                    navController.navigate(ListScreen.Profile.name)
+                    navController.navigate(ListScreen.Profile.name) 
                 }
             },
         contentScale = ContentScale.Crop,
-        colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply {
-            setToScale(
-                0.5f,
-                0.5f,
-                0.5f,
-                1f
-            )
-        })
     )
 
 }

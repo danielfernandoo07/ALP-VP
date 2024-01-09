@@ -395,6 +395,7 @@ fun Post2(
 
                             }
                     )
+                    ShareButton(postContent = content.headline)
 //                    Spacer(modifier = Modifier.width(16.dp))
 //                    Image(
 //                        painter = painterResource(id = R.drawable.share),

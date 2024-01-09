@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.ui.text.AnnotatedString
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +31,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -52,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -306,7 +310,7 @@ fun Post(
             Spacer(modifier = Modifier.height(10.dp))
 
             // Post Content
-            ClickableTextWithUrls(content.contentText,navController)
+            ClickableTextWithUrls(content.contentText, navController)
             // Bottom Section
             Row(
                 modifier = Modifier
@@ -337,6 +341,7 @@ fun Post(
 
                             }
                     )
+                    ShareButton(postContent = content.headline)
 //                    Spacer(modifier = Modifier.width(16.dp))
 //                    Image(
 //                        painter = painterResource(id = R.drawable.share),
@@ -369,6 +374,38 @@ fun Post(
 
 
         }
+    }
+}
+
+@Composable
+fun ShareButton(postContent: String) {
+    val context = LocalContext.current
+
+    // Create a shareable content
+    val shareableContent = "Check out this post: $postContent"
+
+    // Create an Intent to share the content
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, shareableContent)
+    }
+
+    // Create a launcher for the share action
+    val shareLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Handle the result if needed
+        }
+
+    // Create a button to trigger the share action
+    IconButton(onClick = {
+        // Start the share activity
+        shareLauncher.launch(Intent.createChooser(shareIntent, "Share via"))
+    }) {
+        Image(
+            painter = painterResource(id = R.drawable.share),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
     }
 }
 
@@ -511,13 +548,14 @@ fun LoadProfileImage(
                 if (content.user.id != user.id) {
                     navController.navigate(ListScreen.Profile2.name + "/" + content.user.id.toString())
                 } else {
-                    navController.navigate(ListScreen.Profile.name) 
+                    navController.navigate(ListScreen.Profile.name)
                 }
             },
         contentScale = ContentScale.Crop,
     )
 
 }
+
 @Composable
 fun ClickableTextWithUrls(
     text: String,

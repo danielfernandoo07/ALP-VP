@@ -341,6 +341,7 @@ fun Post(
 
                             }
                     )
+                    ShareButton()
 //                    Spacer(modifier = Modifier.width(16.dp))
 //                    Image(
 //                        painter = painterResource(id = R.drawable.share),
@@ -375,7 +376,37 @@ fun Post(
         }
     }
 }
+@Composable
+fun ShareButton() {
+    val context = LocalContext.current
 
+    // Create a shareable content
+    val shareableContent = "Check Out This Cool New App! UC Social!"
+
+    // Create an Intent to share the content
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, shareableContent)
+    }
+
+    // Create a launcher for the share action
+    val shareLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Handle the result if needed
+        }
+
+    // Create a button to trigger the share action
+    IconButton(onClick = {
+        // Start the share activity
+        shareLauncher.launch(Intent.createChooser(shareIntent, "Share via"))
+    }) {
+        Image(
+            painter = painterResource(id = R.drawable.share),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+    }
+}
 @Composable
 fun TopBar(
     homeViewModel: HomeViewModel,
